@@ -1,3 +1,112 @@
 <resources>
     <string name="app_name">Nistores</string>
+    <string name="app_logo1">Nistores Logo</string>
+    <string name="hint_name">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_sign_in">Sign in</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign up here</string>
+    <string name="create_account">Create Account</string>
+    <string name="yes_account">Already have an account?</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="profile">Profile</string>
+    <string name="recent_posts">Recent Posts</string>
+    <string name="favourites">Favourites</string>
+    <string name="explore_stores">Explore Stores</string>
+    <string name="categories">Categories</string>
+    <string name="delivery_orders">Delivery Orders</string>
+    <string name="weekend_giveaways">Weekend Giveaways</string>
+    <string name="my_stores">My Stores</string>
+    <string name="own_store">Own a Store</string>
+    <string name="polls">Polls</string>
+    <string name="help_desk">Help Desk</string>
+    <string name="settings">Settings</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="about_us">About Us</string>
+    <string name="terms_policy">Terms and Policy</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="manage_products">Manage Products</string>
+    <string name="sub_history">Subscription History</string>
+    <string name="notification">Notification</string>
+    <string name="logout">Logout</string>
+
+    <string name="first_name">First Name</string>
+    <string name="surname">Surname</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="select_loc">Select Location</string>
+    <string name="select_interest">Select Interest</string>
+    <string name="complete_reg">Complete Registration</string>
+
+    <string name="create_your_account">Create Your Account</string>
+    <string name="login">Login</string>
+    <string name="log_in_intro">Log in to get in touch with exotic businesses around you.</string>
+
+    <string-array name="locations">
+        <item>Abuja</item>
+        <item>Abia</item>
+        <item>Adamawa</item>
+        <item>Akwa Ibom</item>
+        <item>Anambra</item>
+        <item>Bauchi</item>
+        <item>Benue</item>
+        <item>Borno</item>
+        <item>Cross River</item>
+        <item>Delta</item>
+        <item>Ebonyi</item>
+        <item>Ekiti</item>
+        <item>Edo</item>
+        <item>Enugu</item>
+        <item>Gombe</item>
+        <item>Imo</item>
+        <item>Jigawa</item>
+        <item>Kaduna</item>
+        <item>Kano</item>
+        <item>Katsina</item>
+        <item>Kebbi</item>
+        <item>Kogi</item>
+        <item>Kwara</item>
+        <item>Lagos</item>
+        <item>Nasarawa</item>
+        <item>Niger</item>
+        <item>Ogun</item>
+        <item>Osun</item>
+        <item>Oyo</item>
+        <item>Plateau</item>
+        <item>Rivers</item>
+        <item>Sokoto</item>
+        <item>Taraba</item>
+        <item>Yobe</item>
+        <item>Zamfara</item>
+    </string-array>
+    <string name="title_activity_home">Home</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_business_lounge">Business Lounge</string>
+    <string name="title_display_port">Display Port</string>
+    <string name="title_chats">Chats</string>
+    <string name="title_top_stories">Top Stores</string>
+
+    <string name="messages">Messages</string>
+    <string name="search">Search</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_home_fragment">Hello Home fragment</string>
+    <string name="hello_business_fragment">Hello Business fragment</string>
+    <string name="hello_port_fragment">Hello display port fragment</string>
+    <string name="hello_chats_fragment">Hello chat fragment</string>
+    <string name="hello_top_fragment">Hello top posts fragment</string>
+
+    <string name="api_url">https://www.nistores.com.ng/</string>
+    <string name="load_product_pic">Loading Product Picture/</string>
+    <string name="or">OR</string>
+
+
+
 </resources>
