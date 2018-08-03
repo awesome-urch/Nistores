@@ -10,7 +10,7 @@ public class Product {
     private String pphoto;
     private String pprice;
     private String store_uid;
-
+    private String views;
 
     public String getTitle() {
         return pname;
@@ -42,5 +42,11 @@ public class Product {
 
     public void setStore_uid(String price) {
         this.store_uid = price;
+    }
+
+    public String getViews(){ return views; }
+
+    public void setViews(String views){
+        this.views = views;
     }
 }

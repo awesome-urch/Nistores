@@ -24,7 +24,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     private List<Product> productList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, price, store;
+        public TextView name, price, store, views;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
@@ -32,6 +32,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             name = view.findViewById(R.id.title);
             price = view.findViewById(R.id.price);
             store = view.findViewById(R.id.store);
+            views = view.findViewById(R.id.views);
             thumbnail = view.findViewById(R.id.thumbnail);
         }
     }
@@ -56,6 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.name.setText(product.getTitle());
         holder.price.setText(product.getPrice());
         holder.store.setText(product.getStore_uid());
+        holder.views.setText(product.getViews());
         final String STRING_BASE_URL = "https://www.nistores.com.ng/";
         String pic = product.getImage();
         //String img = "https://www.nistores.com.ng/"+product.getImage();

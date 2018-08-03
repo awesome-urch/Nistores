@@ -51,7 +51,7 @@
                 android:paddingRight="@dimen/zero_level_margin"
                 android:paddingTop="@dimen/zero_level_margin"
                 android:textColor="@color/textColor"
-                android:textSize="@dimen/font_one" />
+                android:textSize="@dimen/font_14" />
 
             <TextView
                 android:id="@+id/price"
@@ -61,10 +61,44 @@
                 android:paddingLeft="@dimen/zero_level_margin"
                 android:paddingRight="@dimen/zero_level_margin"
                 android:paddingTop="@dimen/zero_level_margin"
-                android:drawableLeft="@drawable/naira_sign"
-                android:drawableStart="@drawable/naira_sign"
+
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/font_one" />
+                android:textSize="@dimen/font_14" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/zero_level_margin"
+                android:padding="@dimen/one_level_margin"
+                android:layout_below="@id/price">
+
+                <TextView
+                    android:id="@+id/likes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_one"
+                    android:drawableLeft="@drawable/ic_thumb_up_black_24dp"
+                    android:drawableStart="@drawable/ic_thumb_up_black_24dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/views"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_one"
+                    android:drawableLeft="@drawable/ic_views"
+                    android:drawableStart="@drawable/ic_views"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/negotiate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/negotiate"
+                    android:textSize="@dimen/font_one"
+                    android:drawableLeft="@drawable/ic_mode_comment"
+                    android:drawableStart="@drawable/ic_mode_comment"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
 
             <!--<TextView
                 android:id="@+id/chere"

@@ -14,5 +14,9 @@ public class Utility {
     public Utility(Context c){
         context = c;
     }
-
+    private String productsURL = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=products";
+    public String url2 = "https://www.nistores.com.ng/api/src/routes/process_user.php";
+    public String getProductsURL(){
+        return productsURL;
+    }
 }

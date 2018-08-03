@@ -43,10 +43,12 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.nistores.awesomeurch.nistores.Folders.Adapters.ProductAdapter;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.AllProductsTable;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.DatabaseHelper;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.GridSpacingItemDecoration;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.InitiateVolley;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Product;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.RecyclerScroller;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
 
@@ -59,7 +61,10 @@ public class AllProductsFragment extends Fragment {
 
     private static final String TAG = AllProductsFragment.class.getSimpleName();
 
-    private static final String URL = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=products&start=0";
+    ApiUrls apiUrls;
+    private String URL;
+
+    //private static final String URL = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=products&start=0";
     //private static final String URL = "https://api.androidhive.info/json/movies_2017.json";
 
     private RecyclerView recyclerView;
@@ -71,6 +76,8 @@ public class AllProductsFragment extends Fragment {
     Dao<AllProductsTable, Long> dao1;
     List<AllProductsTable> allProductsTableList;
     JSONArray myProductArray = new JSONArray();
+    private RecyclerScroller scroller;
+    int pageNo;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -98,12 +105,33 @@ public class AllProductsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_all_products, container, false);
 
+        apiUrls = new ApiUrls();
+
+        URL = apiUrls.getProductsURL();
+
         recyclerView = view.findViewById(R.id.recycler_view);
         productList = new ArrayList<>();
         mAdapter = new ProductAdapter(getContext(), productList);
 
+        /*RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+recyclerView.setNestedScrollingEnabled(false);*/
+
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
+        scroller = new RecyclerScroller(mLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                scroller.resetState();
+                pageNo += 20;
+                getData(pageNo);
+                Toast.makeText(getContext(),""+pageNo,Toast.LENGTH_SHORT).show();
+                //onCreateData(newPage);
+            }
+        };
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -112,18 +140,34 @@ public class AllProductsFragment extends Fragment {
         helper = new DatabaseHelper(getContext()).getInstance(getContext());
         AllProductsTable AllProductsTable = null;
         AllProductsTable dbCount = null;
+
+        getData(0);
+
+        return view;
+
+    }
+
+    private void getData(int start){
+
+        //start = pageNo;
+        String origin = Integer.toString(start);
         try{
             //helper = new DatabaseHelper(getContext());
             dao1 = DaoManager.createDao(helper.getConnectionSource(), AllProductsTable.class);
             int length = 20;
+            String startStr = Integer.toString(start);
+
+            Log.d("CHECK",startStr);
 
             QueryBuilder<AllProductsTable,Long> queryBuilder = dao1.queryBuilder().orderBy("id",true);
-            queryBuilder.limit(Long.parseLong(Integer.toString(length)));
+            queryBuilder.offset(Long.parseLong(startStr)).limit(Long.parseLong(Integer.toString(length)));
             allProductsTableList = queryBuilder.query();
 
             if(allProductsTableList.isEmpty()){ //Nothing is in the database
-                fetchProductItems();
+                Log.d("CHECK","Nothing in db");
+                fetchProductItems(origin);
             }else{ //Something is in the database
+                Log.d("CHECK","Something in db");
 
                 for(AllProductsTable item:allProductsTableList){
                     String product_id = item.getProductId();
@@ -144,32 +188,28 @@ public class AllProductsFragment extends Fragment {
                     myProductArray.put(myProductObject);
                 }
 
+                Log.d("CHECK",myProductArray.toString());
+
                 List<Product> items = new Gson().fromJson(myProductArray.toString(), new TypeToken<List<Product>>() {
                 }.getType());
 
                 fillInItems(items);
 
-            //List<AllProductsTable> list1 = dao1.queryForAll();
-
+                //List<AllProductsTable> list1 = dao1.queryForAll();
             }
 
         }catch (Exception e){
             Log.e("Err","Error occurred",e);
             Log.d("ERR",e.toString());
         }
-
-        return view;
-
-    }
-
-    private void fetchAllProducts(){
-
     }
 
 
 
-    private void fetchProductItems(){
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
+    private void fetchProductItems(String origin){
+        String originURL = URL+"&start="+origin;
+        Log.d("CHECK",originURL);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

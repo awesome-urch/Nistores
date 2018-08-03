@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.j256.ormlite.dao.Dao;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.DatabaseHelper;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.UserTable;
 import com.nistores.awesomeurch.nistores.R;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper helper;
     Dao<UserTable, Integer> dao;
     Integer const_id = 1;
+    ApiUrls apiUrls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
             //this is the url where you want to send the request
-            String url = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=login&username="+name+"&password="+pass;
+            apiUrls = new ApiUrls();
+            String ur = apiUrls.getLoginURL();
+            String url = ur+"&username="+name+"&password="+pass;
             // Request a string response from the provided URL.
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {
