@@ -31,6 +31,23 @@
         <item name="colorButtonNormal">@color/colorPrimaryDark</item>
         <item name="colorControlHighlight">@android:color/white</item>
     </style>
+	
+	<style name="ButtonBlueWeb" parent="@style/Theme.AppCompat.Light">
+        <item name="colorButtonNormal">@color/lightBlue</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+    </style>
+    <style name="ButtonError" parent="@style/Theme.AppCompat.Light">
+        <item name="colorButtonNormal">@color/redColor</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+    </style>
+    <style name="ButtonOrange" parent="@style/Theme.AppCompat.Light">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+    </style>
+    <style name="ButtonSuccess" parent="@style/Theme.AppCompat.Light">
+        <item name="colorButtonNormal">@color/greenColor</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+    </style>
 
     <style name="WebAppTheme" parent="AppTheme" />
 
