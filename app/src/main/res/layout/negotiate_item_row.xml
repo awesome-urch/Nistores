@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout n1:orientation="vertical" n1:background="@android:color/white" n1:padding="@dimen/zero_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_margin="@dimen/one_level_margin"
+  xmlns:n1="http://schemas.android.com/apk/res/android">
+    <LinearLayout n1:layout_gravity="end" n1:orientation="vertical" n1:id="@+id/container" n1:background="@drawable/send_chat_style" n1:layout_width="wrap_content" n1:layout_height="wrap_content">
+        <TextView n1:textSize="@dimen/font_two" n1:textColor="@android:color/white" n1:id="@+id/message" n1:layout_width="wrap_content" n1:layout_height="wrap_content" n1:maxWidth="200.0dip" n1:text="@string/loading" />
+        <TextView n1:textSize="@dimen/font_one" n1:textColor="@color/whiteGrey" n1:layout_gravity="end" n1:id="@+id/date" n1:layout_width="wrap_content" n1:layout_height="wrap_content" n1:text="@string/price" />
+        <TextView n1:id="@+id/id" n1:visibility="gone" n1:layout_width="0.0dip" n1:layout_height="0.0dip" />
+        <TextView n1:id="@+id/user" n1:visibility="gone" n1:layout_width="0.0dip" n1:layout_height="0.0dip" />
+    </LinearLayout>
+</LinearLayout>

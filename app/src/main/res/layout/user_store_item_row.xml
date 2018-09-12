@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_margin="@dimen/zero_level_margin"
+  xmlns:n1="http://schemas.android.com/apk/res/android">
+    <android.support.v7.widget.CardView n1:layout_gravity="center" n1:id="@+id/card_view" n1:focusable="true" n1:clickable="true" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:foreground="?selectableItemBackground" n2:cardCornerRadius="@dimen/zero_level_margin" n2:cardUseCompatPadding="true" xmlns:n2="http://schemas.android.com/apk/res-auto">
+        <RelativeLayout n1:layout_width="fill_parent" n1:layout_height="fill_parent">
+            <ImageView n1:id="@+id/thumbnail" n1:background="?selectableItemBackgroundBorderless" n1:padding="@dimen/zero_level_margin" n1:focusable="true" n1:clickable="true" n1:layout_width="fill_parent" n1:layout_height="200.0dip" n1:scaleType="fitCenter" n1:adjustViewBounds="true" n1:contentDescription="@string/load_product_pic" />
+            <TextView n1:id="@+id/store_id" n1:layout_width="0.0dip" n1:layout_height="0.0dip" />
+            <TextView n1:textSize="@dimen/font_18" n1:textColor="@color/textColor" n1:id="@+id/name" n1:paddingLeft="@dimen/one_level_margin" n1:paddingTop="@dimen/one_level_margin" n1:paddingRight="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_below="@+id/thumbnail" />
+            <TextView n1:textSize="@dimen/font_14" n1:textColor="@color/textColor" n1:id="@+id/address" n1:paddingLeft="@dimen/one_level_margin" n1:paddingTop="@dimen/one_level_margin" n1:paddingRight="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_below="@+id/name" />
+            <LinearLayout n1:id="@+id/price" n1:padding="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/zero_level_margin" n1:layout_below="@+id/address">
+                <TextView n1:textSize="@dimen/font_two" n1:textColor="@color/webColor" n1:id="@+id/expiry" n1:layout_width="0.0dip" n1:layout_height="wrap_content" n1:layout_weight="2.0" />
+                <TextView n1:textSize="@dimen/font_two" n1:id="@+id/renew" n1:layout_width="0.0dip" n1:layout_height="wrap_content" n1:text="@string/renew" n1:layout_weight="1.0" />
+            </LinearLayout>
+            <LinearLayout n1:padding="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/zero_level_margin" n1:layout_below="@+id/price">
+                <android.support.v7.widget.AppCompatButton n1:theme="@style/ButtonBlue" n1:textSize="20.0sp" n1:textColor="@android:color/white" n1:id="@+id/btn_delete" n1:padding="10.0dip" n1:layout_width="fill_parent" n1:layout_height="60.0dip" n1:layout_margin="@dimen/one_level_margin" n1:text="@string/delete" n1:layout_weight="1.0" />
+                <android.support.v7.widget.AppCompatButton n1:theme="@style/ButtonOrange" n1:textSize="20.0sp" n1:textColor="@android:color/white" n1:id="@+id/btn_edit" n1:padding="10.0dip" n1:layout_width="fill_parent" n1:layout_height="60.0dip" n1:layout_margin="@dimen/one_level_margin" n1:text="@string/edit" n1:layout_weight="1.0" />
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>
