@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorAccent"
+    android:background="@color/lightBlue"
     android:layout_height="match_parent"
     tools:context="com.nistores.awesomeurch.nistores.Folders.Pages.SplashScreen">
 
     <ImageView
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/nistore_logo"
+        android:src="@drawable/new_logo2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

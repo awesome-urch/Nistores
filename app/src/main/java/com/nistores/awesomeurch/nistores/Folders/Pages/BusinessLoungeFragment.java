@@ -4,11 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.nistores.awesomeurch.nistores.Folders.Adapters.BusinessLoungeAdapter;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.BusinessLounge;
 import com.nistores.awesomeurch.nistores.R;
+
+import java.util.List;
 
 
 /**
@@ -29,38 +36,27 @@ public class BusinessLoungeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    //private OnFragmentInteractionListener mListener;
+    ApiUrls apiUrls;
+    private String URL;
+
+    private RecyclerView recyclerView;
+    LinearLayout networkErrorLayout;
+    private List<BusinessLounge> businessLoungeListList;
+    private BusinessLoungeAdapter mAdapter;
+
 
     public BusinessLoungeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BusinessLoungeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BusinessLoungeFragment newInstance(String param1, String param2) {
+    public static BusinessLoungeFragment newInstance() {
         BusinessLoungeFragment fragment = new BusinessLoungeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -3,7 +3,9 @@ package com.nistores.awesomeurch.nistores.Folders.Pages;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -11,6 +13,8 @@ import com.nistores.awesomeurch.nistores.R;
 
 public class CreateAccountActivity extends AppCompatActivity {
     Intent intent;
+    Button signInButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +29,13 @@ public class CreateAccountActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        TextView sign_in = findViewById(R.id.sign_in);
-
+        signInButton = findViewById(R.id.sign_in);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
 
     }
 

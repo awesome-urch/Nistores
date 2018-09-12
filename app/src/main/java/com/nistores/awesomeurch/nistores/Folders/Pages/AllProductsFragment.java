@@ -1,13 +1,11 @@
 package com.nistores.awesomeurch.nistores.Folders.Pages;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,16 +14,13 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,12 +40,11 @@ import com.nistores.awesomeurch.nistores.Folders.Adapters.ProductAdapter;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.AllProductsTable;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.DatabaseHelper;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.EndlessRecyclerViewScrollListener;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.GridSpacingItemDecoration;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.InitiateVolley;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Product;
-import com.nistores.awesomeurch.nistores.Folders.Helpers.RecyclerScroller;
 import com.nistores.awesomeurch.nistores.R;
-import com.squareup.picasso.Picasso;
 
 
 public class AllProductsFragment extends Fragment {
@@ -64,10 +58,8 @@ public class AllProductsFragment extends Fragment {
     ApiUrls apiUrls;
     private String URL;
 
-    //private static final String URL = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=products&start=0";
-    //private static final String URL = "https://api.androidhive.info/json/movies_2017.json";
-
     private RecyclerView recyclerView;
+    LinearLayout networkErrorLayout;
     private List<Product> productList;
     private ProductAdapter mAdapter;
     DatabaseHelper helper;
@@ -76,7 +68,6 @@ public class AllProductsFragment extends Fragment {
     Dao<AllProductsTable, Long> dao1;
     List<AllProductsTable> allProductsTableList;
     JSONArray myProductArray = new JSONArray();
-    private RecyclerScroller scroller;
     int pageNo;
 
     //private OnFragmentInteractionListener mListener;
@@ -85,19 +76,18 @@ public class AllProductsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static AllProductsFragment newInstance(String param1, String param2) {
+    public static AllProductsFragment newInstance() {
         AllProductsFragment fragment = new AllProductsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-
-    @Override
+    /*@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    }
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,37 +95,68 @@ public class AllProductsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_all_products, container, false);
 
+
+
+        return view;
+
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
+        if (savedInstanceState == null) {
+            Bundle args = getArguments();
+        }
+
         apiUrls = new ApiUrls();
 
         URL = apiUrls.getProductsURL();
+
+        networkErrorLayout = view.findViewById(R.id.network_error_layout);
+        AppCompatButton retryButton = view.findViewById(R.id.btn_retry);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getData(0);
+            }
+        });
 
         recyclerView = view.findViewById(R.id.recycler_view);
         productList = new ArrayList<>();
         mAdapter = new ProductAdapter(getContext(), productList);
 
-        /*RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-recyclerView.setNestedScrollingEnabled(false);*/
-
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        scroller = new RecyclerScroller(mLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                scroller.resetState();
-                pageNo += 20;
-                getData(pageNo);
-                Toast.makeText(getContext(),""+pageNo,Toast.LENGTH_SHORT).show();
-                //onCreateData(newPage);
-            }
-        };
+
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         recyclerView.setNestedScrollingEnabled(false);
+        EndlessRecyclerViewScrollListener scroller = new EndlessRecyclerViewScrollListener ((GridLayoutManager) mLayoutManager) {
+            @Override
+            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
+                Toast.makeText(getContext(),""+page,Toast.LENGTH_SHORT).show();
+                //scroller.resetState();
+                pageNo += page * 20;
+                getData(pageNo);
+
+                /*view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scroller.resetState();
+                        //adapter.notifyItemRangeInserted(curSize, allContacts.size() - 1);
+                        Toast.makeText(getContext(),""+page,Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+
+                //onCreateData(newPage);
+            }
+        };
+
+        recyclerView.addOnScrollListener(scroller);
+        //recyclerView.setOnScrollListener(scroller);
 
         helper = new DatabaseHelper(getContext()).getInstance(getContext());
         AllProductsTable AllProductsTable = null;
@@ -143,15 +164,19 @@ recyclerView.setNestedScrollingEnabled(false);*/
 
         getData(0);
 
-        return view;
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     private void getData(int start){
 
         //start = pageNo;
-        String origin = Integer.toString(start);
-        try{
+        //String origin = Integer.toString(start);
+        fetchProductItems(start);
+        /*try{
             //helper = new DatabaseHelper(getContext());
             dao1 = DaoManager.createDao(helper.getConnectionSource(), AllProductsTable.class);
             int length = 20;
@@ -176,6 +201,9 @@ recyclerView.setNestedScrollingEnabled(false);*/
                     String pprice = item.getPrice();
                     String views = item.getViews();
                     String store_uid = item.getStore_uid();
+                    String store_id = item.getStore_id();
+                    String likes = item.getLikes();
+                    String featured = item.getFeatured();
 
                     JSONObject myProductObject = new JSONObject();
                     myProductObject.put("product_id",product_id);
@@ -184,6 +212,9 @@ recyclerView.setNestedScrollingEnabled(false);*/
                     myProductObject.put("pprice",pprice);
                     myProductObject.put("views",views);
                     myProductObject.put("store_uid",store_uid);
+                    myProductObject.put("store_id",store_id);
+                    myProductObject.put("likes",likes);
+                    myProductObject.put("featured",featured);
 
                     myProductArray.put(myProductObject);
                 }
@@ -201,12 +232,12 @@ recyclerView.setNestedScrollingEnabled(false);*/
         }catch (Exception e){
             Log.e("Err","Error occurred",e);
             Log.d("ERR",e.toString());
-        }
+        }*/
     }
 
 
 
-    private void fetchProductItems(String origin){
+    private void fetchProductItems(final int origin){
         String originURL = URL+"&start="+origin;
         Log.d("CHECK",originURL);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
@@ -224,8 +255,8 @@ recyclerView.setNestedScrollingEnabled(false);*/
                                 List<Product> items = new Gson().fromJson(data.toString(), new TypeToken<List<Product>>() {
                                 }.getType());
 
-                                fillInItems(items);
-                                for(int i=0;i<data.length();i++){
+                                fillInItems(items, origin);
+                                /*for(int i=0;i<data.length();i++){
                                     JSONObject obj = data.getJSONObject(i);
                                     String product_id = obj.getString("product_id");
                                     String pname = obj.getString("pname");
@@ -233,6 +264,9 @@ recyclerView.setNestedScrollingEnabled(false);*/
                                     String pprice = obj.getString("pprice");
                                     String views = obj.getString("views");
                                     String store_uid = obj.getString("store_uid");
+                                    String store_id = obj.getString("store_id");
+                                    String likes = obj.getString("likes");
+                                    String featured = obj.getString("featured");
 
                                     helper = new DatabaseHelper(getContext()).getInstance(getContext());
                                     dao1 = DaoManager.createDao(helper.getConnectionSource(), AllProductsTable.class);
@@ -247,9 +281,12 @@ recyclerView.setNestedScrollingEnabled(false);*/
                                         all.setPrice(pprice);
                                         all.setViews(views);
                                         all.setStore_uid(store_uid);
+                                        all.setStore_id(store_id);
+                                        all.setLikes(likes);
+                                        all.setFeatured(featured);
                                         dao1.create(all);
                                     }
-                                }
+                                }*/
 
                             }else{
                                 Toast.makeText(getContext(),"Sorry an error occurred",Toast.LENGTH_SHORT).show();
@@ -257,7 +294,7 @@ recyclerView.setNestedScrollingEnabled(false);*/
                         } catch (JSONException e) {
                             Log.e("ERR",e.toString());
                             e.printStackTrace();
-                        } catch (SQLException e) {
+                        } catch (Exception e) {
                             Log.e("ERR",e.toString());
                             e.printStackTrace();
                         }
@@ -265,22 +302,44 @@ recyclerView.setNestedScrollingEnabled(false);*/
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
+                if(origin==0){
+                    networkErrorLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(getContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(),"No network connection",Toast.LENGTH_SHORT).show();
+                }
                 Log.d("VOLLEY",error.toString());
 
             }
         });
-
+        //jsonObjectRequest.setShouldCache("true");
         InitiateVolley.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
-    private void fillInItems(List<Product> items){
+    private void fillInItems(List<Product> items, int startPoint){
 
-        productList.clear();
-        productList.addAll(items);
+        if(startPoint==0){
+            Log.d("ERRO","clear");
+            productList.clear();
+            productList.addAll(items);
+            // refreshing recycler view
+            mAdapter.notifyDataSetChanged();
+        }else{
+            Log.d("ERRO","append");
+            productList.addAll(items);
+            final int curSize = mAdapter.getItemCount();
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    //scroller.resetState();
 
-        // refreshing recycler view
-        mAdapter.notifyDataSetChanged();
+                    //mAdapter.notifyItemInserted(productList.size() - 1);
+                    mAdapter.notifyItemRangeInserted(curSize, productList.size() - 1);
+                }
+            });
+
+        }
+
     }
 
     /**

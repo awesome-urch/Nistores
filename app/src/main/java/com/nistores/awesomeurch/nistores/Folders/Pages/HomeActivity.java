@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     //mTextMessage.setText(R.string.title_home);
-                    fragment = new AllProductsFragment();
+                    fragment = AllProductsFragment.newInstance();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_business_lounge:
@@ -92,6 +92,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         BottomNavigationView navigation = findViewById(R.id.navigation);
         BottomNavigationHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override

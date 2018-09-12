@@ -123,8 +123,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("RTN",response.toString());
                             try {
                                 Integer err = response.getInt("error");
-                                JSONObject data = response.getJSONObject("data");
+
                                 if(err==0){
+                                    JSONObject data = response.getJSONObject("data");
                                     logUserIn(data);
 
                                 }else{

@@ -32,6 +32,15 @@ public class AllProductsTable {
     @DatabaseField
     private String store_uid;
 
+    @DatabaseField
+    private String likes;
+
+    @DatabaseField
+    private String store_id;
+
+    @DatabaseField
+    private String featured;
+
 
     public Integer getId() {
         return id;
@@ -87,6 +96,30 @@ public class AllProductsTable {
 
     public void setStore_uid(String store_uid) {
         this.store_uid = store_uid;
+    }
+
+    public String getStore_id() {
+        return store_id;
+    }
+
+    public void setStore_id(String store_id) {
+        this.store_id = store_id;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public String getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(String featured) {
+        this.featured = featured;
     }
 
 }
