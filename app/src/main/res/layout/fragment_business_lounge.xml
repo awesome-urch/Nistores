@@ -21,6 +21,12 @@
             n1:textAlignment="center"
             n1:layout_margin="@dimen/one_level_margin"
             n1:text="@string/title_business_lounge" />
+        <ProgressBar
+            n1:id="@+id/progress"
+            n1:visibility="gone"
+            n1:layout_width="match_parent"
+            n1:layout_height="wrap_content"
+            n1:padding="@dimen/one_level_margin"/>
         <android.support.v7.widget.RecyclerView
             n1:id="@id/recycler_view"
             n1:scrollbars="vertical"
