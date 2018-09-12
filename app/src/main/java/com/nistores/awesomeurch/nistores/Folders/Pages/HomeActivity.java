@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 case R.id.navigation_business_lounge:
                     //mTextMessage.setText(R.string.title_business_lounge);
-                    fragment = new BusinessLoungeFragment();
+                    fragment = BusinessLoungeFragment.newInstance();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_display_port:

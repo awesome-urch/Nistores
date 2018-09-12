@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -60,6 +61,7 @@ public class AllProductsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     LinearLayout networkErrorLayout;
+    ProgressBar progressBar;
     private List<Product> productList;
     private ProductAdapter mAdapter;
     DatabaseHelper helper;
@@ -119,6 +121,8 @@ public class AllProductsFragment extends Fragment {
                 getData(0);
             }
         });
+
+        progressBar = view.findViewById(R.id.progress);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         productList = new ArrayList<>();
@@ -228,11 +232,14 @@ public class AllProductsFragment extends Fragment {
     private void fetchProductItems(final int origin){
         String originURL = URL+"&start="+origin;
         Log.d("CHECK",originURL);
+        if(origin==0){
+            progressBar.setVisibility(View.VISIBLE);
+        }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
+                        progressBar.setVisibility(View.GONE);
                         Log.d("RTN",response.toString());
                         try {
 
@@ -296,6 +303,7 @@ public class AllProductsFragment extends Fragment {
                 }else{
                     Toast.makeText(getContext(),"No network connection",Toast.LENGTH_SHORT).show();
                 }
+                progressBar.setVisibility(View.GONE);
                 Log.d("VOLLEY",error.toString());
 
             }

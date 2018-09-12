@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -59,11 +61,11 @@ public class BusinessLoungeFragment extends Fragment {
     ApiUrls apiUrls;
     private String URL;
 
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     LinearLayout networkErrorLayout;
+    ProgressBar progressBar;
     private List<BusinessLounge> businessLoungeList;
     private BusinessLoungeAdapter mAdapter;
-
 
     public BusinessLoungeFragment() {
         // Required empty public constructor
@@ -106,6 +108,7 @@ public class BusinessLoungeFragment extends Fragment {
             }
         });
 
+        progressBar = view.findViewById(R.id.progress);
         recyclerView = view.findViewById(R.id.recycler_view);
         businessLoungeList = new ArrayList<>();
         mAdapter = new BusinessLoungeAdapter(getContext(), businessLoungeList);
@@ -113,7 +116,9 @@ public class BusinessLoungeFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         //recyclerView.setNestedScrollingEnabled(false);
@@ -130,11 +135,12 @@ public class BusinessLoungeFragment extends Fragment {
     private void fetchProductItems(){
         String originURL = URL + "request=biz_lounge";
         Log.d("CHECK",originURL);
+        progressBar.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
+                        progressBar.setVisibility(View.GONE);
                         Log.d("RTN",response.toString());
                         try {
 
@@ -158,6 +164,7 @@ public class BusinessLoungeFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressBar.setVisibility(View.GONE);
                     networkErrorLayout.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
 
@@ -165,7 +172,7 @@ public class BusinessLoungeFragment extends Fragment {
 
             }
         });
-        jsonObjectRequest.setShouldCache(true);
+        //jsonObjectRequest.setShouldCache(true);
         InitiateVolley.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
