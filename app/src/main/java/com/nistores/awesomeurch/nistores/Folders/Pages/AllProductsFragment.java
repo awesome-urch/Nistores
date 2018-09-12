@@ -95,8 +95,6 @@ public class AllProductsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_all_products, container, false);
 
-
-
         return view;
 
     }
@@ -142,16 +140,6 @@ public class AllProductsFragment extends Fragment {
                 pageNo += page * 20;
                 getData(pageNo);
 
-                /*view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scroller.resetState();
-                        //adapter.notifyItemRangeInserted(curSize, allContacts.size() - 1);
-                        Toast.makeText(getContext(),""+page,Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-
-                //onCreateData(newPage);
             }
         };
 

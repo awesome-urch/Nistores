@@ -18,6 +18,7 @@
             n1:textColor="@color/webColor"
             n1:layout_width="fill_parent"
             n1:layout_height="wrap_content"
+            n1:textAlignment="center"
             n1:layout_margin="@dimen/one_level_margin"
             n1:text="@string/title_business_lounge" />
         <android.support.v7.widget.RecyclerView
@@ -26,6 +27,31 @@
             n1:clipToPadding="false"
             n1:layout_width="fill_parent"
             n1:layout_height="wrap_content" />
+        <LinearLayout
+            n1:orientation="vertical"
+            n1:id="@+id/network_error_layout"
+            n1:padding="@dimen/four_level_margin"
+            n1:visibility="gone"
+            n1:layout_width="fill_parent"
+            n1:layout_height="wrap_content"
+            n1:layout_marginTop="@dimen/four_level_margin">
+            <TextView n1:textSize="@dimen/font_three"
+                n1:layout_width="fill_parent"
+                n1:layout_height="wrap_content"
+                n1:text="@string/network_error" />
+            <android.support.v7.widget.AppCompatButton
+                n1:theme="@style/ButtonBlue"
+                n1:textSize="20.0sp"
+                n1:textColor="@android:color/white"
+                n1:layout_gravity="center_horizontal"
+                n1:id="@+id/btn_retry"
+                n1:padding="10.0dip"
+                n1:layout_width="fill_parent"
+                n1:layout_height="60.0dip"
+                n1:layout_marginTop="24.0dip"
+                n1:layout_marginBottom="24.0dip"
+                n1:text="@string/retry" />
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
