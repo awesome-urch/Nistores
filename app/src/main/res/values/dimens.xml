@@ -16,5 +16,6 @@
     <dimen name="font_two">16sp</dimen>
     <dimen name="font_18">18sp</dimen>
     <dimen name="font_three">20sp</dimen>
+    <dimen name="upload_height">180dp</dimen>
 
 </resources>

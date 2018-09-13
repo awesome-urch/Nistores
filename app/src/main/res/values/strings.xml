@@ -10,6 +10,7 @@
     <string name="call_us">For instant Help, Call our Customer Care Representative on +2349060155912</string>
     <string name="categories">Categories</string>
     <string name="click_to_upload">Click to upload</string>
+    <string name="click_to_select">Click to select picture</string>
     <string name="complete_reg">Complete Registration</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="contact_for_details">Contact for details</string>
@@ -129,6 +130,7 @@
     <string name="weekend_giveaways">Weekend Giveaways</string>
     <string name="why_nistores">Why Nistores?</string>
     <string name="yes_account">Already have an account?</string>
+    <string name="error_occur">Sorry an error occurred.</string>
 	
 	<string-array name="locations">
         <item>Abuja</item>

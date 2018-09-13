@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 case R.id.navigation_display_port:
                     //mTextMessage.setText(R.string.title_display_port);
-                    fragment = new DisplayPortFragment();
+                    fragment = DisplayPortFragment.newInstance();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_chats:
