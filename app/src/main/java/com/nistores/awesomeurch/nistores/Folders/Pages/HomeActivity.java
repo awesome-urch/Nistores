@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 case R.id.navigation_top_stories:
                     //mTextMessage.setText(R.string.title_top_stories);
-                    fragment = new TopStoresFragment();
+                    fragment = TopStoresFragment.newInstance();
                     loadFragment(fragment);
                     return true;
             }

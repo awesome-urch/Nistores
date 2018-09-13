@@ -22,7 +22,7 @@
             <LinearLayout n1:orientation="vertical" n1:id="@+id/divide1" n1:background="@color/whiteGrey" n1:layout_width="fill_parent" n1:layout_height="1.0dip" n1:layout_marginLeft="@dimen/one_level_margin" n1:layout_marginTop="8.0dip" n1:layout_marginRight="@dimen/one_level_margin" n1:layout_marginBottom="4.0dip" n1:layout_below="@+id/second" />
             <LinearLayout n1:orientation="horizontal" n1:id="@+id/third" n1:padding="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_below="@+id/divide1">
                 <LinearLayout n1:layout_width="wrap_content" n1:layout_height="wrap_content" n1:layout_margin="@dimen/two_level_margin">
-                    <ImageView n1:id="@+id/follow" n1:background="@drawable/circle_border" n1:padding="@dimen/one_level_margin" n1:layout_width="50.0dip" n1:layout_height="50.0dip" n1:scaleType="centerCrop" n1:contentDescription="@string/default_picture" n2:srcCompat="@drawable/ic_favorite" />
+                    <ImageView n1:focusable="true" n1:clickable="true" n1:id="@+id/follow" n1:background="@drawable/circle_border" n1:padding="@dimen/one_level_margin" n1:layout_width="50.0dip" n1:layout_height="50.0dip" n1:scaleType="centerCrop" n1:contentDescription="@string/default_picture" n2:srcCompat="@drawable/ic_favorite" />
                 </LinearLayout>
                 <LinearLayout n1:orientation="vertical" n1:padding="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content">
                     <LinearLayout n1:layout_width="fill_parent" n1:layout_height="wrap_content">
