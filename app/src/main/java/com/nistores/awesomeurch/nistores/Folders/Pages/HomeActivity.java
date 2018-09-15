@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.BottomNavigationHelper;
@@ -167,6 +168,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         transaction.replace(R.id.frame_container, fragment);
         //transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void preventInteraction(){
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void enableUserInteraction(){
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
 }

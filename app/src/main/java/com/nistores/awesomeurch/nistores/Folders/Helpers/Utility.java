@@ -2,6 +2,7 @@ package com.nistores.awesomeurch.nistores.Folders.Helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.WindowManager;
 
 /**
  * Created by Awesome Urch on 27/07/2018.
@@ -19,4 +20,5 @@ public class Utility {
     public String getProductsURL(){
         return productsURL;
     }
+
 }

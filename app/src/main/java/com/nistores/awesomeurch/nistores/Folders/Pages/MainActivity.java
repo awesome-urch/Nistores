@@ -13,6 +13,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signIn(){
+
         boolean valid = true;
         String name = username.getText().toString();
         String pass = password.getText().toString();

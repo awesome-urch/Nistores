@@ -1,5 +1,6 @@
 package com.nistores.awesomeurch.nistores.Folders.Pages;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,30 +14,45 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nistores.awesomeurch.nistores.Folders.Adapters.MorePhotoAdapter;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.InitiateVolley;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.MorePhoto;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.TopStores;
 import com.nistores.awesomeurch.nistores.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,17 +60,21 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
 public class DisplayPortFragment extends Fragment {
     RadioButton radioPrice, radioContact;
     RadioGroup radioGroupPrice;
+    AppCompatButton btnMorePhotos;
     TextInputLayout priceLayout;
     Spinner storeSpinner;
     ApiUrls apiUrls;
-    String URL;
+    String URL, imgURL;
     SharedPreferences prefs;
     String userId;
     ArrayList<String> myStores;
@@ -63,7 +83,13 @@ public class DisplayPortFragment extends Fragment {
     CoordinatorLayout coordinatorLayout;
     Bitmap bitmap;
     RecyclerView imageRecycler;
+    List<MorePhoto> morePhotos;
+    MorePhotoAdapter mAdapter;
+    ProgressBar uploadingMainPhoto, uploadingMorePhoto;
+    ProgressDialog progressDialog;
+    HomeActivity homeActivity;
     private static final int SELECT_PHOTO = 1;
+    private static final int SELECT_MORE_PHOTO = 2;
 
     public DisplayPortFragment() {
         // Required empty public constructor
@@ -98,17 +124,29 @@ public class DisplayPortFragment extends Fragment {
             Bundle args = getArguments();
         }
 
+        homeActivity = new HomeActivity();
         apiUrls = new ApiUrls();
         URL = apiUrls.getApiUrl();
+        imgURL = apiUrls.getApiURL2();
         myStores = new ArrayList<>();
 
+        uploadingMainPhoto = view.findViewById(R.id.progress_upload);
         coordinatorLayout = view.findViewById(R.id.myCoordinatorLayout);
         mainPhoto = view.findViewById(R.id.main_photo);
         mainPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //attachMainPhoto(view);
-                openGallery();
+                openGallery(SELECT_PHOTO);
+            }
+        });
+
+        btnMorePhotos = view.findViewById(R.id.btn_more_photos);
+        btnMorePhotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //attachMainPhoto(view);
+                openGallery(SELECT_MORE_PHOTO);
             }
         });
 
@@ -131,54 +169,215 @@ public class DisplayPortFragment extends Fragment {
         });
 
         imageRecycler = view.findViewById(R.id.recycler_img_view);
+        morePhotos = new ArrayList<>();
+        mAdapter = new MorePhotoAdapter(getContext(), morePhotos);
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 3);
+        imageRecycler.setLayoutManager(mLayoutManager);
+        /*DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(imageRecycler.getContext(),
+                DividerItemDecoration.VERTICAL);
+        imageRecycler.addItemDecoration(dividerItemDecoration);*/
+        imageRecycler.setItemAnimator(new DefaultItemAnimator());
+        imageRecycler.setAdapter(mAdapter);
 
         fetchItems();
 
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
-    private void openGallery(){
+    @Override
+    public void onStop(){
+        super.onStop();
+        //TODO: stop all volleys using their tags
+    }
+
+    private void openGallery(int requestType){
         Toast.makeText(getContext(),"Opening images folder...",Toast.LENGTH_SHORT).show();
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        startActivityForResult(photoPickerIntent, requestType);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    if(selectedImage !=null){
 
-                        try {
-                            uploadClick.setVisibility(View.GONE);
-                            //getting image from gallery
-                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                            //Setting image to ImageView
-                            mainPhoto.setImageBitmap(bitmap);
-                            bitmapToBase64(bitmap);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+        if(resultCode == RESULT_OK){
+            Uri selectedImage = data.getData();
+            if(selectedImage !=null){
 
-                        //mainPhoto.setImageURI(selectedImage);
+                try {
+                    //getting image from gallery
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                    String resourceBase = bitmapToBase64(bitmap);
+                    //Setting image to ImageView
+                    switch (requestCode){
+                        case SELECT_PHOTO:
+
+                            /*JSONObject imageObject = new JSONObject();
+                            try {
+                                imageObject.put("size", "1000");
+                                imageObject.put("type", "jpg");
+                                imageObject.put("data", resourceBase);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }*/
+                            //uploadImage(String.valueOf(imageObject));
+                            uploadImage(resourceBase, "jpg", SELECT_PHOTO);
+                            //mainPhoto.setImageBitmap(bitmap);
+                            break;
+                        case SELECT_MORE_PHOTO:
+                            //appendMorePhotos(resourceBase);
+                            uploadImage(resourceBase, "jpg", SELECT_MORE_PHOTO);
+                            break;
                     }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+            }
         }
     }
 
-    public void bitmapToBase64(Bitmap bmp){
+    private void uploadImage(final String image, final String ext, final int mode){
+
+        Log.d("SEE",""+image.getBytes().length);
+        //Handle interstitial anxiety
+        if(mode == SELECT_PHOTO){
+            uploadClick.setVisibility(View.GONE);
+            uploadingMainPhoto.setVisibility(View.VISIBLE);
+        }else if(mode == SELECT_MORE_PHOTO){
+            btnMorePhotos.setText(getResources().getString(R.string.uploading___));
+        }
+
+        preventInteraction();
+        //String iURL = imgURL + "request=upload";
+        //sending image to server
+        StringRequest request = new StringRequest(Request.Method.POST, imgURL, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                uploadingMainPhoto.setVisibility(View.GONE);
+                enableUserInteraction();
+                Log.d("DFILE",s);
+                //progressDialog.dismiss();
+                if(s.equals("error")){
+
+                    Toast.makeText(getContext(), "Some error occurred!", Toast.LENGTH_LONG).show();
+                    if(mode==SELECT_PHOTO){
+                        uploadClick.setVisibility(View.VISIBLE);
+                    }else if(mode==SELECT_MORE_PHOTO){
+                        btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
+                    }
+
+                }
+                else{
+                    Toast.makeText(getContext(), "Uploaded Successfully", Toast.LENGTH_LONG).show();
+                    String imgPath = apiUrls.getUploadsFolder() + s;
+                    if(mode==SELECT_PHOTO){
+                        Picasso.with(getContext()).load(imgPath).placeholder(R.drawable.ic_crop_image).into(mainPhoto);
+                    }else if(mode==SELECT_MORE_PHOTO){
+                        btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
+                        appendMorePhotos(imgPath);
+                    }
+
+
+                }
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if(mode==SELECT_PHOTO){
+                    uploadClick.setVisibility(View.VISIBLE);
+                    uploadingMainPhoto.setVisibility(View.GONE);
+                }else if(mode==SELECT_MORE_PHOTO){
+                    btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
+                }
+
+                enableUserInteraction();
+                Toast.makeText(getContext(), "Network error occurred. Try again", Toast.LENGTH_LONG).show();
+                Log.d("ERR",volleyError.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                Map<String, String> parameters = new HashMap<String, String>();
+                //parameters.put("Content-Type", "application/form-data");
+                //parameters.put("Content-Length", ""+97957);
+                parameters.put("Connection", "Keep-Alive");
+                return parameters;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+                //return "application/x-www-form-urlencoded";
+            }
+
+            //adding parameters to send
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError  {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("image", image);
+                parameters.put("ext", ext);
+                return parameters;
+            }
+        }
+        ;
+
+
+        request.setRetryPolicy(new DefaultRetryPolicy( 70000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        RequestQueue rQueue = Volley.newRequestQueue(getActivity());
+        request.setShouldCache(false);
+        //InitiateVolley.getInstance().addToRequestQueue(request);
+
+        rQueue.add(request);
+
+    }
+
+    private void appendMorePhotos(String res){
+        Log.d("iPATH",""+res);
+        try{
+            JSONArray array = new JSONArray();
+            JSONObject object = new JSONObject();
+            object.put("image",res);
+            array.put(object);
+
+            List<MorePhoto> items = new Gson().fromJson(array.toString(), new TypeToken<List<MorePhoto>>() {
+            }.getType());
+
+            Log.d("ARR",array.toString());
+
+            morePhotos.addAll(items);
+            final int curSize = mAdapter.getItemCount();
+            imageRecycler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //scroller.resetState();
+                    mAdapter.notifyItemInserted(morePhotos.size() - 1);
+                    //mAdapter.notifyItemRangeInserted(curSize, productList.size() - 1);
+                }
+            });
+
+        }catch(JSONException e){
+            Log.d("ERR",e.toString());
+            e.printStackTrace();
+        }
+    }
+
+    public String bitmapToBase64(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] imageBytes = baos.toByteArray();
-        final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        Log.d("REZOT",imageString);
+        final String imageString = Base64.encodeToString(imageBytes, 0);
+        //Log.d("REZOT",imageString);
+        return imageString;
     }
 
     public void onRadioButtonClicked(View view) {
@@ -258,10 +457,19 @@ public class DisplayPortFragment extends Fragment {
                 myStores.add(storeName);
             }
 
-            storeSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, myStores));
+            storeSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, myStores));
 
         }catch (JSONException e){e.printStackTrace();}
 
+    }
+
+    public void preventInteraction(){
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void enableUserInteraction(){
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
 

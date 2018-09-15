@@ -10,6 +10,7 @@
     <string name="call_us">For instant Help, Call our Customer Care Representative on +2349060155912</string>
     <string name="categories">Categories</string>
     <string name="click_to_upload">Click to upload</string>
+    <string name="click_to_upload_more">Click to upload more</string>
     <string name="click_to_select">Click to select picture</string>
     <string name="complete_reg">Complete Registration</string>
     <string name="confirm_password">Confirm Password</string>
@@ -123,6 +124,7 @@
     <string name="type_your_message">Type your message</string>
     <string name="unique_url">You can have a Unique URL/web address for your store that you can share on other platforms.</string>
     <string name="upload_product">Upload Product</string>
+    <string name="uploading...">Uploading…</string>
     <string name="username">Username</string>
     <string name="view_profile">View Profile</string>
     <string name="views">Views</string>
