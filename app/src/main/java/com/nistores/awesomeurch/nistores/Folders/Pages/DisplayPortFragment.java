@@ -48,6 +48,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nistores.awesomeurch.nistores.Folders.Adapters.MorePhotoAdapter;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.FileUpload;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.InitiateVolley;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.MorePhoto;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.TopStores;
@@ -90,6 +91,7 @@ public class DisplayPortFragment extends Fragment {
     HomeActivity homeActivity;
     private static final int SELECT_PHOTO = 1;
     private static final int SELECT_MORE_PHOTO = 2;
+    private static final String JPG = "jpg";
 
     public DisplayPortFragment() {
         // Required empty public constructor
@@ -218,24 +220,20 @@ public class DisplayPortFragment extends Fragment {
                     switch (requestCode){
                         case SELECT_PHOTO:
 
-                            /*JSONObject imageObject = new JSONObject();
-                            try {
-                                imageObject.put("size", "1000");
-                                imageObject.put("type", "jpg");
-                                imageObject.put("data", resourceBase);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }*/
                             //uploadImage(String.valueOf(imageObject));
-                            uploadImage(resourceBase, "jpg", SELECT_PHOTO);
+                            //uploadImage(resourceBase, "jpg", SELECT_PHOTO);
+
                             //mainPhoto.setImageBitmap(bitmap);
+                            uploadMainFile(resourceBase, JPG);
+
                             break;
                         case SELECT_MORE_PHOTO:
                             //appendMorePhotos(resourceBase);
-                            uploadImage(resourceBase, "jpg", SELECT_MORE_PHOTO);
+                            //uploadImage(resourceBase, "jpg", SELECT_MORE_PHOTO);
+                            uploadOtherFiles(resourceBase, JPG);
+
                             break;
                     }
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -245,101 +243,77 @@ public class DisplayPortFragment extends Fragment {
         }
     }
 
-    private void uploadImage(final String image, final String ext, final int mode){
-
-        Log.d("SEE",""+image.getBytes().length);
-        //Handle interstitial anxiety
-        if(mode == SELECT_PHOTO){
-            uploadClick.setVisibility(View.GONE);
-            uploadingMainPhoto.setVisibility(View.VISIBLE);
-        }else if(mode == SELECT_MORE_PHOTO){
-            btnMorePhotos.setText(getResources().getString(R.string.uploading___));
-        }
-
-        preventInteraction();
-        //String iURL = imgURL + "request=upload";
-        //sending image to server
-        StringRequest request = new StringRequest(Request.Method.POST, imgURL, new Response.Listener<String>(){
+    //method for uploading port main photo
+    private void uploadMainFile(final String fileEncoded, final String ext){
+        FileUpload fileUpload = new FileUpload(getContext()) {
             @Override
-            public void onResponse(String s) {
+            public void onProcess() {
+                preventInteraction();
+                uploadClick.setVisibility(View.GONE);
+                uploadingMainPhoto.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onSuccess(String imgPath) {
+                enableUserInteraction();
+                Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
                 uploadingMainPhoto.setVisibility(View.GONE);
+                Picasso.with(getContext()).load(imgPath).placeholder(R.drawable.ic_crop_image).into(mainPhoto);
+            }
+
+            @Override
+            public void onServerError() {
                 enableUserInteraction();
-                Log.d("DFILE",s);
-                //progressDialog.dismiss();
-                if(s.equals("error")){
-
-                    Toast.makeText(getContext(), "Some error occurred!", Toast.LENGTH_LONG).show();
-                    if(mode==SELECT_PHOTO){
-                        uploadClick.setVisibility(View.VISIBLE);
-                    }else if(mode==SELECT_MORE_PHOTO){
-                        btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
-                    }
-
-                }
-                else{
-                    Toast.makeText(getContext(), "Uploaded Successfully", Toast.LENGTH_LONG).show();
-                    String imgPath = apiUrls.getUploadsFolder() + s;
-                    if(mode==SELECT_PHOTO){
-                        Picasso.with(getContext()).load(imgPath).placeholder(R.drawable.ic_crop_image).into(mainPhoto);
-                    }else if(mode==SELECT_MORE_PHOTO){
-                        btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
-                        appendMorePhotos(imgPath);
-                    }
-
-
-                }
+                Toast.makeText(context, "Server error occurred. Try again", Toast.LENGTH_LONG).show();
+                uploadingMainPhoto.setVisibility(View.GONE);
+                uploadClick.setVisibility(View.VISIBLE);
             }
-        },new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                if(mode==SELECT_PHOTO){
-                    uploadClick.setVisibility(View.VISIBLE);
-                    uploadingMainPhoto.setVisibility(View.GONE);
-                }else if(mode==SELECT_MORE_PHOTO){
-                    btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
-                }
 
+            @Override
+            public void onNetworkError() {
                 enableUserInteraction();
-                Toast.makeText(getContext(), "Network error occurred. Try again", Toast.LENGTH_LONG).show();
-                Log.d("ERR",volleyError.toString());
+                Toast.makeText(context, "Network error occurred. Try again", Toast.LENGTH_LONG).show();
+                uploadClick.setVisibility(View.VISIBLE);
+                uploadingMainPhoto.setVisibility(View.GONE);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                Map<String, String> parameters = new HashMap<String, String>();
-                //parameters.put("Content-Type", "application/form-data");
-                //parameters.put("Content-Length", ""+97957);
-                parameters.put("Connection", "Keep-Alive");
-                return parameters;
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded; charset=UTF-8";
-                //return "application/x-www-form-urlencoded";
-            }
-
-            //adding parameters to send
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError  {
-                Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("image", image);
-                parameters.put("ext", ext);
-                return parameters;
-            }
-        }
-        ;
-
-
-        request.setRetryPolicy(new DefaultRetryPolicy( 70000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueue rQueue = Volley.newRequestQueue(getActivity());
-        request.setShouldCache(false);
-        //InitiateVolley.getInstance().addToRequestQueue(request);
-
-        rQueue.add(request);
-
+        };
+        fileUpload.uploadImage(fileEncoded, ext);
     }
+
+    //method for uploading other photos
+    private void uploadOtherFiles(final String fileEncoded, final String ext){
+        FileUpload fileUpload = new FileUpload(getContext()) {
+            @Override
+            public void onProcess() {
+                preventInteraction();
+                btnMorePhotos.setText(getResources().getString(R.string.uploading___));
+            }
+
+            @Override
+            public void onSuccess(String imgPath) {
+                enableUserInteraction();
+                Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
+                btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
+                appendMorePhotos(imgPath);
+            }
+
+            @Override
+            public void onServerError() {
+                enableUserInteraction();
+                Toast.makeText(context, "Server error occurred. Try again", Toast.LENGTH_LONG).show();
+                btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
+            }
+
+            @Override
+            public void onNetworkError() {
+                enableUserInteraction();
+                Toast.makeText(context, "Network error occurred. Try again", Toast.LENGTH_LONG).show();
+                btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
+            }
+        };
+        fileUpload.uploadImage(fileEncoded, ext);
+    }
+
 
     private void appendMorePhotos(String res){
         Log.d("iPATH",""+res);

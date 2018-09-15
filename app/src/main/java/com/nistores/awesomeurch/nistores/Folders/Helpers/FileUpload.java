@@ -28,9 +28,9 @@ public abstract class FileUpload {
         this.context = context;
     }
 
-    private void uploadImage(final String image, final String ext){
+    public void uploadImage(final String image, final String ext){
 
-        //Log.d("SEE",""+image.getBytes().length);
+        Log.d("SEE",""+image.getBytes().length);
         apiUrls = new ApiUrls();
         URL = apiUrls.getApiURL2();
         //Handle interstitial anxiety
@@ -42,14 +42,13 @@ public abstract class FileUpload {
             public void onResponse(String s) {
 
                 Log.d("DFILE",s);
-                //progressDialog.dismiss();
+
                 if(s.equals("error")){
 
-                    Toast.makeText(context, "Some error occurred!", Toast.LENGTH_LONG).show();
+                    onServerError();
 
                 }
                 else{
-                    Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
                     String imgPath = apiUrls.getUploadsFolder() + s;
                     onSuccess(imgPath);
 
@@ -59,7 +58,8 @@ public abstract class FileUpload {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-                Toast.makeText(context, "Network error occurred. Try again", Toast.LENGTH_LONG).show();
+                onNetworkError();
+
                 Log.d("ERR",volleyError.toString());
 
 
