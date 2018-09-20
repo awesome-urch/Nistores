@@ -2,8 +2,6 @@ package com.nistores.awesomeurch.nistores.Folders.Helpers;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -13,8 +11,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.nistores.awesomeurch.nistores.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;

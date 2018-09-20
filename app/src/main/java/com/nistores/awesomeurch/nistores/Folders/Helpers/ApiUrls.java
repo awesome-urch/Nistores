@@ -7,13 +7,18 @@ package com.nistores.awesomeurch.nistores.Folders.Helpers;
  */
 
 public class ApiUrls {
-    
-	private String apiURL = "https://www.nistores.com.ng/api/src/routes/process_one.php?";
+
+    private String live = "https://www.nistores.com.ng/api/src/routes/";
+    private String local = "http://192.168.43.60/pagesn/";
+	private String apiURL = local+"process_one.php?";
 	private String loginURL = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=login";
     private String productsURL = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=products";
     public String url2 = "https://www.nistores.com.ng/api/src/routes/process_user.php";
-    private String apiURL2 = "https://www.nistores.com.ng/api/src/routes/test.php";
+    private String apiURL2 = local+"test.php";
+
     private String uploadsFolder = "https://www.nistores.com.ng/api/src/routes/";
+    private String processPost = local+"process_post.php";
+
     public String getProductsURL(){
         return productsURL;
     }
@@ -29,6 +34,10 @@ public class ApiUrls {
     }
 
     public String getUploadsFolder() {
-        return uploadsFolder;
+        return local;
+    }
+
+    public String getProcessPost() {
+        return processPost;
     }
 }

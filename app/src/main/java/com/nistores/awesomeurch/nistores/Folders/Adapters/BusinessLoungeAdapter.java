@@ -15,7 +15,7 @@ import com.nistores.awesomeurch.nistores.R;
 
 import java.util.List;
 
-public class BusinessLoungeAdapter  extends RecyclerView.Adapter<BusinessLoungeAdapter.MyViewHolder> {
+public class BusinessLoungeAdapter extends RecyclerView.Adapter<BusinessLoungeAdapter.MyViewHolder> {
     private Context context;
     private List<BusinessLounge> bizList;
 

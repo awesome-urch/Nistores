@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -26,7 +27,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -47,11 +51,14 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nistores.awesomeurch.nistores.Folders.Adapters.MorePhotoAdapter;
+import com.nistores.awesomeurch.nistores.Folders.Adapters.selectCategoryAdapter;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.FileUpload;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.InitiateVolley;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.MorePhoto;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.TopStores;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.Utility;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.selectCategory;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
 
@@ -71,26 +78,35 @@ import static android.app.Activity.RESULT_OK;
 public class DisplayPortFragment extends Fragment {
     RadioButton radioPrice, radioContact;
     RadioGroup radioGroupPrice;
-    AppCompatButton btnMorePhotos;
+    AppCompatButton btnMorePhotos, btnUpload;
     TextInputLayout priceLayout;
     Spinner storeSpinner;
     ApiUrls apiUrls;
-    String URL, imgURL;
+    String URL, imgURL, postURL;
     SharedPreferences prefs;
     String userId;
     ArrayList<String> myStores;
     ImageView mainPhoto;
     TextView uploadClick;
     CoordinatorLayout coordinatorLayout;
+    ConstraintLayout loaderLayout;
     Bitmap bitmap;
-    RecyclerView imageRecycler;
+    RecyclerView imageRecycler, categoryRecycler;
     List<MorePhoto> morePhotos;
     MorePhotoAdapter mAdapter;
+    List<selectCategory> selectCategoryList;
+    selectCategoryAdapter categoryAdapter;
     ProgressBar uploadingMainPhoto, uploadingMorePhoto;
-    ProgressDialog progressDialog;
+    EditText productNameView, productDescriptionView, priceView;
+    ViewGroup categoriesGroup;
     HomeActivity homeActivity;
+    Utility utility;
+    JSONArray userStores;
     private static final int SELECT_PHOTO = 1;
     private static final int SELECT_MORE_PHOTO = 2;
+    private int MAIN_PHOTO = 0;
+    private int PRICE_TYPE = 1;
+    private String mainPic, storeID;
     private static final String JPG = "jpg";
 
     public DisplayPortFragment() {
@@ -130,8 +146,15 @@ public class DisplayPortFragment extends Fragment {
         apiUrls = new ApiUrls();
         URL = apiUrls.getApiUrl();
         imgURL = apiUrls.getApiURL2();
+        postURL = apiUrls.getProcessPost();
         myStores = new ArrayList<>();
+        utility = new Utility(getContext());
 
+        productNameView = view.findViewById(R.id.product_name);
+        productDescriptionView = view.findViewById(R.id.description);
+        priceView = view.findViewById(R.id.price);
+
+        loaderLayout = view.findViewById(R.id.loader_layout);
         uploadingMainPhoto = view.findViewById(R.id.progress_upload);
         coordinatorLayout = view.findViewById(R.id.myCoordinatorLayout);
         mainPhoto = view.findViewById(R.id.main_photo);
@@ -151,10 +174,33 @@ public class DisplayPortFragment extends Fragment {
                 openGallery(SELECT_MORE_PHOTO);
             }
         });
+        btnUpload = view.findViewById(R.id.btn_upload);
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addProduct();
+            }
+        });
 
         uploadClick = view.findViewById(R.id.click_upload);
         storeSpinner = view.findViewById(R.id.select_store);
+        storeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selStore = adapterView.getItemAtPosition(i).toString();
+                Log.d("SEL_ST",selStore+" "+i);
+                loadCategories(i);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("SEL_ST","nothing selected");
+            }
+        });
+
         priceLayout = view.findViewById(R.id.input_layout_price);
+        radioGroupPrice = view.findViewById(R.id.radioGroupPrice);
         radioPrice = view.findViewById(R.id.radio_price);
         radioContact = view.findViewById(R.id.radio_contact);
         radioPrice.setOnClickListener(new View.OnClickListener() {
@@ -176,11 +222,21 @@ public class DisplayPortFragment extends Fragment {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 3);
         imageRecycler.setLayoutManager(mLayoutManager);
-        /*DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(imageRecycler.getContext(),
-                DividerItemDecoration.VERTICAL);
-        imageRecycler.addItemDecoration(dividerItemDecoration);*/
+
         imageRecycler.setItemAnimator(new DefaultItemAnimator());
         imageRecycler.setAdapter(mAdapter);
+
+        categoryRecycler = view.findViewById(R.id.recycler_category);
+        selectCategoryList = new ArrayList<>();
+        categoryAdapter = new selectCategoryAdapter(getContext(), selectCategoryList);
+        RecyclerView.LayoutManager cLayoutManager = new LinearLayoutManager(getContext());
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        categoryRecycler.setLayoutManager(cLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(imageRecycler.getContext(),
+                DividerItemDecoration.VERTICAL);
+        categoryRecycler.addItemDecoration(dividerItemDecoration);
+        categoryRecycler.setAdapter(categoryAdapter);
+
 
         fetchItems();
 
@@ -215,7 +271,9 @@ public class DisplayPortFragment extends Fragment {
                 try {
                     //getting image from gallery
                     bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                    String resourceBase = bitmapToBase64(bitmap);
+                    //String resourceBase = bitmapToBase64(bitmap);
+
+                    String resourceBase = utility.bitmapToBase64(bitmap);
                     //Setting image to ImageView
                     switch (requestCode){
                         case SELECT_PHOTO:
@@ -255,6 +313,8 @@ public class DisplayPortFragment extends Fragment {
 
             @Override
             public void onSuccess(String imgPath) {
+                MAIN_PHOTO = 1;
+                mainPic = imgPath;
                 enableUserInteraction();
                 Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
                 uploadingMainPhoto.setVisibility(View.GONE);
@@ -326,7 +386,6 @@ public class DisplayPortFragment extends Fragment {
             List<MorePhoto> items = new Gson().fromJson(array.toString(), new TypeToken<List<MorePhoto>>() {
             }.getType());
 
-            Log.d("ARR",array.toString());
 
             morePhotos.addAll(items);
             final int curSize = mAdapter.getItemCount();
@@ -345,13 +404,126 @@ public class DisplayPortFragment extends Fragment {
         }
     }
 
-    public String bitmapToBase64(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-        byte[] imageBytes = baos.toByteArray();
-        final String imageString = Base64.encodeToString(imageBytes, 0);
-        //Log.d("REZOT",imageString);
-        return imageString;
+    public void addProduct(){
+
+        boolean valid = true;
+        final String pname = productNameView.getText().toString();
+        final String pdesc = productDescriptionView.getText().toString();
+        final String pprice = (PRICE_TYPE==1)?"":priceView.getText().toString();
+        JSONArray morePhotsJson = new JSONArray();
+
+        for(int i = 0; i < morePhotos.size(); i++){
+            morePhotsJson.put(morePhotos.get(i).getImage());
+
+        }
+        final String morePhotosStr = morePhotsJson.toString();
+        //Log.d("MPH",morePhotosStr);
+        final String selCats = getSelectedCats();
+        Log.d("ALL_V",pname+"::"+pdesc+"::"+pprice+"::"+storeID+"::"+PRICE_TYPE+"::"+morePhotosStr+"::"+selCats);
+
+        if(pname.isEmpty()){
+            valid = false;
+            productNameView.setError("Enter the name of product");
+            Toast.makeText(getContext(),"Enter the name of product",Toast.LENGTH_SHORT).show();
+        }
+        if(pdesc.isEmpty()){
+            valid = false;
+            productDescriptionView.setError("Describe the product");
+            Toast.makeText(getContext(),"Describe the product",Toast.LENGTH_SHORT).show();
+        }
+        if(MAIN_PHOTO == 0){
+            valid = false;
+            Toast.makeText(getContext(),"Upload picture of product",Toast.LENGTH_SHORT).show();
+        }
+        if(radioGroupPrice.getCheckedRadioButtonId() == -1){
+            valid = false;
+            Toast.makeText(getContext(),"Set price for the product",Toast.LENGTH_SHORT).show();
+        }
+        if(PRICE_TYPE==0){
+            if(pprice.isEmpty()){
+                valid = false;
+                priceView.setError("Enter the price of product");
+                Toast.makeText(getContext(),"Enter the price of product",Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(valid){
+
+            //interstitial anxiety
+            loaderLayout.setVisibility(View.VISIBLE);
+            preventInteraction();
+            StringRequest request = new StringRequest(Request.Method.POST, postURL, new Response.Listener<String>(){
+                @Override
+                public void onResponse(String s) {
+                    loaderLayout.setVisibility(View.GONE);
+                    enableUserInteraction();
+                    Log.d("DFILE",s);
+
+                    if(s.equals("error")){
+
+                        Toast.makeText(getContext(),"Sorry an error occurred. Retry",Toast.LENGTH_SHORT).show();
+
+                    }
+                    else{
+                        Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            },new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                    Toast.makeText(getContext(),"Network error occurred. Please retry!",Toast.LENGTH_SHORT).show();
+                    loaderLayout.setVisibility(View.GONE);
+
+                    Log.d("ERR",volleyError.toString());
+
+
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError
+                {
+                    Map<String, String> parameters = new HashMap<String, String>();
+                    //parameters.put("Content-Type", "application/form-data");
+                    //parameters.put("Content-Length", ""+97957);
+                    parameters.put("Connection", "Keep-Alive");
+                    return parameters;
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/x-www-form-urlencoded; charset=UTF-8";
+                    //return "application/x-www-form-urlencoded";
+                }
+
+                //adding parameters to send
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError  {
+                    Map<String, String> parameters = new HashMap<String, String>();
+                    parameters.put("request", "add_product");
+                    parameters.put("pname", pname);
+                    parameters.put("pdesc", pdesc);
+                    parameters.put("pprice", pprice);
+                    parameters.put("pstore_id", storeID);
+                    parameters.put("price_type", ""+PRICE_TYPE);
+                    parameters.put("pphoto", mainPic);
+                    parameters.put("pcategory", selCats);
+                    parameters.put("extra_pics", morePhotosStr);
+
+                    return parameters;
+                }
+            };
+
+
+            //RequestQueue rQueue = Volley.newRequestQueue(getContext());
+            request.setShouldCache(false);
+            InitiateVolley.getInstance().addToRequestQueue(request);
+
+            //rQueue.add(request);
+        }
+
+
     }
 
     public void onRadioButtonClicked(View view) {
@@ -363,12 +535,12 @@ public class DisplayPortFragment extends Fragment {
             case R.id.radio_price:
                 if (checked)
                 priceLayout.setVisibility(View.VISIBLE);
-                    // Pirates are the best
+                PRICE_TYPE = 0;
                     break;
             case R.id.radio_contact:
                 if (checked)
                 priceLayout.setVisibility(View.GONE);
-                    // Ninjas rule
+                PRICE_TYPE = 1;
                     break;
         }
     }
@@ -386,10 +558,10 @@ public class DisplayPortFragment extends Fragment {
                         try {
 
                             Integer err = response.getInt("error");
-                            JSONArray data = response.getJSONArray("data");
+                            userStores = response.getJSONArray("data");
                             if(err==0){
 
-                                fillInItems(data);
+                                fillInItems(userStores);
 
                             }else{
                                 Toast.makeText(getContext(),"Sorry an error occurred",Toast.LENGTH_SHORT).show();
@@ -418,7 +590,7 @@ public class DisplayPortFragment extends Fragment {
 
             }
         });
-        //jsonObjectRequest.setShouldCache(true);
+        jsonObjectRequest.setShouldCache(false);
         InitiateVolley.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
@@ -437,6 +609,84 @@ public class DisplayPortFragment extends Fragment {
 
     }
 
+    private void loadCategories(final int index){
+
+
+        //String storeId = null;
+        try {
+            JSONObject storeObj = userStores.getJSONObject(index);
+            String storeCatId = storeObj.getString("scat_id");
+            storeID = storeObj.getString("store_id");
+            Log.d("storeCatID", storeCatId);
+            fetchCategories(storeCatId);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("storeCatID", ""+e);
+        }
+
+    }
+
+    private void fetchCategories(final String cats){
+
+        String originURL = URL + "request=store_cats&catsStr="+cats;
+        Log.d("CHECK",originURL);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("RTN",response.toString());
+                        try {
+
+                            Integer err = response.getInt("error");
+                            JSONArray storeCategories = response.getJSONArray("data");
+                            if(err==0){
+                                List<selectCategory> items = new Gson().fromJson(storeCategories.toString(), new TypeToken<List<selectCategory>>() {
+                                }.getType());
+                                fillInCategories(items);
+                                //fillInItems(storeCategories);
+
+                            }else{
+                                Toast.makeText(getContext(),"Sorry an error occurred",Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Log.e("ERR",e.toString());
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
+
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.network_error,
+                        Snackbar.LENGTH_LONG)
+                        .setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                fetchCategories(cats);
+                            }
+                        });
+                snackbar.show();
+
+                Log.d("VOLLEY",error.toString());
+
+            }
+        });
+        jsonObjectRequest.setShouldCache(false);
+        InitiateVolley.getInstance().addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void fillInCategories(List<selectCategory> items){
+
+        selectCategoryList.clear();
+        selectCategoryList.addAll(items);
+        // refreshing recycler view
+        categoryAdapter.notifyDataSetChanged();
+
+    }
+
     public void preventInteraction(){
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -444,6 +694,22 @@ public class DisplayPortFragment extends Fragment {
 
     public void enableUserInteraction(){
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public String getSelectedCats(){
+        StringBuilder ret = new StringBuilder();
+
+        for (int x = 0; x<categoryRecycler.getChildCount();x++){
+            CheckBox cb = categoryRecycler.getChildAt(x).findViewById(R.id.name);
+            TextView tv = categoryRecycler.getChildAt(x).findViewById(R.id.id);
+            if(cb.isChecked()){
+                String s = tv.getText().toString();
+                String comma = (x>0)?",":"";
+                ret.append(comma).append(s);
+                //Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show();
+            }
+        }
+        return String.valueOf(ret);
     }
 
 

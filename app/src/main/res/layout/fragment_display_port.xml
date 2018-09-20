@@ -12,8 +12,10 @@
             </android.support.design.widget.TextInputLayout>
             <TextView n1:textColor="@color/textColor" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/two_level_margin" n1:text="@string/select_store" />
             <Spinner n1:id="@+id/select_store" n1:background="@drawable/input_style1" n1:layout_width="fill_parent" n1:layout_height="40.0dip" />
+
             <TextView n1:textColor="@color/textColor" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/two_level_margin" n1:text="@string/select_category" />
-            <Spinner n1:id="@+id/select_category" n1:background="@drawable/input_style1" n1:layout_width="fill_parent" n1:layout_height="40.0dip" />
+            <android.support.v7.widget.RecyclerView n1:id="@+id/recycler_category" n1:scrollbars="vertical" n1:clipToPadding="false" n1:layout_width="fill_parent" n1:layout_height="wrap_content" />
+
             <TextView n1:textColor="@color/textColor" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/two_level_margin" n1:text="@string/description" />
             <android.support.design.widget.TextInputLayout n1:id="@+id/input_layout_description" n1:layout_width="fill_parent" n1:layout_height="wrap_content">
                 <EditText n1:id="@+id/description" n1:background="@drawable/input_style1" n1:padding="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:minHeight="80.0dip" n1:hint="@string/description" n1:inputType="textCapSentences|textMultiLine" />
@@ -70,4 +72,13 @@
         </LinearLayout>
 
     </ScrollView>
+    <android.support.constraint.ConstraintLayout n1:id="@+id/network_error_layout" n1:visibility="gone" n1:layout_width="fill_parent" n1:layout_height="fill_parent">
+        <LinearLayout n1:orientation="vertical" n1:padding="56.0dip" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n4:layout_constraintBottom_toBottomOf="@id/network_error_layout" n4:layout_constraintLeft_toLeftOf="@id/network_error_layout" n4:layout_constraintRight_toRightOf="@id/network_error_layout" n4:layout_constraintTop_toTopOf="@id/network_error_layout" xmlns:n4="http://schemas.android.com/apk/res-auto">
+            <TextView n1:textSize="@dimen/font_three" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:text="@string/network_error" />
+            <android.support.v7.widget.AppCompatButton n1:theme="@style/ButtonBlue" n1:textSize="20.0sp" n1:textColor="@android:color/white" n1:layout_gravity="center_horizontal" n1:id="@id/btn_retry" n1:padding="10.0dip" n1:layout_width="fill_parent" n1:layout_height="60.0dip" n1:layout_marginTop="24.0dip" n1:layout_marginBottom="24.0dip" n1:text="@string/retry" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout n1:id="@+id/loader_layout" n1:visibility="gone" n1:background="@color/transparentBlue" n1:layout_width="fill_parent" n1:layout_height="fill_parent" n5:layout_constraintBottom_toBottomOf="parent" n5:layout_constraintLeft_toLeftOf="parent" n5:layout_constraintRight_toRightOf="parent" n5:layout_constraintTop_toTopOf="parent" xmlns:n5="http://schemas.android.com/apk/res-auto">
+        <ProgressBar n1:id="@id/loader" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n5:layout_constraintBottom_toBottomOf="@id/loader_layout" n5:layout_constraintLeft_toLeftOf="@id/loader_layout" n5:layout_constraintRight_toRightOf="@id/loader_layout" n5:layout_constraintTop_toTopOf="@id/loader_layout" />
+    </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>
