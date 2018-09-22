@@ -88,6 +88,7 @@ public class DisplayPortFragment extends Fragment {
     ArrayList<String> myStores;
     ImageView mainPhoto;
     TextView uploadClick;
+    Intent intent;
     CoordinatorLayout coordinatorLayout;
     ConstraintLayout loaderLayout;
     Bitmap bitmap;
@@ -465,8 +466,9 @@ public class DisplayPortFragment extends Fragment {
 
                     }
                     else{
-                        Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(getContext(),"Successfully uploaded",Toast.LENGTH_SHORT).show();
+                        intent = new Intent(getContext(),SuccessActivity.class);
+                        startActivity(intent);
                     }
                 }
             },new Response.ErrorListener(){

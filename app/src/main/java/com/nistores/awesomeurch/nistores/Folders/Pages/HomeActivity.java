@@ -14,10 +14,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.BottomNavigationHelper;
 import com.nistores.awesomeurch.nistores.R;
@@ -34,6 +36,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Fragment fragment;
     private TextView mTextMessage;
     SharedPreferences preferences;
+    public static int PRODUCTS = 1;
+    public static int BUSINESS = 2;
+    public static int PORT = 3;
+    public static int CHATS = 4;
+    public static int STORES = 5;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -87,12 +94,39 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragment = new AllProductsFragment();
+        Bundle getBundle = this.getIntent().getExtras();
+        if (getBundle != null) {
+            int fg = getBundle.getInt("fragment");
+            Log.d("FRAG",fg+"");
+            fragment = selectFragment(fg);
+        }else{
+            fragment = new AllProductsFragment();
+        }
+
         loadFragment(fragment);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         BottomNavigationHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    public Fragment selectFragment(int frag){
+        if(frag == PRODUCTS){
+            fragment = AllProductsFragment.newInstance();
+        }else if(frag == BUSINESS){
+            fragment = BusinessLoungeFragment.newInstance();
+        }else if(frag == PORT){
+            //fragment = DisplayPortFragment.newInstance();
+            fragment = new DisplayPortFragment();
+        }else if(frag == CHATS){
+            fragment = ChatsFragment.newInstance();
+        }else if(frag == STORES){
+            fragment = TopStoresFragment.newInstance();
+        }else{
+            fragment = AllProductsFragment.newInstance();
+        }
+        return fragment;
+
     }
 
     @Override
@@ -126,6 +160,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_messages) {
+            fragment = new ChatsFragment();
+            loadFragment(fragment);
+            return true;
+        } else if(id == R.id.action_notifications){
+
+            return true;
+        } else if(id == R.id.action_search){
+            intent = new Intent(this,SearchActivity.class);
+            startActivity(intent);
             return true;
         }
 

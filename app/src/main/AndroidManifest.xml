@@ -1,25 +1,58 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.nistores.awesomeurch.nistores">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nistores.awesomeurch.nistores">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <application android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:largeHeap="true" android:name="com.nistores.awesomeurch.nistores.Folders.Helpers.InitiateVolley" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:testOnly="true" android:theme="@style/AppTheme">
-        <activity android:label="@string/app_name" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.SplashScreen" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+    <application
+        android:name=".Folders.Helpers.InitiateVolley"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:testOnly="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Folders.Pages.SplashScreen"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:label="@string/create_account" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.CreateAccountActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity"/>
+        <activity
+            android:name=".Folders.Pages.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".Folders.Pages.CreateAccountActivity"
+            android:label="@string/create_account"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
         </activity>
-        <activity android:label="@string/title_activity_home" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.HomeActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <!--<activity android:label="@string/profile" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.ProfileActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity"/>
-        </activity>
+        <activity
+            android:name=".Folders.Pages.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:label="@string/search" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.SearchActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.HomeActivity"/>
+        </activity>
+        <activity android:label="@string/search_results" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.searchResultActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.SearchActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.SearchActivity"/>
+        </activity>
+        <!--
+        <activity android:label="@string/profile" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.ProfileActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity"/>
         </activity>
+
         <activity android:label="@string/notification" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.NotificationsActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity"/>
         </activity>
@@ -61,7 +94,15 @@
         </activity>
         <activity android:label="@string/negotiate" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.NegotiateActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.NegotiateActivity"/>
-        </activity>-->
+        </activity>
+        -->
 
+        <activity
+            android:label="@string/success_product"
+            android:name=".Folders.Pages.SuccessActivity"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.SuccessActivity"/>
+        </activity>
     </application>
+
 </manifest>

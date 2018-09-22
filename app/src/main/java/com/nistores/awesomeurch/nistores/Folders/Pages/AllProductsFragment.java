@@ -111,7 +111,7 @@ public class AllProductsFragment extends Fragment {
 
         apiUrls = new ApiUrls();
 
-        URL = apiUrls.getProductsURL();
+        URL = apiUrls.getApiUrl();
 
         networkErrorLayout = view.findViewById(R.id.network_error_layout);
         AppCompatButton retryButton = view.findViewById(R.id.btn_retry);
@@ -230,7 +230,7 @@ public class AllProductsFragment extends Fragment {
 
 
     private void fetchProductItems(final int origin){
-        String originURL = URL+"&start="+origin;
+        String originURL = URL + "request=products&start="+origin;
         Log.d("CHECK",originURL);
         if(origin==0){
             progressBar.setVisibility(View.VISIBLE);

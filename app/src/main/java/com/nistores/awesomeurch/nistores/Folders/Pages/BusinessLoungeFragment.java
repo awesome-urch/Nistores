@@ -145,9 +145,8 @@ public class BusinessLoungeFragment extends Fragment {
                         try {
 
                             Integer err = response.getInt("error");
-                            JSONArray data = response.getJSONArray("data");
                             if(err==0){
-
+                                JSONArray data = response.getJSONArray("data");
                                 List<BusinessLounge> items = new Gson().fromJson(data.toString(), new TypeToken<List<BusinessLounge>>() {
                                 }.getType());
 
