@@ -177,12 +177,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            // Handle the camera action
+            //take to profile activity
+            intent = new Intent(this,ProfileActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_recent_posts) {
 
 

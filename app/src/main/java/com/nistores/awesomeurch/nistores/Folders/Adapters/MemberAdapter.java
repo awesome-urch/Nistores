@@ -1,6 +1,7 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -49,10 +50,10 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
     public void onBindViewHolder(MemberAdapter.MyViewHolder holder, final int position) {
         final Member member = members.get(position);
         holder.idView.setText(member.getMerchant_id());
-        holder.nameView.setText(Html.fromHtml(member.getSurname() + member.getFirstname()));
+        holder.nameView.setText(Html.fromHtml(member.getSurname() + " " + member.getFirstname()));
         holder.addressView.setText(member.getLocation());
 
-        String pic = member.getPicture();
+        String pic = "https://www.nistores.com.ng/" + member.getPicture();
 
         Picasso.with(context).load(pic).placeholder(R.drawable.ic_person_default).into(holder.thumbnail);
 

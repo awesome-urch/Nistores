@@ -235,6 +235,7 @@ public class AllProductsFragment extends Fragment {
         if(origin==0){
             progressBar.setVisibility(View.VISIBLE);
         }
+        networkErrorLayout.setVisibility(View.GONE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -285,6 +286,7 @@ public class AllProductsFragment extends Fragment {
 
                             }else{
                                 Toast.makeText(getContext(),"Sorry an error occurred",Toast.LENGTH_SHORT).show();
+                                networkErrorLayout.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
                             Log.e("ERR",e.toString());

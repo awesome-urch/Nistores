@@ -2,22 +2,28 @@ package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.selectCategory;
 import com.nistores.awesomeurch.nistores.R;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class selectCategoryAdapter extends RecyclerView.Adapter<selectCategoryAdapter.MyViewHolder> {
     private Context context;
     private List<selectCategory> selectCategories;
+    private String preSelect;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, id, link ;
+        public TextView id, link ;
+        public CheckBox name;
 
         public MyViewHolder(View view) {
             super(view);
@@ -29,6 +35,7 @@ public class selectCategoryAdapter extends RecyclerView.Adapter<selectCategoryAd
     public selectCategoryAdapter(Context context, List<selectCategory> selectCategories) {
         this.context = context;
         this.selectCategories = selectCategories;
+        this.preSelect = "";
     }
 
     @Override
@@ -45,11 +52,32 @@ public class selectCategoryAdapter extends RecyclerView.Adapter<selectCategoryAd
         holder.name.setText(category.getName());
         holder.id.setText(category.getId());
 
-
+        holder.name.setChecked(false);
+        if(Arrays.asList(preSelectedArray()).contains(category.getId())){
+            final CheckBox cb = holder.name;
+            Log.d("CHECKEE","e dey for "+category.getName());
+            cb.setChecked(true);
+            /*cb.post(new Runnable() {
+                @Override
+                public void run() {
+                    cb.setSelected(true);
+                }
+            });*/
+        }
     }
 
     @Override
     public int getItemCount() {
         return selectCategories.size();
     }
+
+    public void setPreSelect(String preSelect) {
+        this.preSelect = preSelect;
+    }
+
+    private String[] preSelectedArray(){
+        String delim = ",";
+        return this.preSelect.split(delim);
+    }
+
 }

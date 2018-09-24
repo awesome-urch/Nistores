@@ -233,7 +233,7 @@ public class DisplayPortFragment extends Fragment {
         RecyclerView.LayoutManager cLayoutManager = new LinearLayoutManager(getContext());
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         categoryRecycler.setLayoutManager(cLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(imageRecycler.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(categoryRecycler.getContext(),
                 DividerItemDecoration.VERTICAL);
         categoryRecycler.addItemDecoration(dividerItemDecoration);
         categoryRecycler.setAdapter(categoryAdapter);

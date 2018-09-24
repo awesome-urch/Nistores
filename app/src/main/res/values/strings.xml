@@ -10,6 +10,7 @@
     <string name="business_fly">With Nistores you can make your Business Fly</string>
     <string name="call_us">For instant Help, Call our Customer Care Representative on +2349060155912</string>
     <string name="categories">Categories</string>
+    <string name="change_profile_pic">Change Profile Picture</string>
     <string name="click_to_upload">Click to upload</string>
     <string name="click_to_upload_more">Click to upload more</string>
     <string name="click_to_select">Click to select picture</string>
@@ -29,6 +30,7 @@
     <string name="disclaimer">Disclaimer</string>
     <string name="easy_location">Your products are displayed to people around you who can easily locate you for bulk supplies</string>
     <string name="edit">Edit</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="email">Email</string>
     <string name="enter_price">Enter Price</string>
     <string name="error_occur">Sorry an error occurred.</string>
@@ -48,6 +50,8 @@
     <string name="hint_password">Password</string>
     <string name="how_help">How can we help you?</string>
     <string name="in_stock">In Stock</string>
+    <string name="interests">Interests</string>
+    <string name="last_name">Last Name</string>
     <string name="load_product_pic">Loading Product Picture/</string>
     <string name="loading">loading…</string>
     <string name="log_in_intro">Log in to get in touch with exotic businesses around you.</string>
@@ -82,6 +86,7 @@
     <string name="product_views">Product Views</string>
     <string name="products">Products</string>
     <string name="profile">Profile</string>
+    <string name="profile_info">Profile Information</string>
     <string name="profile_views">Profile Views</string>
     <string name="ratings">Ratings</string>
     <string name="recent_posts">Recent Posts</string>
@@ -89,13 +94,14 @@
     <string name="renew">Renew</string>
     <string name="retry">Retry</string>
     <string name="robust_network">Take advantage of our robust social network</string>
+    <string name="save_changes">Save Changes</string>
     <string name="search">Search</string>
     <string name="search_goods_services">Search here</string>
-    <string name="search_menu_title">Search</string>
     <string name="search_results">Search Results</string>
     <string name="search_ticket">Search Answered Tickets</string>
     <string name="secure_store">You can now secure a store on Nistores and display your products to millions of viewers Nationwide for free.</string>
     <string name="see_all">See all</string>
+    <string name="see_more">See more</string>
     <string name="select_category">Select Category</string>
     <string name="select_interest">Select Interest</string>
     <string name="select_loc">Select Location</string>
@@ -106,7 +112,6 @@
     <string name="sign_up">Sign up here</string>
     <string name="simple_fast">Its simple, fast and easy.</string>
     <string name="status">Status</string>
-    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="store_views">Store Views</string>
     <string name="stores">Stores</string>
     <string name="sub_history">Subscription History</string>
@@ -126,6 +131,7 @@
     <string name="turn_off_notif">Turn off Notifications</string>
     <string name="type_your_message">Type your message</string>
     <string name="unique_url">You can have a Unique URL/web address for your store that you can share on other platforms.</string>
+    <string name="update_interest">Update Interest</string>
     <string name="upload_product">Upload Product</string>
     <string name="upload_another_product">Upload another product</string>
     <string name="uploading...">Uploading…</string>

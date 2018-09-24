@@ -42,17 +42,32 @@
             android:name=".Folders.Pages.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:label="@string/search" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.SearchActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.HomeActivity"/>
+        <activity
+            android:name=".Folders.Pages.SearchActivity"
+            android:label="@string/search"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
         </activity>
-        <activity android:label="@string/search_results" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.searchResultActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.SearchActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.SearchActivity"/>
+        <activity
+            android:name=".Folders.Pages.searchResultActivity"
+            android:label="@string/search_results"
+            android:parentActivityName=".Folders.Pages.SearchActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.SearchActivity" />
         </activity>
-        <!--
-        <activity android:label="@string/profile" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.ProfileActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity"/>
+        <activity
+            android:name=".Folders.Pages.ProfileActivity"
+            android:label="@string/profile"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
         </activity>
 
+        <!--
         <activity android:label="@string/notification" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.NotificationsActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity"/>
         </activity>
@@ -98,10 +113,22 @@
         -->
 
         <activity
-            android:label="@string/success_product"
             android:name=".Folders.Pages.SuccessActivity"
+            android:label="@string/success_product"
             android:parentActivityName=".Folders.Pages.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.SuccessActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
+        </activity>
+        <activity android:name=".Folders.Pages.AllSearchResultsActivity" >
+        </activity>
+        <activity
+            android:name=".Folders.Pages.EditProfileActivity"
+            android:parentActivityName=".Folders.Pages.ProfileActivity"
+            android:label="@string/edit_profile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.ProfileActivity" />
         </activity>
     </application>
 
