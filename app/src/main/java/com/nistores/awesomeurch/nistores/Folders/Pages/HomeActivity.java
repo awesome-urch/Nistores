@@ -187,9 +187,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else if (id == R.id.nav_recent_posts) {
-
+            fragment = new AllProductsFragment();
+            loadFragment(fragment);
 
         } else if (id == R.id.nav_favourites) {
+            intent = new Intent(this,FavouritesActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_explore_stores) {
 

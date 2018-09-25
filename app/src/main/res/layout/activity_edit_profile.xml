@@ -43,9 +43,11 @@
                 <ImageView
                     android:layout_gravity="center"
                     android:id="@+id/profile_picture"
-                    android:layout_width="fill_parent"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/one_level_margin"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:layout_margin="@dimen/two_level_margin"
                     android:contentDescription="@string/default_picture"
                     app:srcCompat="@drawable/ic_person_default" />
                 <android.support.v7.widget.AppCompatButton
@@ -172,10 +174,48 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
 
+                <!-- Network error layout for categories -->
+                <LinearLayout
+                    android:id="@+id/network_error_layout"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="56.0dip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="@dimen/font_three"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="@string/network_error" />
+                    <android.support.v7.widget.AppCompatButton
+                        android:theme="@style/ButtonBlue"
+                        android:textSize="14.0sp"
+                        android:textColor="@android:color/white"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/btn_retry"
+                        android:padding="10.0dip"
+                        android:layout_width="150.0dip"
+                        android:layout_height="45.0dip"
+                        android:layout_marginTop="10.0dip"
+                        android:layout_marginBottom="10.0dip"
+                        android:text="@string/retry" />
+                </LinearLayout>
+                <!-- End Network error layout for categories -->
+
+                <ProgressBar
+                    android:visibility="visible"
+                    android:id="@+id/loader"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    />
+
                 <android.support.v7.widget.AppCompatButton
                     android:theme="@style/ButtonBlue"
                     android:textSize="14.0sp"
                     android:textColor="@android:color/white"
+                    android:visibility="gone"
                     android:layout_gravity="start"
                     android:id="@+id/update_interest"
                     android:padding="10.0dip"

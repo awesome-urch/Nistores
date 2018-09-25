@@ -3,8 +3,13 @@ package com.nistores.awesomeurch.nistores.Folders.Helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.TextView;
+
+import com.nistores.awesomeurch.nistores.R;
 
 import java.io.ByteArrayOutputStream;
 
@@ -34,5 +39,21 @@ public class Utility {
         return imageString;
     }
 
+    public String getSelectedCats(RecyclerView categoryRecycler){
+        StringBuilder ret = new StringBuilder();
+        int cnt = 0;
+        for (int x = 0; x<categoryRecycler.getChildCount();x++){
+            CheckBox cb = categoryRecycler.getChildAt(x).findViewById(R.id.name);
+            TextView tv = categoryRecycler.getChildAt(x).findViewById(R.id.id);
+            if(cb.isChecked()){
+                String s = tv.getText().toString();
+                String comma = (cnt>0)?",":"";
+                ret.append(comma).append(s);
+                cnt++;
+                //Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show();
+            }
+        }
+        return String.valueOf(ret);
+    }
 
 }

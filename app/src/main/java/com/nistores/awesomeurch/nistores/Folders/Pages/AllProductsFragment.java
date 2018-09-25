@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -60,6 +61,7 @@ public class AllProductsFragment extends Fragment {
     private String URL;
 
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     LinearLayout networkErrorLayout;
     ProgressBar progressBar;
     private List<Product> productList;
@@ -71,6 +73,8 @@ public class AllProductsFragment extends Fragment {
     List<AllProductsTable> allProductsTableList;
     JSONArray myProductArray = new JSONArray();
     int pageNo;
+    private boolean refresh = false;
+    EndlessRecyclerViewScrollListener scroller;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -123,6 +127,17 @@ public class AllProductsFragment extends Fragment {
         });
 
         progressBar = view.findViewById(R.id.progress);
+        swipeRefreshLayout = view.findViewById(R.id.swipe);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        setRefresh(true);
+                        fetchProductItems(0);
+
+                    }
+                }
+        );
 
         recyclerView = view.findViewById(R.id.recycler_view);
         productList = new ArrayList<>();
@@ -136,12 +151,12 @@ public class AllProductsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         recyclerView.setNestedScrollingEnabled(false);
-        EndlessRecyclerViewScrollListener scroller = new EndlessRecyclerViewScrollListener ((GridLayoutManager) mLayoutManager) {
+        scroller = new EndlessRecyclerViewScrollListener ((GridLayoutManager) mLayoutManager) {
             @Override
             public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
                 Toast.makeText(getContext(),""+page,Toast.LENGTH_SHORT).show();
                 //scroller.resetState();
-                pageNo += page * 20;
+                pageNo = page * 20;
                 getData(pageNo);
 
             }
@@ -230,16 +245,20 @@ public class AllProductsFragment extends Fragment {
 
 
     private void fetchProductItems(final int origin){
-        String originURL = URL + "request=products&start="+origin;
+        String originURL = URL + "request=products&start=" + origin;
         Log.d("CHECK",originURL);
         if(origin==0){
-            progressBar.setVisibility(View.VISIBLE);
+            if(!isRefresh()){
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
         }
         networkErrorLayout.setVisibility(View.GONE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        swipeRefreshLayout.setRefreshing(false);
                         progressBar.setVisibility(View.GONE);
                         Log.d("RTN",response.toString());
                         try {
@@ -317,6 +336,7 @@ public class AllProductsFragment extends Fragment {
     private void fillInItems(List<Product> items, int startPoint){
 
         if(startPoint==0){
+            scroller.resetState();
             Log.d("ERRO","clear");
             productList.clear();
             productList.addAll(items);
@@ -338,6 +358,14 @@ public class AllProductsFragment extends Fragment {
 
         }
 
+    }
+
+    private boolean isRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(boolean refresh) {
+        this.refresh = refresh;
     }
 
     /**

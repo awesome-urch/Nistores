@@ -45,8 +45,8 @@ public abstract class FileUpload {
 
                 }
                 else{
-                    String imgPath = apiUrls.getUploadsFolder() + s;
-                    onSuccess(imgPath);
+                    //String imgPath = apiUrls.getUploadsFolder() + s;
+                    onSuccess(s);
 
                 }
             }

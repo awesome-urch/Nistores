@@ -272,23 +272,16 @@ public class DisplayPortFragment extends Fragment {
                 try {
                     //getting image from gallery
                     bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                    //String resourceBase = bitmapToBase64(bitmap);
 
                     String resourceBase = utility.bitmapToBase64(bitmap);
                     //Setting image to ImageView
                     switch (requestCode){
                         case SELECT_PHOTO:
-
-                            //uploadImage(String.valueOf(imageObject));
-                            //uploadImage(resourceBase, "jpg", SELECT_PHOTO);
-
                             //mainPhoto.setImageBitmap(bitmap);
                             uploadMainFile(resourceBase, JPG);
 
                             break;
                         case SELECT_MORE_PHOTO:
-                            //appendMorePhotos(resourceBase);
-                            //uploadImage(resourceBase, "jpg", SELECT_MORE_PHOTO);
                             uploadOtherFiles(resourceBase, JPG);
 
                             break;
@@ -315,7 +308,7 @@ public class DisplayPortFragment extends Fragment {
             @Override
             public void onSuccess(String imgPath) {
                 MAIN_PHOTO = 1;
-                mainPic = imgPath;
+                mainPic = apiUrls.getUploadsFolder()+imgPath;
                 enableUserInteraction();
                 Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
                 uploadingMainPhoto.setVisibility(View.GONE);
@@ -355,7 +348,7 @@ public class DisplayPortFragment extends Fragment {
                 enableUserInteraction();
                 Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
                 btnMorePhotos.setText(getResources().getString(R.string.click_to_upload_more));
-                appendMorePhotos(imgPath);
+                appendMorePhotos(apiUrls.getUploadsFolder()+imgPath);
             }
 
             @Override
@@ -406,7 +399,7 @@ public class DisplayPortFragment extends Fragment {
     }
 
     public void addProduct(){
-
+        final String serverPic = "api/src/routes/"+mainPic;
         boolean valid = true;
         final String pname = productNameView.getText().toString();
         final String pdesc = productDescriptionView.getText().toString();
@@ -419,7 +412,7 @@ public class DisplayPortFragment extends Fragment {
         }
         final String morePhotosStr = morePhotsJson.toString();
         //Log.d("MPH",morePhotosStr);
-        final String selCats = getSelectedCats();
+        final String selCats = utility.getSelectedCats(categoryRecycler);
         Log.d("ALL_V",pname+"::"+pdesc+"::"+pprice+"::"+storeID+"::"+PRICE_TYPE+"::"+morePhotosStr+"::"+selCats);
 
         if(pname.isEmpty()){
@@ -509,7 +502,7 @@ public class DisplayPortFragment extends Fragment {
                     parameters.put("pprice", pprice);
                     parameters.put("pstore_id", storeID);
                     parameters.put("price_type", ""+PRICE_TYPE);
-                    parameters.put("pphoto", mainPic);
+                    parameters.put("pphoto", serverPic);
                     parameters.put("pcategory", selCats);
                     parameters.put("extra_pics", morePhotosStr);
 
@@ -696,22 +689,6 @@ public class DisplayPortFragment extends Fragment {
 
     public void enableUserInteraction(){
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
-
-    public String getSelectedCats(){
-        StringBuilder ret = new StringBuilder();
-
-        for (int x = 0; x<categoryRecycler.getChildCount();x++){
-            CheckBox cb = categoryRecycler.getChildAt(x).findViewById(R.id.name);
-            TextView tv = categoryRecycler.getChildAt(x).findViewById(R.id.id);
-            if(cb.isChecked()){
-                String s = tv.getText().toString();
-                String comma = (x>0)?",":"";
-                ret.append(comma).append(s);
-                //Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show();
-            }
-        }
-        return String.valueOf(ret);
     }
 
 

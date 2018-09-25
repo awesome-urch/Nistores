@@ -24,6 +24,7 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
     private Context context;
     private List<Product> productList;
+    private int design = 2;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, price, store, views, likesView, storeIdView, productIdView, featuredView;
@@ -46,12 +47,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public ProductAdapter(Context context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
+
     }
 
     @Override
     public ProductAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.product_item_row, parent, false);
+        if(design == 1){
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.favourite_item_row, parent, false);
+        }
+
 
         return new ProductAdapter.MyViewHolder(itemView);
     }
@@ -87,5 +95,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @Override
     public int getItemCount() {
         return productList.size();
+    }
+
+    public void setDesign(int design) {
+        this.design = design;
     }
 }

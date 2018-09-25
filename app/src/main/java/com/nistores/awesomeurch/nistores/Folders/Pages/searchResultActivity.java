@@ -59,6 +59,7 @@ public class searchResultActivity extends AppCompatActivity {
     private static int TOPIC = 3;
     String specSearch = "all";
     private String specWord = "";
+    private static int FAVOURITE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class searchResultActivity extends AppCompatActivity {
         recyclerProduct = findViewById(R.id.recycler_product);
         products = new ArrayList<>();
         productAdapter = new ProductAdapter(getApplicationContext(), products);
+        productAdapter.setDesign(FAVOURITE);
         RecyclerView.LayoutManager cLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerProduct.setLayoutManager(cLayoutManager);
 
@@ -199,7 +201,7 @@ public class searchResultActivity extends AppCompatActivity {
                 enableUserInteraction();
             }
         };
-        volleyRequest.setCache(true);
+        volleyRequest.setCache(false);
         volleyRequest.fetchResources();
     }
 
@@ -242,7 +244,7 @@ public class searchResultActivity extends AppCompatActivity {
                 networkErrorLayout.setVisibility(View.VISIBLE);
             }
         };
-        volleyRequest.setCache(true);
+        volleyRequest.setCache(false);
         volleyRequest.fetchResources();
 
     }

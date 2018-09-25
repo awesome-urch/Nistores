@@ -27,7 +27,7 @@ public abstract class VolleyRequest {
     public VolleyRequest(Context context, String URL){
         this.context = context;
         this.URL = URL;
-        this.cache = false;
+        this.cache = true;
         this.format = "array";
     }
 
@@ -66,8 +66,8 @@ public abstract class VolleyRequest {
 
             }
         });
-        if(isCache()){
-            jsonObjectRequest.setShouldCache(true);
+        if(!isCache()){
+            jsonObjectRequest.setShouldCache(false);
         }
         InitiateVolley.getInstance().addToRequestQueue(jsonObjectRequest);
     }

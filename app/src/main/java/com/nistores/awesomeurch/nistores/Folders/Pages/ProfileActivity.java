@@ -133,7 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         };
-        volleyRequest.setCache(true);
+        volleyRequest.setCache(false);
         volleyRequest.fetchResources();
 
     }
