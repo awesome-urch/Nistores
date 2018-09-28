@@ -58,7 +58,12 @@
                     xmlns:n2="http://schemas.android.com/apk/res-auto" />
             </android.support.constraint.ConstraintLayout>
             <TextView n1:textColor="@color/textColor" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/two_level_margin" n1:text="@string/more_photos" />
-            <android.support.v7.widget.RecyclerView n1:id="@+id/recycler_img_view" n1:scrollbars="vertical" n1:clipToPadding="false" n1:layout_width="fill_parent" n1:layout_height="wrap_content" />
+            <android.support.v7.widget.RecyclerView
+                n1:id="@+id/recycler_img_view"
+                n1:scrollbars="vertical"
+                n1:clipToPadding="false"
+                n1:layout_width="fill_parent"
+                n1:layout_height="wrap_content" />
             <android.support.v7.widget.AppCompatButton n1:theme="@style/ButtonOrange" n1:textSize="14.0sp" n1:textColor="@android:color/white" n1:layout_gravity="start" n1:id="@+id/btn_more_photos" n1:padding="10.0dip" n1:layout_width="170.0dip" n1:layout_height="45.0dip" n1:layout_marginBottom="24.0dip" n1:text="@string/click_to_upload_more" />
             <TextView n1:textColor="@color/textColor" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/two_level_margin" n1:text="@string/price" />
             <RadioGroup n1:id="@+id/radioGroupPrice" n1:orientation="horizontal" n1:layout_width="fill_parent" n1:layout_height="wrap_content">

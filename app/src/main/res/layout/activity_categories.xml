@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" android:theme="@style/WebAppTheme" android:background="@color/littleGrey" android:paddingLeft="@dimen/one_level_margin" android:paddingTop="@dimen/one_level_margin" android:paddingRight="@dimen/one_level_margin" android:layout_width="match_parent" android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" android:theme="@style/WebAppTheme" android:background="@color/littleGrey" android:padding="@dimen/one_level_margin" android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout android:orientation="vertical" android:background="@android:color/white" android:layout_width="match_parent" android:layout_height="wrap_content">
-        <android.support.v7.widget.RecyclerView android:id="@+id/recycler_view" android:scrollbars="vertical" android:clipToPadding="false" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView android:id="@+id/recycler_view" android:scrollbars="vertical" android:clipToPadding="false" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </LinearLayout>
         <ProgressBar android:id="@+id/loader" android:padding="@dimen/three_level_margin" android:layout_width="match_parent" android:layout_height="wrap_content"/>
         <LinearLayout android:orientation="vertical" android:id="@+id/network_error" android:padding="56dp" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
             <TextView android:textSize="@dimen/font_three" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/network_error"/>

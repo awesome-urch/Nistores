@@ -195,7 +195,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else if (id == R.id.nav_explore_stores) {
-
+            intent = new Intent(this,ExploreStoresActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_categories) {
+            intent = new Intent(this,CategoriesActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_own_store) {
+            intent = new Intent(this,OwnStoreActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_delivery_orders) {
+            intent = new Intent(this,DeliveryOrderActivity.class);
+            startActivity(intent);
         } else if (id == R.id.logout){
             preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();

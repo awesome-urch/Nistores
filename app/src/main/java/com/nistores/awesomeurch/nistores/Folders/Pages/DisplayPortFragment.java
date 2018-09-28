@@ -107,7 +107,7 @@ public class DisplayPortFragment extends Fragment {
     private static final int SELECT_MORE_PHOTO = 2;
     private int MAIN_PHOTO = 0;
     private int PRICE_TYPE = 1;
-    private String mainPic, storeID;
+    private String mainPic, storeID, picMain;
     private static final String JPG = "jpg";
 
     public DisplayPortFragment() {
@@ -308,11 +308,12 @@ public class DisplayPortFragment extends Fragment {
             @Override
             public void onSuccess(String imgPath) {
                 MAIN_PHOTO = 1;
+                picMain = imgPath;
                 mainPic = apiUrls.getUploadsFolder()+imgPath;
                 enableUserInteraction();
                 Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
                 uploadingMainPhoto.setVisibility(View.GONE);
-                Picasso.with(getContext()).load(imgPath).placeholder(R.drawable.ic_crop_image).into(mainPhoto);
+                Picasso.with(getContext()).load(mainPic).placeholder(R.drawable.ic_crop_image).into(mainPhoto);
             }
 
             @Override
@@ -380,15 +381,12 @@ public class DisplayPortFragment extends Fragment {
             List<MorePhoto> items = new Gson().fromJson(array.toString(), new TypeToken<List<MorePhoto>>() {
             }.getType());
 
-
             morePhotos.addAll(items);
-            final int curSize = mAdapter.getItemCount();
             imageRecycler.post(new Runnable() {
                 @Override
                 public void run() {
                     //scroller.resetState();
                     mAdapter.notifyItemInserted(morePhotos.size() - 1);
-                    //mAdapter.notifyItemRangeInserted(curSize, productList.size() - 1);
                 }
             });
 
@@ -399,7 +397,7 @@ public class DisplayPortFragment extends Fragment {
     }
 
     public void addProduct(){
-        final String serverPic = "api/src/routes/"+mainPic;
+        final String serverPic = "api/src/routes/"+picMain;
         boolean valid = true;
         final String pname = productNameView.getText().toString();
         final String pdesc = productDescriptionView.getText().toString();
@@ -462,6 +460,7 @@ public class DisplayPortFragment extends Fragment {
                         Toast.makeText(getContext(),"Successfully uploaded",Toast.LENGTH_SHORT).show();
                         intent = new Intent(getContext(),SuccessActivity.class);
                         startActivity(intent);
+                        getActivity().finish();
                     }
                 }
             },new Response.ErrorListener(){
@@ -590,7 +589,6 @@ public class DisplayPortFragment extends Fragment {
     }
 
     private void fillInItems(JSONArray items){
-
         try{
             for(int i=0;i<items.length();i++){
                 JSONObject jsonObject1=items.getJSONObject(i);

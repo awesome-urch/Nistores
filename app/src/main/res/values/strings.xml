@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_us">About Us</string>
+    <string name="all_the_states_could_not">Couldn\'t load all the 36 states </string>
     <string name="api_url">https://www.nistores.com.ng/</string>
     <string name="app_logo1">Nistores Logo</string>
     <string name="app_name">Nistores</string>
@@ -26,13 +27,19 @@
     <string name="default_picture">Default Picture</string>
     <string name="delete">Delete</string>
     <string name="delivery_orders">Delivery Orders</string>
+    <string name="deliveryOrder1">Initiate delivery by clicking on the "Initiate Delivery" button at the bottom of this page</string>
+    <string name="deliveryOrder2">An order number will be automatically generated</string>
+    <string name="deliveryOrder3">You will be taken to a page where you will fill the delivery order form</string>
+    <string name="deliveryOrder4">Click on any of the states to see delivery order numbers coming to the state</string>
     <string name="description">Description</string>
     <string name="disclaimer">Disclaimer</string>
     <string name="easy_location">Your products are displayed to people around you who can easily locate you for bulk supplies</string>
     <string name="edit">Edit</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="email">Email</string>
+    <string name="enter_all_item_price">Enter total price of all the items</string>
     <string name="enter_price">Enter Price</string>
+    <string name="enter_store_number">Enter store number</string>
     <string name="error_occur">Sorry an error occurred.</string>
     <string name="explore_stores">Explore Stores</string>
     <string name="favourites">Favourites</string>
@@ -50,8 +57,11 @@
     <string name="hint_password">Password</string>
     <string name="how_help">How can we help you?</string>
     <string name="in_stock">In Stock</string>
+    <string name="initiate_delivery">Initiate Delivery</string>
+    <string name="instructions">Instructions</string>
     <string name="interests">Interests</string>
     <string name="last_name">Last Name</string>
+    <string name="live_product_photos">Live Photos of Product</string>
     <string name="load_product_pic">Loading Product Picture/</string>
     <string name="loading">loading…</string>
     <string name="log_in_intro">Log in to get in touch with exotic businesses around you.</string>
@@ -72,7 +82,10 @@
     <string name="no_account">"Don't have an account?"</string>
     <string name="no_notifications">No Notification</string>
     <string name="notification">Notification</string>
+    <string name="open_camera">Open Camera</string>
     <string name="or">OR</string>
+    <string name="order_number">Order Number</string>
+    <string name="order_content_desc">Order Content Description</string>
     <string name="osho_free">"It's Free"</string>
     <string name="out_stock">Out of Stock</string>
     <string name="own_store">Own a Store</string>
@@ -89,6 +102,9 @@
     <string name="profile_info">Profile Information</string>
     <string name="profile_views">Profile Views</string>
     <string name="ratings">Ratings</string>
+    <string name="receiver_location">"Receiver's Location"</string>
+    <string name="receiver_full_name">"Receiver's Full Name"</string>
+    <string name="receiver_username">"Receiver's Username"</string>
     <string name="recent_posts">Recent Posts</string>
     <string name="refresh">refresh</string>
     <string name="renew">Renew</string>
@@ -118,6 +134,8 @@
     <string name="surname">Surname</string>
     <string name="success_product">Your product has been successfully uploaded.</string>
     <string name="swipe_down_refresh">Swipe down to refresh</string>
+    <string name="take_live_photos">Take Camera Photo(s) of Product</string>
+    <string name="take_live_videos">Take Live Video(s) of You and the Product</string>
     <string name="terms_policy">Terms and Policy</string>
     <string name="title_activity_home">Home</string>
     <string name="title_business_lounge">Business Lounge</string>
@@ -128,6 +146,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_top_stories">Top Stores</string>
     <string name="topics">Topics</string>
+    <string name="total_price">Total Price(for all the items)</string>
     <string name="turn_off_notif">Turn off Notifications</string>
     <string name="type_your_message">Type your message</string>
     <string name="unique_url">You can have a Unique URL/web address for your store that you can share on other platforms.</string>
@@ -140,8 +159,10 @@
     <string name="views">Views</string>
     <string name="visit_store">Visit Store</string>
     <string name="weekend_giveaways">Weekend Giveaways</string>
+    <string name="what_store_number">What is your store number?</string>
     <string name="why_nistores">Why Nistores?</string>
     <string name="yes_account">Already have an account?</string>
+    <string name="your_location">Your Location</string>
 
     <string-array name="locations">
         <item>Abuja</item>
