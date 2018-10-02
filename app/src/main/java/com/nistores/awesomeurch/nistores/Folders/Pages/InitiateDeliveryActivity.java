@@ -1,13 +1,20 @@
 package com.nistores.awesomeurch.nistores.Folders.Pages;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -15,6 +22,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -40,7 +50,9 @@ import com.nistores.awesomeurch.nistores.Folders.Helpers.FileUpload;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.InitiateVolley;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.MorePhoto;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Utility;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.VolleyRequest;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.WrapContentLinearLayoutManager;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.uploadFile;
 import com.nistores.awesomeurch.nistores.R;
 
 import org.json.JSONArray;
@@ -53,27 +65,38 @@ import java.util.List;
 import java.util.Map;
 
 public class InitiateDeliveryActivity extends AppCompatActivity {
-    Spinner storeSpinner;
-    ArrayList<String> myStores;
+    Spinner storeSpinner, myLocationSpinner, receiverLocationSpinner;
+    ArrayList<String> myStores, statesArrayList;
     SharedPreferences prefs;
-    String userId;
+    String userId, states;
     ApiUrls apiUrls;
-    String URL, postURL, storeID;
-    JSONArray userStores;
+    String URL, postURL, storeID, savedVideo, buyerFullName, buyerID;
+    JSONArray userStores, statesJsonArray, picturesArray;
     CoordinatorLayout coordinatorLayout;
-    RecyclerView photoRecycler, videoRecycler;
+    ConstraintLayout loaderLayout;
+    LinearLayout controlLayout;
+    ImageView playImage, stopImage;
+    RecyclerView photoRecycler;
     List<MorePhoto> morePhotos;
     MorePhotoAdapter mAdapter;
-    AppCompatButton initDeliveryBtn, btnLivePhotos, btnLiveVideos;
-    ImageView mImageView;
+    AppCompatButton deliveryBtn, btnLivePhotos, btnLiveVideos;
     VideoView videoView;
-    String orderId;
-    EditText orderNumberView;
+    String orderId, savedPhotos, myStoresString, storeName,
+            myLocation, buyersLocation, myFullLocation, buyersFullLocation, videoPath, allPhotos, uploadedVideoPath;
+    StringBuilder uploadedPhotos;
+    int picturesCount;
+    EditText orderNumberView, descView, totalPriceView, myStoreNo, receiverFullname, receiverUsername;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_VIDEO_CAPTURE = 2;
+    static final String selectMyLocation = "myLocation";
+    static final String selectBuyerLocation = "buyerLocation";
     static final String JPG = "jpg";
+    String desc, totalPrice, storeNumber, usernameReceiver, fullnameReceiver;
+    Uri videoUri;
     Bitmap bitmap;
     Utility utility;
+    NotificationCompat.Builder mBuilder;
+    ProgressDialog uploading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +106,7 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
         photoRecycler = findViewById(R.id.recycler_photo_view);
         morePhotos = new ArrayList<>();
         mAdapter = new MorePhotoAdapter(getApplicationContext(), morePhotos);
+        mAdapter.setServer(false);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         //RecyclerView.LayoutManager cLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -94,7 +118,10 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
         photoRecycler.setItemAnimator(new DefaultItemAnimator());
         photoRecycler.setAdapter(mAdapter);
 
-        mImageView = findViewById(R.id.profile_picture);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        userId = prefs.getString("user",null);
+
+        loaderLayout = findViewById(R.id.loader_layout);
         videoView = findViewById(R.id.video);
         btnLivePhotos = findViewById(R.id.btn_live_photos);
         btnLiveVideos = findViewById(R.id.btn_live_videos);
@@ -111,17 +138,87 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
             }
         });
 
+        deliveryBtn = findViewById(R.id.btn_deliver);
+        deliveryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkInputs();
+            }
+        });
+
+        controlLayout = findViewById(R.id.controls);
+        playImage = findViewById(R.id.play);
+        stopImage = findViewById(R.id.stop);
+
+        playImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoView.start();
+            }
+        });
+        stopImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoView.pause();
+            }
+        });
 
         orderNumberView = findViewById(R.id.order_id);
+        descView = findViewById(R.id.content_desc);
+        totalPriceView = findViewById(R.id.price);
+
+        myStoreNo = findViewById(R.id.snumber);
+        receiverFullname = findViewById(R.id.input_receiver_name);
+        receiverUsername = findViewById(R.id.input_receiver_username);
+        receiverUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                /* When focus is lost check that the text field
+                 * has valid values.
+                 */
+                if (!hasFocus) {
+                    confirmUsername(); //you can pass view
+                }
+            }
+        });
+
         myStores = new ArrayList<>();
         storeSpinner = findViewById(R.id.select_store);
         storeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selStore = adapterView.getItemAtPosition(i).toString();
-                Log.d("SEL_ST",selStore+" "+i);
+                storeName = adapterView.getItemAtPosition(i).toString();
+                Log.d("SEL_ST",storeName+" "+i);
                 loadCategories(i);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("SEL_ST","nothing selected");
+            }
+        });
+
+        statesArrayList = new ArrayList<>();
+        myLocationSpinner = findViewById(R.id.my_location);
+        receiverLocationSpinner = findViewById(R.id.receiver_location);
+        myLocationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                myFullLocation = adapterView.getItemAtPosition(i).toString();
+                selectLocation(i,selectMyLocation);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("SEL_ST","nothing selected");
+            }
+        });
+        receiverLocationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                buyersFullLocation = adapterView.getItemAtPosition(i).toString();
+                selectLocation(i,selectBuyerLocation);
             }
 
             @Override
@@ -135,21 +232,80 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
         URL = apiUrls.getApiUrl();
         postURL = apiUrls.getProcessPost();
         utility = new Utility(getApplicationContext());
+        uploadedPhotos = new StringBuilder();
 
         Bundle bundle = this.getIntent().getExtras();
         if(bundle!=null){
             orderId = bundle.getString("orderNumber");
+            states = bundle.getString("states");
             orderNumberView.setText(orderId);
             //fetchItems();
+            if(states != null){
+                try {
+                    statesJsonArray = new JSONArray(states);
+                    fillInStates(statesJsonArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if(savedInstanceState != null){
+            savedPhotos = savedInstanceState.getString("photos");
+            myStoresString = savedInstanceState.getString("myStores");
+            savedVideo = savedInstanceState.getString("video");
+            if(savedPhotos != null){
+                //Log.d("SAVED",savedPhotos);
+                try {
+                    JSONArray array = new JSONArray(savedPhotos);
+                    //Log.d("LEN",""+array.length());
+                    for(int i = 0; i < array.length(); i++){
+                        final String encodedPic = array.getString(i);
+                        new Handler()
+                                .postDelayed(new Runnable(){
+                                    public void run(){
+                                        appendMorePhotos(encodedPic);
+                                    }
+                                }, 1600);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(myStoresString != null){
+                try {
+                    userStores = new JSONArray(myStoresString);
+                    //userStores = storeArray;
+                    fillInItems(userStores);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                fetchItems();
+            }
+
+            if(savedVideo != null){
+                setVideo(Uri.parse(savedVideo));
+            }
+
+        }else{
+            Log.d("SAVED","nothing saved");
+            fetchItems();
         }
 
 
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle state) {
-
-        super.onSaveInstanceState(state);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putStringArrayList("photos",morePhotos);
+        outState.putString("photos",getRecyclerResources());
+        outState.putString("myStores",myStoresString);
+        outState.putString("video",savedVideo);
+        Log.d("SAVED","onSaveIns");
     }
 
     private void openCamera(){
@@ -176,64 +332,69 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
             if(requestCode == REQUEST_IMAGE_CAPTURE){
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                String resourceBase = utility.bitmapToBase64(imageBitmap);
+                final String resourceBase = utility.bitmapToBase64(imageBitmap);
                 Log.d("REZOT",resourceBase);
-                uploadOtherFiles(resourceBase, JPG);
-                mImageView.setImageBitmap(imageBitmap);
+                //uploadOtherFiles(resourceBase, JPG);
+                new Handler()
+                        .postDelayed(new Runnable(){
+                            public void run(){
+                                appendMorePhotos(resourceBase);
+                            }
+                        }, 500);
+
             }else if(requestCode == REQUEST_VIDEO_CAPTURE){
-                Uri videoUri = data.getData();
-                Log.d("REZOT",videoUri+"");
-                videoView.setVideoURI(videoUri);
-
+                videoUri = data.getData();
+                setVideo(videoUri);
+                videoPath = getPath(videoUri);
+                Log.d("VIDEOP",videoPath);
             }
-
         }
 
-        /*if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String resourceBase = utility.bitmapToBase64(imageBitmap);
-            uploadOtherFiles(resourceBase, JPG);
-            Log.d("REZOT",resourceBase);
-            mImageView.setImageBitmap(imageBitmap);
-        }*/
     }
 
-    //method for uploading other photos
-    private void uploadOtherFiles(final String fileEncoded, final String ext){
-        FileUpload fileUpload = new FileUpload(getApplicationContext()) {
-            @Override
-            public void onProcess() {
-                preventInteraction();
-                btnLivePhotos.setText(getResources().getString(R.string.uploading___));
-            }
+    private void setVideo(Uri videoUri){
+        if(videoUri != null){
+            savedVideo = videoUri+"";
+        }
 
-            @Override
-            public void onSuccess(String imgPath) {
-                Log.d("PTH",imgPath);
-                enableUserInteraction();
-                Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
-                btnLivePhotos.setText(getResources().getString(R.string.open_camera));
-                appendMorePhotos(apiUrls.getUploadsFolder()+imgPath);
-            }
-
-            @Override
-            public void onServerError() {
-                enableUserInteraction();
-                Toast.makeText(context, "Server error occurred. Try again", Toast.LENGTH_LONG).show();
-                btnLivePhotos.setText(getResources().getString(R.string.open_camera));
-            }
-
-            @Override
-            public void onNetworkError() {
-                enableUserInteraction();
-                Toast.makeText(context, "Network error occurred. Try again", Toast.LENGTH_LONG).show();
-                btnLivePhotos.setText(getResources().getString(R.string.open_camera));
-            }
-        };
-        fileUpload.uploadImage(fileEncoded, ext);
+        Log.d("REZOT",videoUri+"");
+        videoView.setVideoURI(videoUri);
+        videoView.requestFocus();
+        videoView.start();
+        controlLayout.setVisibility(View.VISIBLE);
     }
 
+    public String getPath(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+
+        cursor = getContentResolver().query(
+                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
+        cursor.close();
+
+        return path;
+    }
+
+    private void fillInStates(JSONArray items){
+        try{
+            for(int i=0;i<items.length();i++){
+                JSONObject jsonObject1=items.getJSONObject(i);
+                String storeName=jsonObject1.getString("mcat_title");
+                statesArrayList.add(storeName);
+            }
+
+            myLocationSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, statesArrayList));
+            receiverLocationSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, statesArrayList));
+
+        }catch (JSONException e){e.printStackTrace();}
+
+    }
 
     private void appendMorePhotos(String res){
         Log.d("iPATH",""+res);
@@ -251,15 +412,15 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
                 morePhotos.clear(); //The list for update recycle view
 
             mAdapter.notifyDataSetChanged();*/
-            final int curSize = mAdapter.getItemCount();
+            //final int curSize = mAdapter.getItemCount();
             morePhotos.addAll(items);
             photoRecycler.post(new Runnable() {
                 @Override
                 public void run() {
                     //scroller.resetState();
                     //photoRecycler.getRecycledViewPool().clear();
-                    //mAdapter.notifyItemInserted(morePhotos.size() - 1);
-                    mAdapter.notifyItemRangeInserted(curSize, morePhotos.size() - 1);
+                    mAdapter.notifyItemInserted(morePhotos.size() - 1);
+                    //mAdapter.notifyItemRangeInserted(curSize, morePhotos.size() - 1);
 
                 }
             });
@@ -284,21 +445,21 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
     }
 
     private void fetchItems(){
-        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        userId = prefs.getString("user",null);
         String originURL = URL + "request=my_stores&id=" + userId;
         Log.d("CHECK",originURL);
+        loaderLayout.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        loaderLayout.setVisibility(View.GONE);
                         Log.d("RTN",response.toString());
                         try {
 
                             Integer err = response.getInt("error");
-                            userStores = response.getJSONArray("data");
                             if(err==0){
-
+                                userStores = response.getJSONArray("data");
+                                myStoresString = userStores.toString();
                                 fillInItems(userStores);
 
                             }else{
@@ -313,6 +474,7 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                loaderLayout.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
                 networkError();
                 Log.d("VOLLEY",error.toString());
@@ -349,19 +511,212 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.d("storeCatID", ""+e);
         }
+    }
+
+    private void selectLocation(final int index, final String whoseLocation){
+        try{
+            JSONObject locObj = statesJsonArray.getJSONObject(index);
+            String loc = locObj.getString("mcat_link");
+            if(whoseLocation.equals(selectMyLocation)){
+                myLocation = loc;
+            }else if(whoseLocation.equals(selectBuyerLocation)){
+                buyersLocation = loc;
+            }
+            Log.d("locID",loc);
+        }catch(JSONException e){
+            Log.d("locID",""+e);
+        }
+    }
+
+    private void checkInputs(){
+        boolean valid = true;
+        desc = descView.getText().toString();
+        totalPrice = totalPriceView.getText().toString();
+        storeNumber = myStoreNo.getText().toString();
+        usernameReceiver = receiverUsername.getText().toString();
+        fullnameReceiver = receiverFullname.getText().toString();
+        final String myPicturesString = getRecyclerResources();
+
+        if(savedVideo==null){
+            valid = false;
+            Toast.makeText(getApplicationContext(),"Take live video of you and the product",Toast.LENGTH_SHORT).show();
+        }
+        if(myPicturesString.equals("[]")){
+            valid = false;
+            Toast.makeText(getApplicationContext(),"Take live photos of the product",Toast.LENGTH_SHORT).show();
+        }
+        if(desc.isEmpty()){
+            valid = false;
+            descView.setError("Enter the description");
+            Toast.makeText(getApplicationContext(),"Enter the description",Toast.LENGTH_SHORT).show();
+        }
+        if(totalPrice.isEmpty()){
+            valid = false;
+            totalPriceView.setError("Enter the total price");
+            Toast.makeText(getApplicationContext(),"Enter the total price",Toast.LENGTH_SHORT).show();
+        }
+        if(storeNumber.isEmpty()){
+            valid = false;
+            myStoreNo.setError("Enter your store number");
+            Toast.makeText(getApplicationContext(),"Enter your store number",Toast.LENGTH_SHORT).show();
+        }
+
+        if(buyerID==null){
+            valid = false;
+            receiverUsername.setError("Re-enter correctly the receiver's username");
+            Toast.makeText(getApplicationContext(),"Enter receiver's username",Toast.LENGTH_SHORT).show();
+        }else{
+            if(buyerID.equals(userId)){
+                valid = false;
+                receiverUsername.setError("You can't sell to yourself!");
+                Toast.makeText(getApplicationContext(),"Please enter receiver's username. You can't sell to yourself!",Toast.LENGTH_SHORT).show();
+            }
+        }
+        if(usernameReceiver.isEmpty()){
+            valid = false;
+            receiverUsername.setError("Enter receiver's username");
+            Toast.makeText(getApplicationContext(),"Enter receiver's username",Toast.LENGTH_SHORT).show();
+        }
+
+        if(fullnameReceiver.isEmpty()){
+            valid = false;
+            receiverFullname.setError("Enter receiver's full name");
+            Toast.makeText(getApplicationContext(),"Enter receiver's full name",Toast.LENGTH_SHORT).show();
+        }
+
+
+        if(valid){
+            try {
+                picturesArray = new JSONArray(myPicturesString);
+                picturesCount = picturesArray.length();
+                if(picturesCount > 0){
+                    uploadMediaFiles(picturesArray.getString(0),JPG, 0);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
-    private void updateChanges(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        userId = prefs.getString("user",null);
+    //method for uploading other photos
+    private void uploadMediaFiles(final String fileEncoded, final String ext, final int status){
 
+
+        FileUpload fileUpload = new FileUpload(getApplicationContext()) {
+            @Override
+            public void onProcess() {
+                loaderLayout.setVisibility(View.VISIBLE);
+                preventInteraction();
+                deliveryBtn.setText(getResources().getString(R.string.uploading___));
+            }
+
+            @Override
+            public void onSuccess(String imgPath) {
+                Log.d("PTHH",imgPath);
+                String serverImg = "api/src/routes/"+imgPath;
+                String comma = (status>0)?",":"";
+                uploadedPhotos.append(comma).append(serverImg);
+
+                int current = status + 1;
+                if(picturesCount > current){
+
+                    try {
+                        uploadMediaFiles(picturesArray.getString(current),JPG,current);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Log.d("PTHH","finished pics");
+                    uploadVideo();
+                }
+
+                //enableUserInteraction();
+                //Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onServerError() {
+                loaderLayout.setVisibility(View.GONE);
+                enableUserInteraction();
+                Toast.makeText(getApplicationContext(), "Server error occurred. Try again", Toast.LENGTH_LONG).show();
+                deliveryBtn.setText(getResources().getString(R.string.deliver_order));
+
+            }
+
+            @Override
+            public void onNetworkError() {
+                loaderLayout.setVisibility(View.GONE);
+                enableUserInteraction();
+                Toast.makeText(getApplicationContext(), "Network error occurred. Try again", Toast.LENGTH_LONG).show();
+                deliveryBtn.setText(getResources().getString(R.string.deliver_order));
+
+            }
+        };
+        fileUpload.uploadImage(fileEncoded, ext);
+    }
+
+
+    private void uploadVideo() {
+        class UploadVideo extends AsyncTask<Void, Void, String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Toast.makeText(getApplicationContext(), "Network error occurred. Try again", Toast.LENGTH_LONG).show();
+                //uploading = ProgressDialog.show(InitiateDeliveryActivity.this, "Uploading Video", "Please wait...", false, false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                Log.d("REZOT",s);
+                uploadedVideoPath = s;
+                updateChanges();
+
+                /*textViewResponse.setText(Html.fromHtml("<b>Uploaded at <a href='" + s + "'>" + s + "</a></b>"));
+                textViewResponse.setMovementMethod(LinkMovementMethod.getInstance());*/
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                uploadFile u = new uploadFile();
+                return u.uploadVideo(videoPath);
+            }
+        }
+        UploadVideo uv = new UploadVideo();
+        uv.execute();
+    }
+
+    private void createNotification(){
+        int notificationId = 1;
+        String textTitle = "Delivery Order Status";
+        String textContent = "Creating your delivery order";
+        mBuilder = new NotificationCompat.Builder(this, utility.getDeliveryOrder_channelID())
+                .setSmallIcon(R.drawable.ic_file_upload_black_24dp)
+                .setContentTitle(textTitle)
+                .setContentText(textContent)
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+        mBuilder.setProgress(0,0,true)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(notificationId, mBuilder.build());
+    }
+
+    private void updateChanges(){
+        final String serverVideo = "api/src/routes/"+uploadedVideoPath;
         preventInteraction();
         //btnSaveProfile.setText(getResources().getString(R.string.loading));
         StringRequest request = new StringRequest(Request.Method.POST, postURL, new Response.Listener<String>(){
             @Override
             public void onResponse(String s) {
-                //btnSaveProfile.setText(getResources().getString(R.string.save_changes));
+                loaderLayout.setVisibility(View.GONE);
+                //uploading.dismiss();
+                deliveryBtn.setText(getResources().getString(R.string.deliver_order));
                 enableUserInteraction();
                 Log.d("DFILE",s);
 
@@ -371,13 +726,14 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
 
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Changes have been saved!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Your order has been delivered!",Toast.LENGTH_SHORT).show();
                 }
             }
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                //btnSaveProfile.setText(getResources().getString(R.string.save_changes));
+                loaderLayout.setVisibility(View.GONE);
+                deliveryBtn.setText(getResources().getString(R.string.deliver_order));
                 Toast.makeText(getApplicationContext(),"Network error occurred. Please retry!",Toast.LENGTH_SHORT).show();
 
                 Log.d("ERR",volleyError.toString());
@@ -405,9 +761,21 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError  {
                 Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("request", "edit_profile");
-                //parameters.put("picture", serverImg);
-                parameters.put("id", userId);
+                parameters.put("request", "deliver_order");
+                parameters.put("receiver_id", buyerID);
+                parameters.put("number", storeNumber);
+                parameters.put("desc", desc);
+                parameters.put("photos", String.valueOf(uploadedPhotos));
+                parameters.put("video", serverVideo);
+                parameters.put("price", totalPrice);
+                parameters.put("loc_from", myLocation);
+                parameters.put("loc_to", buyersLocation);
+                parameters.put("store_name", storeName);
+                parameters.put("store_id", storeID);
+                parameters.put("store_number", storeNumber);
+                parameters.put("receiver_fullname", buyerFullName);
+                parameters.put("receiver_username", receiverUsername.getText().toString());
+                parameters.put("order_no", orderId);
 
                 return parameters;
             }
@@ -416,6 +784,78 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
         //RequestQueue rQueue = Volley.newRequestQueue(getContext());
         request.setShouldCache(false);
         InitiateVolley.getInstance().addToRequestQueue(request);
+    }
+
+    private String getRecyclerResources(){
+        JSONArray morePhotsJson = new JSONArray();
+
+        for(int i = 0; i < morePhotos.size(); i++){
+            morePhotsJson.put(morePhotos.get(i).getImage());
+
+        }
+        return morePhotsJson.toString();
+        //return morePhotosStr;
+    }
+
+    private void confirmUsername(){
+        String username = receiverUsername.getText().toString();
+        if(!username.isEmpty()){
+            String newURL = URL + "request=check_username&username=" + username;
+            VolleyRequest volleyRequest = new VolleyRequest(getApplicationContext(), newURL) {
+                @Override
+                public void onProcess() {
+                    //do nothing while processing
+                    //networkErrorLayout.setVisibility(View.GONE);
+                    preventInteraction();
+                    Toast.makeText(getApplicationContext(),"Please wait let us confirm the username...",Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onSuccess(JSONObject response) {
+                    enableUserInteraction();
+                    try {
+
+                        Integer err = response.getInt("error");
+                        if(err==0){
+
+                            JSONArray data = response.getJSONArray("data");
+                            setReceiver(data);
+
+                        }else{
+                            if(err==1){
+                                receiverUsername.setError("No user has this username. Please recheck this");
+                            }
+                            //networkErrorLayout.setVisibility(View.VISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        Log.e("V_ERROR",e.toString());
+                        e.printStackTrace();
+                    }
+                }
+
+
+                @Override
+                public void onNetworkError() {
+                    //progressBar.setVisibility(View.GONE);
+                    //networkErrorLayout.setVisibility(View.VISIBLE);
+                    enableUserInteraction();
+                    Toast.makeText(getApplicationContext(),"Network error occurred. Check your internet and retype username",Toast.LENGTH_SHORT).show();
+                }
+            };
+            volleyRequest.fetchResources();
+        }
+
+    }
+
+    private void setReceiver(JSONArray jsonArray){
+        try {
+            JSONObject object = jsonArray.getJSONObject(0);
+            buyerFullName = object.getString("surname") + " " + object.getString("firstname");
+            buyerID = object.getString("id");
+            receiverFullname.setText(buyerFullName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void preventInteraction(){

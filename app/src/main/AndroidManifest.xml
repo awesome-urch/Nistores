@@ -5,9 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".Folders.Helpers.InitiateVolley"
@@ -159,13 +160,14 @@
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
         </activity>
         <activity
+            android:name=".Folders.Pages.InitiateDeliveryActivity"
             android:label="@string/initiate_delivery"
-            android:parentActivityName=".Folders.Pages.DeliveryOrderActivity"
-            android:name=".Folders.Pages.InitiateDeliveryActivity">
+            android:parentActivityName=".Folders.Pages.DeliveryOrderActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.DeliveryOrderActivity" />
         </activity>
+        <activity android:name=".Folders.Pages.deliveredOrderActivity"></activity>
     </application>
 
 </manifest>

@@ -48,7 +48,7 @@ public class DeliveryOrderActivity extends AppCompatActivity {
     private ApiUrls apiUrls;
     private List<BusinessLounge> businessLoungeList;
     private BusinessLoungeAdapter mAdapter;
-    private String URL, postURL, userId;
+    private String URL, postURL, userId, stateString;
     AppCompatButton initDeliveryBtn;
     SharedPreferences preferences;
 
@@ -83,7 +83,29 @@ public class DeliveryOrderActivity extends AppCompatActivity {
         URL = apiUrls.getApiUrl();
         postURL = apiUrls.getProcessPost();
 
-        fetchItems();
+        if(savedInstanceState != null){
+            stateString = savedInstanceState.getString("states");
+            if(stateString != null){
+                try {
+                    JSONArray allStatesArray = new JSONArray(stateString);
+                    //userStores = storeArray;
+                    fillInItems(allStatesArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                fetchItems();
+            }
+        }else{
+            fetchItems();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("states",stateString);
+        Log.d("SAVED","onSaveIns");
     }
 
     private void fetchItems(){
@@ -107,7 +129,8 @@ public class DeliveryOrderActivity extends AppCompatActivity {
                     if(err==0){
 
                         JSONArray data = response.getJSONArray("data");
-                        Log.d("MPUTA",data.toString());
+                        stateString = data.toString();
+                        Log.d("REZOT",stateString);
                         fillInItems(data);
 
                     }else{
@@ -166,6 +189,7 @@ public class DeliveryOrderActivity extends AppCompatActivity {
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                enableUserInteraction();
                 initDeliveryBtn.setText(getResources().getString(R.string.initiate_delivery));
                 Toast.makeText(getApplicationContext(),"Network error occurred. Please retry!",Toast.LENGTH_SHORT).show();
 
@@ -211,6 +235,7 @@ public class DeliveryOrderActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putString("orderNumber",number);
+        bundle.putString("states",stateString);
         intent = new Intent(getApplicationContext(),InitiateDeliveryActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

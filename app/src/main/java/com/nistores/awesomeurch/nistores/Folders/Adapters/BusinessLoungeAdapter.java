@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.BusinessLounge;
 import com.nistores.awesomeurch.nistores.R;
@@ -19,14 +20,27 @@ public class BusinessLoungeAdapter extends RecyclerView.Adapter<BusinessLoungeAd
     private Context context;
     private List<BusinessLounge> bizList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView name, id, link ;
+
 
         public MyViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
             id = view.findViewById(R.id.id);
             link = view.findViewById(R.id.link);
+            name.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            String state = link.getText().toString();
+            String state_id = id.getText().toString();
+            switch (view.getId()){
+                case R.id.name:
+                    Toast.makeText(context,state,Toast.LENGTH_SHORT).show();
+                    break;
+            }
         }
     }
 

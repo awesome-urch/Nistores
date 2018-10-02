@@ -29,6 +29,9 @@ public class Utility {
     public String getProductsURL(){
         return productsURL;
     }
+    public String deliveryOrder_channelName = "Initiate Delivery";
+    public String deliveryOrder_channelDesc = "Notifies you of the progress in initiating delivery";
+    public String deliveryOrder_channelID = "channel_01";
 
     public String bitmapToBase64(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -56,4 +59,15 @@ public class Utility {
         return String.valueOf(ret);
     }
 
+    public String getDeliveryOrder_channelDesc() {
+        return deliveryOrder_channelDesc;
+    }
+
+    public String getDeliveryOrder_channelName() {
+        return deliveryOrder_channelName;
+    }
+
+    public String getDeliveryOrder_channelID() {
+        return deliveryOrder_channelID;
+    }
 }

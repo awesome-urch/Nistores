@@ -1,7 +1,10 @@
 package com.nistores.awesomeurch.nistores.Folders.Pages;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -29,6 +32,7 @@ import com.j256.ormlite.dao.Dao;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.DatabaseHelper;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.UserTable;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.Utility;
 import com.nistores.awesomeurch.nistores.R;
 
 import org.json.JSONException;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Dao<UserTable, Integer> dao;
     Integer const_id = 1;
     ApiUrls apiUrls;
+    Utility utility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         Button sign_in = findViewById(R.id.btn_sign_in);
         AppCompatButton sign_up = findViewById(R.id.sign_up);
         loader = findViewById(R.id.loader_layout);
+        utility = new Utility(getApplicationContext());
 
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,4 +198,25 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this,CreateAccountActivity.class);
         startActivity(intent);
     }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.delivery_order_channel_name);
+            String description = getString(R.string.delivery_order_channel_desc);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(utility.getDeliveryOrder_channelID(), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }else{
+                Log.d("REZOT",utility.getDeliveryOrder_channelID()+" notification channel not registered");
+            }
+        }
+    }
+
 }

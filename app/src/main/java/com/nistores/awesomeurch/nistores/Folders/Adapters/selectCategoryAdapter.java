@@ -61,7 +61,6 @@ public class selectCategoryAdapter extends RecyclerView.Adapter<selectCategoryAd
     @Override
     public void onBindViewHolder(selectCategoryAdapter.MyViewHolder holder, final int position) {
         final selectCategory category = selectCategories.get(position);
-
         holder.id.setText(category.getId());
 
         if(design == SELECT_DESIGN){

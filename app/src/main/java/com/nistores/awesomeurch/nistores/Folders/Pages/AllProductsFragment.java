@@ -319,9 +319,11 @@ public class AllProductsFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if(origin==0){
+                    Log.d("ORIJI","is 0");
                     networkErrorLayout.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
                 }else{
+                    Log.d("ORIJI","is NOT 0");
                     Toast.makeText(getContext(),"No network connection",Toast.LENGTH_SHORT).show();
                 }
                 progressBar.setVisibility(View.GONE);

@@ -21,6 +21,7 @@ import java.util.List;
 public class MorePhotoAdapter extends RecyclerView.Adapter<MorePhotoAdapter.MyViewHolder> {
     private Context context;
     private List<MorePhoto> morePhotos;
+    private Boolean server = true;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView thumbnail;
@@ -49,20 +50,26 @@ public class MorePhotoAdapter extends RecyclerView.Adapter<MorePhotoAdapter.MyVi
         final MorePhoto photo = morePhotos.get(position);
         //holder.thumbnail.setImageBitmap(photo.getImageBitmap());
 
-        //For testing purpose. Not yet sending image to server
-        /*byte[] decodedString = Base64.decode(photo.getImage(), Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        holder.thumbnail.setImageBitmap(decodedByte);*/
+        if(!server){
+            //For testing purpose. Not yet sending image to server
+            byte[] decodedString = Base64.decode(photo.getImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.thumbnail.setImageBitmap(decodedByte);
+        }else{
+            //The real implementation, sending to server and getting the image path from API
+            String pic = photo.getImage();
+            Picasso.with(context).load(pic).placeholder(R.drawable.ic_crop_image).into(holder.thumbnail);
+        }
 
-        //The real implementation, sending to server and getting the image path from API
-        String pic = photo.getImage();
-
-        Picasso.with(context).load(pic).placeholder(R.drawable.ic_crop_image).into(holder.thumbnail);
 
     }
 
     @Override
     public int getItemCount() {
         return morePhotos.size();
+    }
+
+    public void setServer(Boolean server) {
+        this.server = server;
     }
 }

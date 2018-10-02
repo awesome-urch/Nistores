@@ -26,6 +26,9 @@
     <string name="dashboard">Dashboard</string>
     <string name="default_picture">Default Picture</string>
     <string name="delete">Delete</string>
+    <string name="deliver_order">Deliver Order</string>
+    <string name="delivery_order_channel_name">Delivery Orders</string>
+    <string name="delivery_order_channel_desc">Notifies you of the progress in your delivery</string>
     <string name="delivery_orders">Delivery Orders</string>
     <string name="deliveryOrder1">Initiate delivery by clicking on the "Initiate Delivery" button at the bottom of this page</string>
     <string name="deliveryOrder2">An order number will be automatically generated</string>
@@ -135,7 +138,7 @@
     <string name="success_product">Your product has been successfully uploaded.</string>
     <string name="swipe_down_refresh">Swipe down to refresh</string>
     <string name="take_live_photos">Take Camera Photo(s) of Product</string>
-    <string name="take_live_videos">Take Live Video(s) of You and the Product</string>
+    <string name="take_live_videos">Take Live Video of You and the Product</string>
     <string name="terms_policy">Terms and Policy</string>
     <string name="title_activity_home">Home</string>
     <string name="title_business_lounge">Business Lounge</string>
@@ -154,12 +157,14 @@
     <string name="upload_product">Upload Product</string>
     <string name="upload_another_product">Upload another product</string>
     <string name="uploading...">Uploading…</string>
+    <string name="uploading_pictures">Uploading Pictures…</string>
+    <string name="uploading_video">Uploading Video…</string>
     <string name="username">Username</string>
     <string name="view_profile">View Profile</string>
     <string name="views">Views</string>
     <string name="visit_store">Visit Store</string>
     <string name="weekend_giveaways">Weekend Giveaways</string>
-    <string name="what_store_number">What is your store number?</string>
+    <string name="what_store_number">What is your store phone number?</string>
     <string name="why_nistores">Why Nistores?</string>
     <string name="yes_account">Already have an account?</string>
     <string name="your_location">Your Location</string>
