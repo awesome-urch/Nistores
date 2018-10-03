@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.MorePhoto;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
@@ -57,7 +58,8 @@ public class MorePhotoAdapter extends RecyclerView.Adapter<MorePhotoAdapter.MyVi
             holder.thumbnail.setImageBitmap(decodedByte);
         }else{
             //The real implementation, sending to server and getting the image path from API
-            String pic = photo.getImage();
+            String base = new ApiUrls().getOffline();
+            String pic = base + photo.getImage();
             Picasso.with(context).load(pic).placeholder(R.drawable.ic_crop_image).into(holder.thumbnail);
         }
 

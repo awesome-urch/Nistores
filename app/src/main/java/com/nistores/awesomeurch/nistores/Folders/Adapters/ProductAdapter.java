@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Product;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
@@ -81,7 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             holder.featuredView.setVisibility(View.VISIBLE);
         }
 
-        final String STRING_BASE_URL = "https://www.nistores.com.ng/";
+        final String STRING_BASE_URL = new ApiUrls().getOnline();
         String pic = product.getImage();
         //String img = "https://www.nistores.com.ng/"+product.getImage();
 

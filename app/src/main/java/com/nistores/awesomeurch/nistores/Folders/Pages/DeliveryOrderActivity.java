@@ -51,6 +51,7 @@ public class DeliveryOrderActivity extends AppCompatActivity {
     private String URL, postURL, userId, stateString;
     AppCompatButton initDeliveryBtn;
     SharedPreferences preferences;
+    public static String ORDER_STATE = "state_orders";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class DeliveryOrderActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         businessLoungeList = new ArrayList<>();
         mAdapter = new BusinessLoungeAdapter(getApplicationContext(), businessLoungeList);
+        mAdapter.setOpenActivity(ORDER_STATE);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);

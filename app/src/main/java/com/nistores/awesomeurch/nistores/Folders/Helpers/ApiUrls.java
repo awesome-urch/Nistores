@@ -9,6 +9,8 @@ package com.nistores.awesomeurch.nistores.Folders.Helpers;
 public class ApiUrls {
 
     private String live = "https://www.nistores.com.ng/api/src/routes/";
+    private String online = "https://www.nistores.com.ng/";
+    private String offline = "http://192.168.43.60/pagesn/";
     private String local = "http://192.168.43.60/pagesn/";
 	private String apiURL = local+"process_one.php?";
 	private String loginURL = "https://www.nistores.com.ng/api/src/routes/process_one.php?request=login";
@@ -39,5 +41,13 @@ public class ApiUrls {
 
     public String getProcessPost() {
         return processPost;
+    }
+
+    public String getOffline() {
+        return offline;
+    }
+
+    public String getOnline() {
+        return online;
     }
 }
