@@ -1,14 +1,24 @@
 package com.nistores.awesomeurch.nistores.Folders.Helpers;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.nistores.awesomeurch.nistores.Folders.Pages.NotificationsActivity;
 import com.nistores.awesomeurch.nistores.R;
 
 import java.io.ByteArrayOutputStream;
@@ -32,6 +42,8 @@ public class Utility {
     public String deliveryOrder_channelName = "Initiate Delivery";
     public String deliveryOrder_channelDesc = "Notifies you of the progress in initiating delivery";
     public String deliveryOrder_channelID = "channel_01";
+    NotificationCompat.Builder mBuilder;
+    public int NOTIF_INTERVAL = 1000 * 60 * 4; //4 mins
 
     public String bitmapToBase64(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -69,5 +81,44 @@ public class Utility {
 
     public String getDeliveryOrder_channelID() {
         return deliveryOrder_channelID;
+    }
+
+    public void createNotification(String notifyId, String content){
+        // Create an explicit intent for an Activity in your app
+        Bundle bundle = new Bundle();
+        bundle.putString("last_notification_id",notifyId);
+
+        Intent intent = new Intent(context, NotificationsActivity.class);
+        //intent.putExtra("last_notification_id",notifyId);
+        intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        int notificationId = Integer.parseInt(notifyId);
+        String textTitle = "Nistores Notifications";
+        mBuilder = new NotificationCompat.Builder(context, getDeliveryOrder_channelID())
+                .setSmallIcon(R.drawable.ic_notification_color)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                        R.mipmap.ic_launcher))
+                .setContentTitle(textTitle)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        mBuilder.setContentIntent(pendingIntent).setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(notificationId, mBuilder.build());
+        playSound();
+    }
+
+    public void playSound(){
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(context, notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

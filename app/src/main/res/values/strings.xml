@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_us">About Us</string>
+    <string name="action_refresh">Refresh</string>
     <string name="all_the_states_could_not">Couldn\'t load all the 36 states </string>
     <string name="api_url">https://www.nistores.com.ng/</string>
     <string name="app_logo1">Nistores Logo</string>
     <string name="app_name">Nistores</string>
     <string name="are_you_ready">Are you ready?</string>
+    <string name="back_navigation">Back navigation</string>
     <string name="back_to_home">Back to home</string>
     <string name="btn_sign_in">Sign in</string>
     <string name="business_fly">With Nistores you can make your Business Fly</string>
@@ -25,6 +27,7 @@
     <string name="create_new_store">Create New Store</string>
     <string name="create_ticket">Create Request Ticket</string>
     <string name="create_your_account">Create Your Account</string>
+    <string name="could_not_fetch_stores">"Couldn't get your stores"</string>
     <string name="dashboard">Dashboard</string>
     <string name="default_picture">Default Picture</string>
     <string name="delete">Delete</string>
@@ -176,7 +179,7 @@
     <string name="views">Views</string>
     <string name="visit_store">Visit Store</string>
     <string name="weekend_giveaways">Weekend Giveaways</string>
-    <string name="what_store_number">What is your store phone number?</string>
+    <string name="what_store_number">What is your store number?</string>
     <string name="why_nistores">Why Nistores?</string>
     <string name="yes_account">Already have an account?</string>
     <string name="your_location">Your Location</string>

@@ -1,11 +1,18 @@
 package com.nistores.awesomeurch.nistores.Folders.Pages;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -31,6 +38,8 @@ import com.android.volley.toolbox.Volley;
 import com.j256.ormlite.dao.Dao;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.DatabaseHelper;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.JobSchedulerService;
+import com.nistores.awesomeurch.nistores.Folders.Helpers.MyAlarmReceiver;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.UserTable;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Utility;
 import com.nistores.awesomeurch.nistores.R;
@@ -52,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     Integer const_id = 1;
     ApiUrls apiUrls;
     Utility utility;
+    int INTERVAL;
+    JobScheduler mJobScheduler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         AppCompatButton sign_up = findViewById(R.id.sign_up);
         loader = findViewById(R.id.loader_layout);
         utility = new Utility(getApplicationContext());
+        INTERVAL = utility.NOTIF_INTERVAL;
 
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,14 +98,61 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        createNotificationChannel();
+
+        performJobScheduler();
+
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (preferences.contains("user")) {
+            scheduleAlarm();
             intent = new Intent(this,HomeActivity.class);
             startActivity(intent);
             finish();
         }
 
+    }
+
+    //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void performJobScheduler(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Log.d("RUNNN","Scheduler");
+            mJobScheduler = (JobScheduler)
+                    getSystemService( Context.JOB_SCHEDULER_SERVICE );
+
+            JobInfo.Builder builder = new JobInfo.Builder( 1,
+                    new ComponentName( getPackageName(),
+                            JobSchedulerService.class.getName() ) );
+
+            builder.setPeriodic( 3000 );
+        }
+    }
+
+    public void scheduleAlarm() {
+        // Construct an intent that will execute the AlarmReceiver
+        Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
+        // Create a PendingIntent to be triggered when the alarm goes off
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, MyAlarmReceiver.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Setup periodic alarm every every INTERVAL from this point onwards
+        long firstMillis = System.currentTimeMillis(); // alarm is set right away
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        // First parameter is the type: ELAPSED_REALTIME, ELAPSED_REALTIME_WAKEUP, RTC_WAKEUP
+        // Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
+        if (alarm != null) {
+            alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+                    INTERVAL, pIntent);
+        }
+    }
+
+    public void cancelAlarm() {
+        Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, MyAlarmReceiver.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        if (alarm != null) {
+            alarm.cancel(pIntent);
+        }
     }
 
     public void signIn(){
@@ -173,6 +232,9 @@ public class MainActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("user",id).apply();
+        editor.putString("last_notification_id","0").apply();
+        editor.putString("last_id","0").apply();
+        scheduleAlarm();
 
         //save user data in user table
         helper = new DatabaseHelper(getApplicationContext());

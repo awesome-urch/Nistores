@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout n1:layout_width="fill_parent" n1:layout_height="wrap_content"
-  xmlns:n1="http://schemas.android.com/apk/res/android">
-    <TextView n1:textAppearance="?android:textAppearanceLarge" n1:textSize="@dimen/font_two" n1:id="@+id/title" n1:padding="@dimen/two_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:text="@string/profile" />
-    <TextView n1:id="@+id/id" n1:visibility="gone" n1:layout_width="0.0dip" n1:layout_height="0.0dip" />
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content">
+    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="@dimen/font_two" android:id="@+id/title" android:padding="@dimen/two_level_margin" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/profile"/>
+    <TextView android:id="@+id/id" android:visibility="gone" android:layout_width="0dp" android:layout_height="0dp"/>
 </android.support.constraint.ConstraintLayout>

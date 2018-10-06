@@ -97,6 +97,7 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
     Utility utility;
     NotificationCompat.Builder mBuilder;
     ProgressDialog uploading;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -340,7 +341,7 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
                             public void run(){
                                 appendMorePhotos(resourceBase);
                             }
-                        }, 500);
+                        }, 1500);
 
             }else if(requestCode == REQUEST_VIDEO_CAPTURE){
                 videoUri = data.getData();
@@ -703,7 +704,7 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
                 .setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-// notificationId is a unique int for each notification that you must define
+        // notificationId is a unique int for each notification that you must define
         notificationManager.notify(notificationId, mBuilder.build());
     }
 
@@ -727,6 +728,12 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Your order has been delivered!",Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("number",orderId);
+                    //bundle.putString("id",id);
+                    intent = new Intent(getApplicationContext(),deliveredOrderActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             }
         },new Response.ErrorListener(){
@@ -772,6 +779,7 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
                 parameters.put("loc_to", buyersLocation);
                 parameters.put("store_name", storeName);
                 parameters.put("store_id", storeID);
+                parameters.put("seller_id", userId);
                 parameters.put("store_number", storeNumber);
                 parameters.put("receiver_fullname", buyerFullName);
                 parameters.put("receiver_username", receiverUsername.getText().toString());

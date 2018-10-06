@@ -108,6 +108,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         BottomNavigationView navigation = findViewById(R.id.navigation);
         BottomNavigationHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
     }
 
     public Fragment selectFragment(int frag){
@@ -164,7 +165,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             loadFragment(fragment);
             return true;
         } else if(id == R.id.action_notifications){
-
+            intent = new Intent(this,NotificationsActivity.class);
+            startActivity(intent);
             return true;
         } else if(id == R.id.action_search){
             intent = new Intent(this,SearchActivity.class);
@@ -192,6 +194,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_favourites) {
             intent = new Intent(this,FavouritesActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_dashboard) {
+            intent = new Intent(this,DashboardActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_polls) {
+            intent = new Intent(this,pollsActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.about_us) {
+            intent = new Intent(this,AboutUsActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.terms_policy) {
+            intent = new Intent(this,TermsPolicyActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.disclaimer) {
+            intent = new Intent(this,DisclaimerActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_my_stores) {
+            intent = new Intent(this,MyStoresActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_explore_stores) {

@@ -121,7 +121,7 @@ public class deliveredOrderActivity extends AppCompatActivity {
         if(bundle!=null){
             id = bundle.getString("id");
             number = bundle.getString("number");
-            if(id != null){
+            if(number != null){
                 getInfo();
             }
 
