@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,6 +44,7 @@ public class MyStoresActivity extends AppCompatActivity {
     private MyStoreAdapter mAdapter;
     private String URL, userId, storeString;
     private AppCompatButton retryBtn;
+    ImageView thumbnail;
     SharedPreferences preferences;
 
     @Override
@@ -55,6 +59,14 @@ public class MyStoresActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 fetchItems();
+            }
+        });
+
+        thumbnail = findViewById(R.id.thumbnail);
+        thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCreateStoreIntent();
             }
         });
 
@@ -151,4 +163,10 @@ public class MyStoresActivity extends AppCompatActivity {
         // refreshing recycler view
         mAdapter.notifyDataSetChanged();
     }
+
+    private void openCreateStoreIntent(){
+        intent = new Intent(this,CreateStoreActivity.class);
+        startActivity(intent);
+    }
+
 }

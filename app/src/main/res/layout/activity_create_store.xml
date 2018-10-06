@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/myCoordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/WebAppTheme"
+    android:background="@color/littleGrey"
+    tools:context=".Folders.Pages.CreateStoreActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/info_layout"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:padding="@dimen/three_level_margin">
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/store_name" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_store_name"
+                    android:layout_width="fill_parent"
+                    app:hintEnabled="false"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/store_name"
+                        android:background="@drawable/input_style1"
+                        android:padding="@dimen/one_level_margin"
+                        android:textColor="@color/textColor"
+                        android:layout_width="fill_parent"
+                        android:focusable="false"
+                        android:enabled="false"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="@string/store_name"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/your_location" />
+                <Spinner
+                    android:id="@+id/my_location"
+                    android:background="@drawable/input_style1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40.0dip" />
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/store_address" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_store_address"
+                    android:layout_width="fill_parent"
+                    app:hintEnabled="false"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/store_address"
+                        android:background="@drawable/input_style1"
+                        android:padding="@dimen/one_level_margin"
+                        android:minHeight="100dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:hint="@string/store_address"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/store_email" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_store_email"
+                    android:layout_width="fill_parent"
+                    app:hintEnabled="false"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/store_email"
+                        android:background="@drawable/input_style1"
+                        android:padding="@dimen/one_level_margin"
+                        android:textColor="@color/textColor"
+                        android:layout_width="fill_parent"
+                        android:focusable="false"
+                        android:enabled="false"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/store_email"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/store_phone" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_store_phone"
+                    android:layout_width="fill_parent"
+                    app:hintEnabled="false"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/store_phone"
+                        android:background="@drawable/input_style1"
+                        android:padding="@dimen/one_level_margin"
+                        android:textColor="@color/textColor"
+                        android:layout_width="fill_parent"
+                        android:focusable="false"
+                        android:enabled="false"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:hint="@string/store_phone"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/support_phone_number" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_support"
+                    android:layout_width="fill_parent"
+                    app:hintEnabled="false"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/support"
+                        android:background="@drawable/input_style1"
+                        android:padding="@dimen/one_level_margin"
+                        android:textColor="@color/textColor"
+                        android:layout_width="fill_parent"
+                        android:focusable="false"
+                        android:enabled="false"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="@string/support_phone_number"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/website" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_website"
+                    android:layout_width="fill_parent"
+                    app:hintEnabled="false"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/website"
+                        android:background="@drawable/input_style1"
+                        android:padding="@dimen/one_level_margin"
+                        android:textColor="@color/textColor"
+                        android:layout_width="fill_parent"
+                        android:focusable="false"
+                        android:enabled="false"
+                        android:layout_height="wrap_content"
+                        android:inputType="textWebEditText"
+                        android:hint="@string/website"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_two"
+                    android:layout_marginTop="@dimen/two_level_margin"
+                    android:text="@string/additional_info" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_additional_info"
+                    android:layout_width="fill_parent"
+                    app:hintEnabled="false"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/additional_info"
+                        android:background="@drawable/input_style1"
+                        android:padding="@dimen/one_level_margin"
+                        android:minHeight="100dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:hint="@string/additional_info"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:textSize="22.0sp"
+                    android:textColor="@color/webColor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_margin="@dimen/one_level_margin"
+                    android:text="@string/store_categories_services" />
+                <LinearLayout
+                    android:background="@color/webColor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginTop="8.0dip"
+                    android:layout_marginBottom="4.0dip" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_category"
+                    android:scrollbars="vertical"
+                    android:clipToPadding="false"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </ScrollView>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/loader_layout"
+        android:visibility="gone"
+        android:background="@color/transparentBlue"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ProgressBar
+            android:id="@id/loader"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/loader_layout"
+            app:layout_constraintLeft_toLeftOf="@id/loader_layout"
+            app:layout_constraintRight_toRightOf="@id/loader_layout"
+            app:layout_constraintTop_toTopOf="@id/loader_layout" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.design.widget.CoordinatorLayout>

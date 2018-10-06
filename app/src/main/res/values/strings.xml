@@ -2,6 +2,7 @@
 <resources>
     <string name="about_us">About Us</string>
     <string name="action_refresh">Refresh</string>
+    <string name="additional_info">Additional Info</string>
     <string name="all_the_states_could_not">Couldn\'t load all the 36 states </string>
     <string name="api_url">https://www.nistores.com.ng/</string>
     <string name="app_logo1">Nistores Logo</string>
@@ -143,11 +144,16 @@
     <string name="simple_fast">Its simple, fast and easy.</string>
     <string name="state_orders">State Orders</string>
     <string name="status">Status</string>
+    <string name="store_email">Store Email</string>
+    <string name="store_phone">Store Phone</string>
+    <string name="store_address">Store Address</string>
+    <string name="store_categories_services">"Store Categories/Services"</string>
     <string name="store_name">Store Name</string>
     <string name="store_number">Store Number</string>
     <string name="store_views">Store Views</string>
     <string name="stores">Stores</string>
     <string name="sub_history">Subscription History</string>
+    <string name="support_phone_number">Support Phone Number</string>
     <string name="surname">Surname</string>
     <string name="success_product">Your product has been successfully uploaded.</string>
     <string name="swipe_down_refresh">Swipe down to refresh</string>
@@ -178,6 +184,7 @@
     <string name="view_profile">View Profile</string>
     <string name="views">Views</string>
     <string name="visit_store">Visit Store</string>
+    <string name="website">Website</string>
     <string name="weekend_giveaways">Weekend Giveaways</string>
     <string name="what_store_number">What is your store number?</string>
     <string name="why_nistores">Why Nistores?</string>
