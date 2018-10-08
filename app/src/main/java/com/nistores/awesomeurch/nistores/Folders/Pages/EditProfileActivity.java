@@ -267,6 +267,7 @@ public class EditProfileActivity extends AppCompatActivity {
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                enableUserInteraction();
                 btnUpdateInterest.setText(getResources().getString(R.string.update_interest));
                 Toast.makeText(getApplicationContext(),"Network error occurred. Please retry!",Toast.LENGTH_SHORT).show();
 
@@ -334,6 +335,7 @@ public class EditProfileActivity extends AppCompatActivity {
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                enableUserInteraction();
                 btnSaveProfile.setText(getResources().getString(R.string.save_changes));
                 Toast.makeText(getApplicationContext(),"Network error occurred. Please retry!",Toast.LENGTH_SHORT).show();
 

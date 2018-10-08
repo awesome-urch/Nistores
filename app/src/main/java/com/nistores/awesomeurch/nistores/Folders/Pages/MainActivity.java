@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
             //this is the url where you want to send the request
             apiUrls = new ApiUrls();
-            String ur = apiUrls.getLoginURL();
-            String url = ur+"&username="+name+"&password="+pass;
+            String ur = apiUrls.getApiUrl();
+            String url = ur+"request=login&username="+name+"&password="+pass;
             // Request a string response from the provided URL.
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {

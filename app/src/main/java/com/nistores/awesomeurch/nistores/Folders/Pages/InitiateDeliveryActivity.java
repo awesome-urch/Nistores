@@ -739,6 +739,7 @@ public class InitiateDeliveryActivity extends AppCompatActivity {
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                enableUserInteraction();
                 loaderLayout.setVisibility(View.GONE);
                 deliveryBtn.setText(getResources().getString(R.string.deliver_order));
                 Toast.makeText(getApplicationContext(),"Network error occurred. Please retry!",Toast.LENGTH_SHORT).show();

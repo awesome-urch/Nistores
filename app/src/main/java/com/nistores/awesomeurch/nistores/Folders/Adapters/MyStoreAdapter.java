@@ -1,6 +1,8 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.MyStore;
+import com.nistores.awesomeurch.nistores.Folders.Pages.StoreActivity;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +28,7 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
     private Context context;
     private List<MyStore> myStores;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView idView, nameView, addressView, expiryView, renewView;
         ImageView thumbNail;
         AppCompatButton deleteBtn, editBtn;
@@ -40,6 +43,30 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
             thumbNail = view.findViewById(R.id.thumbnail);
             deleteBtn = view.findViewById(R.id.btn_delete);
             editBtn = view.findViewById(R.id.btn_edit);
+
+            nameView.setOnClickListener(this);
+            thumbNail.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view){
+            Bundle bundle = new Bundle();
+            String storeName = nameView.getText().toString();
+            String id = idView.getText().toString();
+
+            Context mcontext = view.getContext();
+
+            switch (view.getId()){
+                case R.id.thumbnail:
+                case R.id.name:
+                    bundle.putString("sName",storeName);
+                    bundle.putString("id",id);
+                    Intent intent = new Intent(mcontext, StoreActivity.class);
+                    intent.putExtras(bundle);
+                    mcontext.startActivity(intent);
+
+                    break;
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.nistores.awesomeurch.nistores">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -29,7 +30,7 @@
         </receiver>
         <receiver
             android:name=".Folders.Helpers.MyAlarmReceiver"
-            android:process=":remote"></receiver>
+            android:process=":remote" />
 
         <service
             android:name=".Folders.Helpers.MyTestService"
@@ -126,7 +127,7 @@
         <activity
             android:name=".Folders.Pages.DashboardActivity"
             android:label="@string/dashboard"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Folders.Pages.NotificationsActivity"
             android:label="@string/notification"
@@ -175,12 +176,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />
         </activity>
+        <activity
+            android:name=".Folders.Pages.NegotiateActivity"
+            android:label="@string/negotiate"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.NegotiateActivity" />
+        </activity>
         <!--
         <activity android:label="@string/help_desk" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.HelpDeskActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.HelpDeskActivity"/>
-        </activity>
-        <activity android:label="@string/negotiate" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.NegotiateActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.NegotiateActivity"/>
         </activity>
         -->
 
@@ -236,7 +242,18 @@
         <activity
             android:name=".Folders.Pages.CreateStoreActivity"
             android:label="@string/create_new_store"
-            android:parentActivityName=".Folders.Pages.MyStoresActivity">
+            android:parentActivityName=".Folders.Pages.MyStoresActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.StoreActivity"
+            android:label="@string/title_activity_store"
+            android:parentActivityName=".Folders.Pages.MyStoresActivity"
+            tools:targetApi="jelly_bean"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />

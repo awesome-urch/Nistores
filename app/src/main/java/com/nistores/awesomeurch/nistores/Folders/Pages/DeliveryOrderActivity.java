@@ -111,7 +111,6 @@ public class DeliveryOrderActivity extends AppCompatActivity {
     }
 
     private void fetchItems(){
-
         String newURL = URL + "request=biz_lounge";
         VolleyRequest volleyRequest = new VolleyRequest(getApplicationContext(), newURL) {
             @Override

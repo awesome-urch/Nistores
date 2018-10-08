@@ -50,4 +50,6 @@ public class ApiUrls {
     public String getOnline() {
         return online;
     }
+
+    public String getBaseURL(){ return online; }
 }

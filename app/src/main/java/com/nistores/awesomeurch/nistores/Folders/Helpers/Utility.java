@@ -121,4 +121,120 @@ public class Utility {
             e.printStackTrace();
         }
     }
+
+    public String returnStateShortCode(String s){
+        String code = "all";
+        switch (s){
+            case "Abuja":
+                code = "Abj";
+                break;
+            case "Abia":
+                code = "Abi";
+                break;
+            case "Adamawa":
+                code = "Adm";
+                break;
+            case "Akwa Ibom":
+                code = "Akw";
+                break;
+            case "Anambra":
+                code = "Anb";
+                break;
+            case "Bauchi":
+                code = "Bau";
+                break;
+            case "Bayelsa":
+                code = "Bay";
+                break;
+            case "Benue":
+                code = "Ben";
+                break;
+            case "Borno":
+                code = "Bon";
+                break;
+            case "Cross River":
+                code = "Cro";
+                break;
+            case "Delta":
+                code = "Del";
+                break;
+            case "Ebonyi":
+                code = "Ebn";
+                break;
+            case "Ekiti":
+                code = "Ekt";
+                break;
+            case "Edo":
+                code = "Edo";
+                break;
+            case "Enugu":
+                code = "Eng";
+                break;
+            case "Gombe":
+                code = "Gmb";
+                break;
+            case "Imo":
+                code = "Imo";
+                break;
+            case "Jigawa":
+                code = "Jgw";
+                break;
+            case "Kaduna":
+                code = "Kad";
+                break;
+            case "Kano":
+                code = "Kan";
+                break;
+            case "katsina":
+                code = "Kat";
+                break;
+            case "Kebbi":
+                code = "Keb";
+                break;
+            case "Kogi":
+                code = "Kog";
+                break;
+            case "Kwara":
+                code = "Kwa";
+                break;
+            case "Lagos":
+                code = "Lag";
+                break;
+            case "Nasarawa":
+                code = "Nas";
+                break;
+            case "Niger":
+                code = "Nig";
+                break;
+            case "Ogun":
+                code = "Ogn";
+                break;
+            case "Osun":
+                code = "Osn";
+                break;
+            case "Oyo":
+                code = "Oyo";
+                break;
+            case "Plateau":
+                code = "Plt";
+                break;
+            case "Rivers":
+                code = "Riv";
+                break;
+            case "Sokoto":
+                code = "Skt";
+                break;
+            case "Taraba":
+                code = "Tar";
+                break;
+            case "Yobe":
+                code = "Yob";
+                break;
+            case "Zamfara":
+                code = "Zam";
+                break;
+        }
+
+        return code;
+    }
 }

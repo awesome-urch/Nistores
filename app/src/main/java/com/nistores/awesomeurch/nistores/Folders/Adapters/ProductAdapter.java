@@ -1,6 +1,8 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Product;
+import com.nistores.awesomeurch.nistores.Folders.Pages.NegotiateActivity;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
 
@@ -27,8 +30,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     private List<Product> productList;
     private int design = 2;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, price, store, views, likesView, storeIdView, productIdView, featuredView;
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView name, price, store, views, likesView, storeIdView, productIdView, featuredView, negotiate, url_view;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
@@ -42,7 +45,46 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             productIdView = view.findViewById(R.id.product_id);
             featuredView = view.findViewById(R.id.featured);
             thumbnail = view.findViewById(R.id.thumbnail);
+            negotiate = view.findViewById(R.id.negotiate);
+            url_view = view.findViewById(R.id.image_url);
+
+            negotiate.setOnClickListener(this);
+
         }
+
+        @Override
+        public void onClick(View view){
+            Bundle bundle;
+            String id = productIdView.getText().toString();
+            String pname = name.getText().toString();
+            String pviews = views.getText().toString();
+            String plikes = likesView.getText().toString();
+            String pic = url_view.getText().toString();
+            String sid = storeIdView.getText().toString();
+            String pprice = price.getText().toString();
+
+            String type = (design == 2)?"products":"favourites";
+            Context mcontext = view.getContext();
+
+            switch (view.getId()){
+                case R.id.negotiate:
+                    bundle = new Bundle();
+                    bundle.putString("id",id);
+                    bundle.putString("name",pname);
+                    bundle.putString("views",pviews);
+                    bundle.putString("likes",plikes);
+                    bundle.putString("from",type);
+                    bundle.putString("pic",pic);
+                    bundle.putString("sid",sid);
+                    bundle.putString("price",pprice);
+                    Intent intent = new Intent(mcontext, NegotiateActivity.class);
+                    intent.putExtras(bundle);
+                    mcontext.startActivity(intent);
+
+                    break;
+            }
+        }
+
     }
 
     public ProductAdapter(Context context, List<Product> productList) {
@@ -84,9 +126,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
         final String STRING_BASE_URL = new ApiUrls().getOnline();
         String pic = product.getImage();
-        //String img = "https://www.nistores.com.ng/"+product.getImage();
 
-        Picasso.with(context).load(STRING_BASE_URL + pic).placeholder(R.mipmap.ic_launcher).into(holder.thumbnail);
+        String full_pic = STRING_BASE_URL + pic;
+        //String img = "https://www.nistores.com.ng/"+product.getImage();
+        holder.url_view.setText(full_pic);
+
+        Picasso.with(context).load(full_pic).placeholder(R.mipmap.ic_launcher).into(holder.thumbnail);
 
             /*Glide.with(context)
                     .load(str.toString())
