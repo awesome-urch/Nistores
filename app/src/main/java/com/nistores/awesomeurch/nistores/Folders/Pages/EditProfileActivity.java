@@ -330,6 +330,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Changes have been saved!",Toast.LENGTH_SHORT).show();
+                    firstname = newFirstName;
+                    lastname = newLastName;
+                    email = newEmail;
                 }
             }
         },new Response.ErrorListener(){

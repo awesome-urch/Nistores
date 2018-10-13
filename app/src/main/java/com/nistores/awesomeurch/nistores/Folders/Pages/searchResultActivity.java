@@ -219,6 +219,7 @@ public class searchResultActivity extends AppCompatActivity {
             public void onSuccess(JSONObject response) {
                 loaderLayout.setVisibility(View.GONE);
                 networkErrorLayout.setVisibility(View.GONE);
+                Log.d("REZOT",response.toString());
                 try {
 
                     Integer err = response.getInt("error");

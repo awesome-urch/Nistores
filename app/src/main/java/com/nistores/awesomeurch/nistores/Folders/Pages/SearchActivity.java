@@ -65,16 +65,16 @@ public class SearchActivity extends AppCompatActivity {
                 actual = "all";
                 break;
             case "Products":
-                actual = "products";
+                actual = "product";
                 break;
             case "Stores":
-                actual = "stores";
+                actual = "store";
                 break;
             case "Members":
-                actual = "members";
+                actual = "member";
                 break;
             case "Topics":
-                actual = "topics";
+                actual = "topic";
                 break;
         }
 

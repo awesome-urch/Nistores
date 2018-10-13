@@ -15,6 +15,7 @@
     <color name="littleGrey">#ffeeeeee</color>
 	<color name="redColor">#ffb71c1c</color>
     <color name="textColor">#333</color>
+    <color name="darkGrey">#ff222222</color>
 	<color name="transparentAccent">#22ff4081</color>
     <color name="transparentBlue">#553f51b5</color>
 	<color name="webColor">#601183</color>

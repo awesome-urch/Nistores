@@ -2,6 +2,7 @@ package com.nistores.awesomeurch.nistores.Folders.Helpers;
 
 public class MyStore {
     private String store_id;
+    private String store_uid;
     private String sname;
     private String saddress;
     private String sdate;
@@ -9,6 +10,10 @@ public class MyStore {
 
     public String getStore_id() {
         return store_id;
+    }
+
+    public String getStore_uid() {
+        return store_uid;
     }
 
     public String getSname() {

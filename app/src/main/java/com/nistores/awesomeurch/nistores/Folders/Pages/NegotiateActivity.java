@@ -60,7 +60,7 @@ public class NegotiateActivity extends AppCompatActivity {
     EditText messageArea;
     ImageView ppic, ownerPic;
     RecyclerView chatsRecyclerView;
-    AppCompatButton btn_price, negotiateButton;
+    AppCompatButton btn_price, negotiateButton, viewProfileBtn;
     ApiUrls apiUrls;
     ProgressBar progressBar;
     SharedPreferences preferences;
@@ -92,6 +92,15 @@ public class NegotiateActivity extends AppCompatActivity {
         ownerName = findViewById(R.id.ownerName);
         ownerAddress = findViewById(R.id.ownerAddress);
         ownerPic = findViewById(R.id.owner_picture);
+        viewProfileBtn = findViewById(R.id.btn_view_profile);
+
+        View.OnClickListener viewProfile = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewProfile();
+            }
+        };
+        viewProfileBtn.setOnClickListener(viewProfile);
 
         apiUrls = new ApiUrls();
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -131,6 +140,7 @@ public class NegotiateActivity extends AppCompatActivity {
 
         }
     }
+
 
 
     public void fetchData(){
@@ -276,7 +286,8 @@ public class NegotiateActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String url = URL+"request=add_comment&comment_user="+user+"&comment="+encodedMsg+"&target_id="+id;
+        String ownerId = ownerID.getText().toString();
+        String url = URL+"request=add_comment&comment_user="+user+"&comment="+encodedMsg+"&target_id="+id+"&owner_id="+ownerId;
         Log.d("RTN",url);
         // Request a string response from the provided URL.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -339,16 +350,15 @@ public class NegotiateActivity extends AppCompatActivity {
     public void onBackPressed(){
         super.onBackPressed();
 
-        switch (type){
-            case "products":
-                intent = new Intent(getApplicationContext(),MainActivity.class);
-                break;
-            case "favourites":
-                intent = new Intent(getApplicationContext(),FavouritesActivity.class);
-                break;
-        }
-
-        startActivity(intent);
-        finish();
     }
+
+    private void viewProfile(){
+        String ownerId = ownerID.getText().toString();
+        Bundle bundle = new Bundle();
+        bundle.putString("id",ownerId);
+        intent = new Intent(this,ProfileActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
 }

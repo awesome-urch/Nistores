@@ -33,10 +33,11 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView profilePicture;
     TextView nameView, addressView, regDateView, viewsView, followersView, followingView,
             contactsView, topicsView, emailView,statusView;
-    String URL, userId;
+    String URL, userId, profileId;
     ApiUrls apiUrls;
-    AppCompatButton retryBtn, editBtn;
+    AppCompatButton retryBtn, editBtn, addContactBtn, followBtn, messageBtn;
     String surname, firstname, address, email, status, picture, interests;
+    boolean me = true;
 
 
     @Override
@@ -62,6 +63,9 @@ public class ProfileActivity extends AppCompatActivity {
         apiUrls = new ApiUrls();
         URL = apiUrls.getApiUrl();
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        userId = prefs.getString("user",null);
+
         editBtn = findViewById(R.id.edit_btn);
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +80,22 @@ public class ProfileActivity extends AppCompatActivity {
                 getInfo();
             }
         });
+        addContactBtn = findViewById(R.id.add_contact_btn);
+        followBtn = findViewById(R.id.follow_btn);
+        messageBtn = findViewById(R.id.message_btn);
 
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            profileId = bundle.getString("id");
+            if(profileId != null){
+                if(!profileId.equals(userId)){
+                    userId = profileId;
+                    me = false;
+                }
+
+            }
+        }
 
         getInfo();
     }
@@ -94,8 +113,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void getInfo(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        userId = prefs.getString("user",null);
         String pURL = URL + "request=info&id=" + userId;
         Log.d("myURL",pURL);
         VolleyRequest volleyRequest = new VolleyRequest(getApplicationContext(), pURL) {
@@ -140,6 +157,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void fillInItems(JSONObject data){
         infoLayout.setVisibility(View.VISIBLE);
+
+        if(me){
+            addContactBtn.setVisibility(View.GONE);
+            followBtn.setVisibility(View.GONE);
+            messageBtn.setVisibility(View.GONE);
+        }else{
+            editBtn.setVisibility(View.GONE);
+        }
 
         try {
             surname = data.getString("surname");

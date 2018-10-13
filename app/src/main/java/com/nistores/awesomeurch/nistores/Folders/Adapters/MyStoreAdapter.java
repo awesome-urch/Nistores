@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.MyStore;
+import com.nistores.awesomeurch.nistores.Folders.Pages.SelectPaymentActivity;
 import com.nistores.awesomeurch.nistores.Folders.Pages.StoreActivity;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
@@ -29,7 +30,7 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
     private List<MyStore> myStores;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView idView, nameView, addressView, expiryView, renewView;
+        TextView idView, uidView, nameView, addressView, expiryView, renewView;
         ImageView thumbNail;
         AppCompatButton deleteBtn, editBtn;
 
@@ -37,6 +38,7 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
             super(view);
             nameView = view.findViewById(R.id.name);
             idView = view.findViewById(R.id.store_id);
+            uidView = view.findViewById(R.id.store_uid);
             addressView = view.findViewById(R.id.address);
             expiryView = view.findViewById(R.id.expiry);
             renewView = view.findViewById(R.id.renew);
@@ -46,6 +48,7 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
 
             nameView.setOnClickListener(this);
             thumbNail.setOnClickListener(this);
+            renewView.setOnClickListener(this);
         }
 
         @Override
@@ -53,18 +56,24 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
             Bundle bundle = new Bundle();
             String storeName = nameView.getText().toString();
             String id = idView.getText().toString();
-
+            String uid = uidView.getText().toString();
             Context mcontext = view.getContext();
+            Intent intent;
 
             switch (view.getId()){
                 case R.id.thumbnail:
                 case R.id.name:
                     bundle.putString("sName",storeName);
                     bundle.putString("id",id);
-                    Intent intent = new Intent(mcontext, StoreActivity.class);
+                    intent = new Intent(mcontext, StoreActivity.class);
                     intent.putExtras(bundle);
                     mcontext.startActivity(intent);
-
+                    break;
+                case R.id.renew:
+                    bundle.putString("uid",uid);
+                    intent = new Intent(mcontext, SelectPaymentActivity.class);
+                    intent.putExtras(bundle);
+                    mcontext.startActivity(intent);
                     break;
             }
         }
@@ -87,6 +96,7 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
     public void onBindViewHolder(MyStoreAdapter.MyViewHolder holder, final int position) {
         final MyStore myStore = myStores.get(position);
         holder.idView.setText(myStore.getStore_id());
+        holder.uidView.setText(myStore.getStore_uid());
         holder.nameView.setText(myStore.getSname());
         holder.addressView.setText(myStore.getSaddress());
 

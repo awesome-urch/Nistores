@@ -1,7 +1,10 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Member;
+import com.nistores.awesomeurch.nistores.Folders.Pages.ProfileActivity;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +27,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView thumbnail;
         public TextView nameView, idView, addressView;
+        AppCompatButton profileBtn;
 
         public MyViewHolder(View view) {
             super(view);
@@ -30,6 +35,25 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
             idView = view.findViewById(R.id.member_id);
             addressView = view.findViewById(R.id.address);
             thumbnail = view.findViewById(R.id.profile_picture);
+            profileBtn = view.findViewById(R.id.btn_profile);
+            View.OnClickListener viewProfile = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    viewProfile(view);
+                }
+            };
+
+            profileBtn.setOnClickListener(viewProfile);
+        }
+
+        private void viewProfile(View view){
+            Context mcontext = view.getContext();
+            String id = idView.getText().toString();
+            Bundle bundle = new Bundle();
+            bundle.putString("id",id);
+            Intent intent = new Intent(mcontext,ProfileActivity.class);
+            intent.putExtras(bundle);
+            mcontext.startActivity(intent);
         }
     }
 

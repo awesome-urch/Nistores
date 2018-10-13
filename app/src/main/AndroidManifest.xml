@@ -174,7 +174,7 @@
             android:parentActivityName=".Folders.Pages.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
         </activity>
         <activity
             android:name=".Folders.Pages.NegotiateActivity"
@@ -252,12 +252,31 @@
             android:name=".Folders.Pages.StoreActivity"
             android:label="@string/title_activity_store"
             android:parentActivityName=".Folders.Pages.MyStoresActivity"
-            tools:targetApi="jelly_bean"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />
         </activity>
+        <activity
+            android:name=".Folders.Pages.StoreReviewActivity"
+            android:label="@string/store_reviews"
+            android:parentActivityName=".Folders.Pages.StoreActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.StoreActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.SelectPaymentActivity"
+            android:label="@string/select_payment_method"
+            android:parentActivityName=".Folders.Pages.MyStoresActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />
+        </activity>
+        <activity android:name=".Folders.Pages.PaymentInstructionAActivity"></activity>
     </application>
 
 </manifest>

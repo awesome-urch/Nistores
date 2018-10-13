@@ -4,10 +4,63 @@
     <ScrollView n1:layout_width="fill_parent" n1:layout_height="wrap_content">
         <android.support.constraint.ConstraintLayout n1:id="@+id/info_layout" n1:padding="@dimen/three_level_margin" n1:visibility="gone" n1:layout_width="fill_parent" n1:layout_height="wrap_content">
             <LinearLayout n1:orientation="vertical" n1:id="@+id/l1" n1:background="@drawable/theme_background" n1:layout_width="fill_parent" n1:layout_height="wrap_content">
-                <ImageView n1:layout_gravity="center" n1:id="@+id/profile_picture" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_margin="@dimen/one_level_margin" n1:contentDescription="@string/default_picture" n2:srcCompat="@drawable/ic_person_default" xmlns:n2="http://schemas.android.com/apk/res-auto" />
+                <ImageView
+                    n1:layout_gravity="center"
+                    n1:id="@+id/profile_picture"
+                    n1:layout_width="fill_parent"
+                    n1:layout_height="200dp"
+                    n1:layout_margin="@dimen/one_level_margin"
+                    n1:scaleType="fitCenter"
+                    n1:adjustViewBounds="true"
+                    n1:contentDescription="@string/default_picture"
+                    n2:srcCompat="@drawable/ic_person_default"
+                    xmlns:n2="http://schemas.android.com/apk/res-auto" />
                 <TextView n1:textAlignment="center" n1:textSize="@dimen/font_three" n1:textColor="@color/textColor" n1:id="@+id/full_name" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_margin="@dimen/one_level_margin" n1:text="Name" />
                 <TextView n1:textAlignment="center" n1:textSize="@dimen/font_14" n1:id="@+id/address" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_margin="@dimen/one_level_margin" n1:text="Name" />
-                <android.support.v7.widget.AppCompatButton n1:theme="@style/ButtonOrange" n1:textColor="@android:color/white" n1:textSize="@dimen/font_two" n1:layout_gravity="center_horizontal" n1:id="@+id/edit_btn" n1:padding="10.0dip" n1:layout_width="120.0dip" n1:layout_height="50.0dip" n1:layout_margin="@dimen/two_level_margin" n1:text="@string/edit_profile" />
+                <android.support.v7.widget.AppCompatButton
+                    n1:theme="@style/ButtonOrange"
+                    n1:textColor="@android:color/white"
+                    n1:textSize="@dimen/font_two"
+                    n1:layout_gravity="center_horizontal"
+                    n1:id="@+id/edit_btn"
+                    n1:padding="10.0dip"
+                    n1:layout_width="120.0dip"
+                    n1:layout_height="50.0dip"
+                    n1:layout_margin="@dimen/two_level_margin"
+                    n1:text="@string/edit_profile" />
+                <android.support.v7.widget.AppCompatButton
+                    n1:theme="@style/ButtonOrange"
+                    n1:textColor="@android:color/white"
+                    n1:textSize="@dimen/font_two"
+                    n1:layout_gravity="center_horizontal"
+                    n1:id="@+id/add_contact_btn"
+                    n1:padding="10.0dip"
+                    n1:layout_width="wrap_content"
+                    n1:layout_height="50.0dip"
+                    n1:layout_margin="@dimen/zero_level_margin"
+                    n1:text="@string/add_to_contacts" />
+                <android.support.v7.widget.AppCompatButton
+                    n1:theme="@style/ButtonOrange"
+                    n1:textColor="@android:color/white"
+                    n1:textSize="@dimen/font_two"
+                    n1:layout_gravity="center_horizontal"
+                    n1:id="@+id/follow_btn"
+                    n1:padding="10.0dip"
+                    n1:layout_width="wrap_content"
+                    n1:layout_height="50.0dip"
+                    n1:layout_margin="@dimen/zero_level_margin"
+                    n1:text="@string/follow" />
+                <android.support.v7.widget.AppCompatButton
+                    n1:theme="@style/ButtonOrange"
+                    n1:textColor="@android:color/white"
+                    n1:textSize="@dimen/font_two"
+                    n1:layout_gravity="center_horizontal"
+                    n1:id="@+id/message_btn"
+                    n1:padding="10.0dip"
+                    n1:layout_width="wrap_content"
+                    n1:layout_height="50.0dip"
+                    n1:layout_margin="@dimen/zero_level_margin"
+                    n1:text="@string/send_private_message" />
             </LinearLayout>
             <LinearLayout n1:orientation="vertical" n1:background="@drawable/theme_background" n1:padding="@dimen/one_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:layout_marginTop="@dimen/three_level_margin" n3:layout_constraintTop_toBottomOf="@+id/l1" xmlns:n3="http://schemas.android.com/apk/res-auto">
                 <LinearLayout n1:id="@+id/member_layout" n1:padding="@dimen/zero_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content">

@@ -1,6 +1,8 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.TopStores;
+import com.nistores.awesomeurch.nistores.Folders.Pages.StoreActivity;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
 
@@ -21,19 +24,47 @@ public class TopStoresAdapter extends RecyclerView.Adapter<TopStoresAdapter.MyVi
     private Context context;
     private List<TopStores> topStoresList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView storeNameView, ownerNameView, viewsView;
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView storeNameView, ownerNameView, viewsView, merchantIdView, storeIdView, storeUidView;
         public ImageView storeLogoView, ownerLogoView;
         LinearLayout starsLayout;
 
         public MyViewHolder(View view) {
             super(view);
+
             storeNameView = view.findViewById(R.id.storeName);
             storeLogoView = view.findViewById(R.id.storeLogo);
             ownerLogoView = view.findViewById(R.id.ownerLogo);
             ownerNameView = view.findViewById(R.id.ownerName);
             viewsView = view.findViewById(R.id.views);
             starsLayout = view.findViewById(R.id.starsLayout);
+            merchantIdView = view.findViewById(R.id.merchant_id);
+            storeIdView = view.findViewById(R.id.store_id);
+            storeUidView = view.findViewById(R.id.store_uid);
+
+            storeNameView.setOnClickListener(this);
+            storeLogoView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view){
+            Bundle bundle = new Bundle();
+            String storeName = storeNameView.getText().toString();
+            String id = storeIdView.getText().toString();
+
+            Context mcontext = view.getContext();
+
+            switch (view.getId()){
+                case R.id.storeLogo:
+                case R.id.storeName:
+                    bundle.putString("sName",storeName);
+                    bundle.putString("id",id);
+                    Intent intent = new Intent(mcontext, StoreActivity.class);
+                    intent.putExtras(bundle);
+                    mcontext.startActivity(intent);
+
+                    break;
+            }
         }
     }
 
@@ -57,6 +88,9 @@ public class TopStoresAdapter extends RecyclerView.Adapter<TopStoresAdapter.MyVi
         holder.ownerNameView.setText(owner);
         holder.storeNameView.setText(stores.getSname());
         holder.viewsView.setText(stores.getViews());
+        holder.storeIdView.setText(stores.getStore_id());
+        holder.storeUidView.setText(stores.getStore_uid());
+        holder.merchantIdView.setText(stores.getMerchant_id());
 
         ViewGroup viewGroup = holder.starsLayout;
         int rating = Integer.parseInt(stores.getStars());

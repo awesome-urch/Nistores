@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/WebAppTheme"
     android:background="@color/littleGrey"
-    android:padding="@dimen/one_level_margin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".Folders.Pages.DeliveryOrderActivity">

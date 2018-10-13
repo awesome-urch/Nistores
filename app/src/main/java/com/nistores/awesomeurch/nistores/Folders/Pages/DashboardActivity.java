@@ -154,8 +154,9 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void sendToHome(){
-        intent = new Intent(this,HomeActivity.class);
-        startActivity(intent);
+        super.onBackPressed();
+        /*intent = new Intent(this,HomeActivity.class);
+        startActivity(intent);*/
     }
 
 }
