@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -74,8 +75,10 @@ public class MyStoresActivity extends AppCompatActivity {
         myStoreList = new ArrayList<>();
         mAdapter = new MyStoreAdapter(getApplicationContext(), myStoreList);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,1);
+        gridLayoutManager.setOrientation(LinearLayout.VERTICAL);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);

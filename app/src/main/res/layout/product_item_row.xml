@@ -92,8 +92,8 @@
                 android:paddingLeft="@dimen/zero_level_margin"
                 android:paddingRight="@dimen/zero_level_margin"
                 android:paddingTop="@dimen/zero_level_margin"
-                android:drawableLeft="@drawable/naija_note"
-                android:drawableStart="@drawable/naija_note"
+                android:drawableLeft="@drawable/icons8_naira_50"
+                android:drawableStart="@drawable/icons8_naira_50"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/font_14" />
 

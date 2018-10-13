@@ -145,6 +145,7 @@ public class AllProductsFragment extends Fragment {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+
         recyclerView.setLayoutManager(mLayoutManager);
 
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));

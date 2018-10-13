@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_us">About Us</string>
+    <string name="account_name">Account Name: Nistores Nigeria Limited </string>
+    <string name="account_number">Account Number: 0248148259 </string>
     <string name="action_refresh">Refresh</string>
     <string name="add_to_contacts">Add to Contacts</string>
     <string name="address">Address</string>
     <string name="additional_info">Additional Info</string>
     <string name="all_the_states_could_not">Couldn\'t load all the 36 states </string>
+    <string name="amount_our_plans_are">Amount: Our plans are:</string>
     <string name="api_url">https://www.nistores.com.ng/</string>
     <string name="app_logo1">Nistores Logo</string>
     <string name="app_name">Nistores</string>
     <string name="are_you_ready">Are you ready?</string>
     <string name="back_navigation">Back navigation</string>
     <string name="back_to_home">Back to home</string>
+    <string name="bank">Bank : GTBank </string>
     <string name="btn_sign_in">Sign in</string>
     <string name="business_fly">With Nistores you can make your Business Fly</string>
+    <string name="call_now">Call now</string>
     <string name="call_us">For instant Help, Call our Customer Care Representative on +2349060155912</string>
     <string name="categories">Categories</string>
     <string name="change_profile_pic">Change Profile Picture</string>
@@ -25,6 +30,7 @@
     <string name="confirm_order">Confirm Order</string>
     <string name="confirm_receiving">Confirm Receiving</string>
     <string name="contact_for_details">Contact for details</string>
+    <string name="contact_number">+2349060155912</string>
     <string name="contacts">Contacts</string>
     <string name="create_account">Create Account</string>
     <string name="create_new_store">Create New Store</string>
@@ -48,6 +54,7 @@
     <string name="deliveryOrder3">You will be taken to a page where you will fill the delivery order form</string>
     <string name="deliveryOrder4">Click on any of the states to see delivery order numbers coming to the state</string>
     <string name="description">Description</string>
+    <string name="depositor_name">Depositor name: Your store number first , then the first word of your store name eg LAG00186 Ginotek, ABJ10560 Sunshine,ANB16800 Emmalex.</string>
     <string name="disclaimer">Disclaimer</string>
     <string name="easy_location">Your products are displayed to people around you who can easily locate you for bulk supplies</string>
     <string name="edit">Edit</string>
@@ -75,6 +82,8 @@
     <string name="hint_name">Username</string>
     <string name="hint_password">Password</string>
     <string name="how_help">How can we help you?</string>
+    <string name="how_to_make_bank_payment">How to make bank payment</string>
+    <string name="how_to_make_payment_via_mobile">How to make payment through mobile transfer</string>
     <string name="in_stock">In Stock</string>
     <string name="initiate_delivery">Initiate Delivery</string>
     <string name="instructions">Instructions</string>
@@ -92,8 +101,13 @@
     <string name="members">Members</string>
     <string name="message_owner">Message Owner</string>
     <string name="messages">Messages</string>
+    <string name="month_plan_1">1 month = 2000</string>
+    <string name="month_plan_3">3 months = 5000</string>
+    <string name="month_plan_6">6 months = 10000</string>
+    <string name="month_plan_12">1 year = 20000</string>
     <string name="more_photos">More Photos</string>
     <string name="my_stores">My Stores</string>
+    <string name="narration_description">"Narration/Description: Your store number: eg. eng00002, abj00275, ENG00586 etc "</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="negotiate">Negotiate</string>
@@ -115,6 +129,7 @@
     <string name="owner">Owner</string>
     <string name="owner_profile">Owner Profile</string>
     <string name="password">Password</string>
+    <string name="payment_instruction">Payment Instruction</string>
     <string name="pay_in_bank">Pay in the Bank (Bank Deposit)</string>
     <string name="pay_for_order">Pay for this order</string>
     <string name="pay_through_agents">Pay through our agents (call our agents to help you make payment)</string>
@@ -122,6 +137,7 @@
     <string name="pay_with_bank">Pay with Bank (Acc Number)</string>
     <string name="pay_with_mobile">Pay with  Mobile Transfer (Mobile App)</string>
     <string name="phone_no">Phone No</string>
+    <string name="phone_no_your_phone">Phone no: Your phone number </string>
     <string name="photos_of_product">Photo(s) of Product</string>
     <string name="polls">Polls</string>
     <string name="price">Price</string>
@@ -153,6 +169,7 @@
     <string name="secure_store">You can now secure a store on Nistores and display your products to millions of viewers Nationwide for free.</string>
     <string name="see_all">See all</string>
     <string name="see_more">See more</string>
+    <string name="select_according_to_budget">Select according to your budget.</string>
     <string name="select_category">Select Category</string>
     <string name="select_interest">Select Interest</string>
     <string name="select_loc">Select Location</string>
@@ -215,10 +232,13 @@
     <string name="website">Website</string>
     <string name="weekend_giveaways">Weekend Giveaways</string>
     <string name="what_store_number">What is your store number?</string>
+    <string name="when_you_make_payment">When you make payment, the bank will notify us and your account will be activated within 24 hours.</string>
     <string name="why_nistores">Why Nistores?</string>
     <string name="write_your_review">Write your review here</string>
     <string name="yes_account">Already have an account?</string>
     <string name="you">You</string>
+    <string name="you_can_make_payment_via_mobile">You can make payment via mobile transfer using the following details</string>
+    <string name="you_can_make_payment_in_bank">You can make payment in any of the bank accounts listed below with the following details</string>
     <string name="your_location">Your Location</string>
     <string name="your_store_number_is">Your store number is</string>
 

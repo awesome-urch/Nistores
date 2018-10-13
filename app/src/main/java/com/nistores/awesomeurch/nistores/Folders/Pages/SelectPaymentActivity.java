@@ -1,7 +1,9 @@
 package com.nistores.awesomeurch.nistores.Folders.Pages;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -14,6 +16,7 @@ public class SelectPaymentActivity extends AppCompatActivity {
     TextView uidView;
     String uid, selectedMethod;
     RadioGroup paymentGroup;
+    AppCompatButton proceedBtn;
     static String ATM = "atm";
     static String IN_BANK = "in_bank";
     static String WITH_BANK = "with_bank";
@@ -31,6 +34,16 @@ public class SelectPaymentActivity extends AppCompatActivity {
                 onSelectPayMethod(view);
             }
         };
+
+        View.OnClickListener onProceedButtonClicked = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onProceed();
+            }
+        };
+
+        proceedBtn = findViewById(R.id.btn_proceed);
+        proceedBtn.setOnClickListener(onProceedButtonClicked);
 
         paymentGroup = findViewById(R.id.paymentGroup);
         for(int x = 0; x < paymentGroup.getChildCount(); x++){
@@ -75,6 +88,17 @@ public class SelectPaymentActivity extends AppCompatActivity {
                     selectedMethod = AGENT;
                     break;
         }
-        Toast.makeText(this,selectedMethod,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,selectedMethod,Toast.LENGTH_SHORT).show();
     }
+
+    private void onProceed(){
+        if(selectedMethod != null){
+            Bundle bundle = new Bundle();
+            bundle.putString("method",selectedMethod);
+            Intent intent = new Intent(this,PaymentInstructionAActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    }
+
 }
