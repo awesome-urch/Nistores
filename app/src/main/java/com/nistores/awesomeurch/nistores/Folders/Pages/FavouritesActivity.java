@@ -40,10 +40,8 @@ public class FavouritesActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EndlessRecyclerViewScrollListener scroller;
-    private String searchType = "all";
     private List<Product> productList;
     private ProductAdapter productAdapter;
-    private ApiUrls apiUrls;
     private String URL, userId;
     private static int FAVOURITE = 1;
     private int pageNo = 0;
@@ -81,7 +79,7 @@ public class FavouritesActivity extends AppCompatActivity {
         scroller = new EndlessRecyclerViewScrollListener ((LinearLayoutManager) mLayoutManager) {
             @Override
             public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
-                Toast.makeText(getApplicationContext(),""+page,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),""+page,Toast.LENGTH_SHORT).show();
                 //scroller.resetState();
                 pageNo = page * 20;
                 fetchItems(pageNo);
@@ -91,7 +89,7 @@ public class FavouritesActivity extends AppCompatActivity {
 
         recyclerView.addOnScrollListener(scroller);
 
-        apiUrls = new ApiUrls();
+        ApiUrls apiUrls = new ApiUrls();
         URL = apiUrls.getApiUrl();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         userId = prefs.getString("user",null);

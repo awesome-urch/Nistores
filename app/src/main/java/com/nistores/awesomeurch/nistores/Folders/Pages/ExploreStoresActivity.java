@@ -10,10 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,8 +32,7 @@ public class ExploreStoresActivity extends AppCompatActivity {
     Intent intent;
     private ProgressBar progressBar;
     private LinearLayout networkErrorLayout;
-    private RecyclerView recyclerView;
-    private ApiUrls apiUrls;
+
     private List<BusinessLounge> businessLoungeList;
     private BusinessLoungeAdapter mAdapter;
     private String URL;
@@ -47,11 +44,18 @@ public class ExploreStoresActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.loader);
         networkErrorLayout = findViewById(R.id.network_error);
+        AppCompatButton retryBtn = findViewById(R.id.btn_retry);
+        retryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchItems();
+            }
+        });
 
-        recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         businessLoungeList = new ArrayList<>();
         mAdapter = new BusinessLoungeAdapter(getApplicationContext(), businessLoungeList);
-
+        mAdapter.setOpenActivity("state_stores");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -60,7 +64,7 @@ public class ExploreStoresActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        apiUrls = new ApiUrls();
+        ApiUrls apiUrls = new ApiUrls();
         URL = apiUrls.getApiUrl();
 
         fetchItems();

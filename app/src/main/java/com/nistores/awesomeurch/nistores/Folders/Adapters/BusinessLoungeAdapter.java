@@ -18,6 +18,7 @@ import com.nistores.awesomeurch.nistores.Folders.Helpers.BusinessLounge;
 import com.nistores.awesomeurch.nistores.Folders.Pages.DeliveryOrderActivity;
 import com.nistores.awesomeurch.nistores.Folders.Pages.InitiateDeliveryActivity;
 import com.nistores.awesomeurch.nistores.Folders.Pages.StateOrdersActivity;
+import com.nistores.awesomeurch.nistores.Folders.Pages.StateStoresActivity;
 import com.nistores.awesomeurch.nistores.R;
 
 import java.util.List;
@@ -53,15 +54,19 @@ public class BusinessLoungeAdapter extends RecyclerView.Adapter<BusinessLoungeAd
             Context viewContext = view.getContext();
             switch (view.getId()){
                 case R.id.name:
-                    if(openActivity.equals("state_orders")){
                         //Toast.makeText(viewContext,state,Toast.LENGTH_SHORT).show();
                         Bundle bundle = new Bundle();
                         bundle.putString("state",state);
                         bundle.putString("stateName",stateName);
-                        intent = new Intent(viewContext,StateOrdersActivity.class);
-                        intent.putExtras(bundle);
-                        viewContext.startActivity(intent);
-                    }
+                        if(openActivity.equals("state_orders")){
+                            intent = new Intent(viewContext,StateOrdersActivity.class);
+                            intent.putExtras(bundle);
+                            viewContext.startActivity(intent);
+                        }else if(openActivity.equals("state_stores")){
+                            intent = new Intent(viewContext,StateStoresActivity.class);
+                            intent.putExtras(bundle);
+                            viewContext.startActivity(intent);
+                        }
                     break;
             }
         }

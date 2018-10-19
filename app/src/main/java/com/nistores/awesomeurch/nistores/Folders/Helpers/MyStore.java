@@ -7,6 +7,7 @@ public class MyStore {
     private String saddress;
     private String sdate;
     private String slogo;
+    private String expires;
 
     public String getStore_id() {
         return store_id;
@@ -30,5 +31,9 @@ public class MyStore {
 
     public String getSlogo() {
         return slogo;
+    }
+
+    public String getExpires() {
+        return expires;
     }
 }

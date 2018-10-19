@@ -78,7 +78,7 @@ public class StateOrdersActivity extends AppCompatActivity {
                fetchItems();
             }
             if(stateName != null){
-                setTitle(stateName + " Orders");
+                setTitle(stateName + " Delivery Orders");
             }
         }
 
@@ -154,6 +154,7 @@ public class StateOrdersActivity extends AppCompatActivity {
                 networkErrorLayout.setVisibility(View.VISIBLE);
             }
         };
+        volleyRequest.setCache(false);
         volleyRequest.fetchResources();
     }
 

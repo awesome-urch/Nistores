@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -353,9 +352,8 @@ public class CreateStoreActivity extends AppCompatActivity {
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                Map<String, String> parameters = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> parameters = new HashMap<>();
                 //parameters.put("Content-Type", "application/form-data");
                 //parameters.put("Content-Length", ""+97957);
                 parameters.put("Connection", "Keep-Alive");
@@ -370,8 +368,8 @@ public class CreateStoreActivity extends AppCompatActivity {
 
             //adding parameters to send
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError  {
-                Map<String, String> parameters = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                Map<String, String> parameters = new HashMap<>();
                 parameters.put("request", "add_store");
                 parameters.put("sname", sname);
                 parameters.put("saddress", saddress);

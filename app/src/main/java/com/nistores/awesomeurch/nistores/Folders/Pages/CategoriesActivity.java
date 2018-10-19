@@ -50,6 +50,7 @@ public class CategoriesActivity extends AppCompatActivity {
         categoryList = new ArrayList<>();
         mAdapter = new selectCategoryAdapter(getApplicationContext(), categoryList);
         mAdapter.setDesign(DESIGN);
+        mAdapter.setOpenActivity("cat_products");
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);

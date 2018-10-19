@@ -115,6 +115,12 @@ public class StoreReviewActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+
+    }
+
     private void rateStore(View v){
         switch(v.getId()){
             case R.id.star1:

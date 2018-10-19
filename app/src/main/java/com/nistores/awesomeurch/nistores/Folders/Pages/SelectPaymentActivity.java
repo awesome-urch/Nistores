@@ -13,10 +13,11 @@ import android.widget.Toast;
 import com.nistores.awesomeurch.nistores.R;
 
 public class SelectPaymentActivity extends AppCompatActivity {
-    TextView uidView;
-    String uid, selectedMethod;
+    TextView uidView, amountView;
+    String uid, selectedMethod, amount, payment_for;
     RadioGroup paymentGroup;
     AppCompatButton proceedBtn;
+    TextView firstPhraseView;
     static String ATM = "atm";
     static String IN_BANK = "in_bank";
     static String WITH_BANK = "with_bank";
@@ -42,6 +43,8 @@ public class SelectPaymentActivity extends AppCompatActivity {
             }
         };
 
+        payment_for = "store_renew";
+
         proceedBtn = findViewById(R.id.btn_proceed);
         proceedBtn.setOnClickListener(onProceedButtonClicked);
 
@@ -51,12 +54,22 @@ public class SelectPaymentActivity extends AppCompatActivity {
             child.setOnClickListener(onRadioButtonClicked);
         }
 
+        firstPhraseView = findViewById(R.id.first_phrase);
         uidView = findViewById(R.id.store_number);
+        amountView = findViewById(R.id.amount);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             uid = bundle.getString("uid");
             uidView.setText(uid);
+            payment_for = bundle.getString("pay_for");
+            amount = bundle.getString("amount");
+            if(payment_for != null){
+                personalizeUI();
+            }
+            if(amount != null){
+                amountView.setText(amount);
+            }
         }
 
     }
@@ -95,9 +108,17 @@ public class SelectPaymentActivity extends AppCompatActivity {
         if(selectedMethod != null){
             Bundle bundle = new Bundle();
             bundle.putString("method",selectedMethod);
+            bundle.putString("pay_for",payment_for);
+            bundle.putString("amount",amountView.getText().toString());
             Intent intent = new Intent(this,PaymentInstructionAActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
+        }
+    }
+
+    private void personalizeUI(){
+        if(payment_for.equals("delivery_order")){
+            firstPhraseView.setText(getResources().getString(R.string.your_delivery_order_number));
         }
     }
 

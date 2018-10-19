@@ -35,14 +35,14 @@ import java.util.List;
 
 public class PaymentInstructionAActivity extends AppCompatActivity {
 
-    LinearLayout inBankLayout, agentLayout, mobileTransferLayout, cardLayout, networkErrorLayout;
+    LinearLayout inBankLayout, agentLayout, mobileTransferLayout, cardLayout, networkErrorLayout, plansALayout, plansBLayout, amountALayout, amountBLayout;
     RecyclerView planRecycler;
     ProgressBar progressBar;
     List<PaymentPlan> paymentPlanList;
     PaymentPlanAdapter planAdapter;
     AppCompatButton callBtn, retryBtn;
-    TextView agentPhoneView, titleCardView;
-    String payMethod, URL, planString;
+    TextView agentPhoneView, titleCardView, amountViewA, amountViewB, depositorAView, depositorBView, assureAView, assureBView;
+    String payMethod, URL, planString, amount, payment_for;
     static String ATM = "atm";
     static String IN_BANK = "in_bank";
     static String WITH_BANK = "with_bank";
@@ -54,6 +54,26 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_instruction_a);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            payMethod = bundle.getString("method");
+            payment_for = bundle.getString("pay_for");
+            amount = bundle.getString("amount");
+
+            if(payment_for!=null){
+                Log.d("KONFAM",payment_for);
+                if(payment_for.equals("delivery_order")){
+                    setContentView(R.layout.activity_payment_instruction_b);
+
+                    /*if(amount != null){
+                        amountViewA.setText(amount);
+                        amountViewB.setText(amount);
+                    }*/
+                }
+            }
+
+        }
+
         View.OnClickListener onPlaceCall = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +84,10 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
 
         agentPhoneView = findViewById(R.id.agent_phone);
         titleCardView = findViewById(R.id.title_card);
+        /*amountViewA = findViewById(R.id.pay_amount_a);
+        amountViewB = findViewById(R.id.pay_amount_b);
+        depositorAView = findViewById(R.id.depositor_a);
+        depositorBView = findViewById(R.id.depositor_b);*/
 
         progressBar = findViewById(R.id.loader);
         cardLayout = findViewById(R.id.card);
@@ -71,6 +95,12 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
         inBankLayout = findViewById(R.id.in_bank);
         agentLayout = findViewById(R.id.agent);
         mobileTransferLayout = findViewById(R.id.mobile_transfer);
+        /*plansALayout = findViewById(R.id.plans_a);
+        plansBLayout = findViewById(R.id.plans_b);
+        amountALayout = findViewById(R.id.amount_a);
+        amountBLayout = findViewById(R.id.amount_b);
+        assureAView = findViewById(R.id.assure_a);
+        assureBView = findViewById(R.id.assure_b);*/
         callBtn = findViewById(R.id.btn_call);
         callBtn.setOnClickListener(onPlaceCall);
 
@@ -88,11 +118,7 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
         planRecycler.setItemAnimator(new DefaultItemAnimator());
         planRecycler.setAdapter(planAdapter);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            payMethod = bundle.getString("method");
-            setUI();
-        }
+        setUI();
 
     }
 
@@ -103,6 +129,30 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
     }
 
     private void setUI() {
+        /*if(payment_for != null){
+            Log.d("KONFAM",payment_for);
+            if(payment_for.equals("delivery_order")){
+                plansALayout.setVisibility(View.GONE);
+                plansBLayout.setVisibility(View.GONE);
+                amountBLayout.setVisibility(View.VISIBLE);
+                amountALayout.setVisibility(View.VISIBLE);
+                depositorAView.setText(getResources().getString(R.string.depositor_name2));
+                depositorBView.setText(getResources().getString(R.string.depositor_name2));
+                assureAView.setText(getResources().getString(R.string.when_you_make_payment_short));
+                assureBView.setText(getResources().getString(R.string.when_you_make_payment_short));
+            }
+        }else{
+            Log.d("KONFAM","null");
+            plansALayout.setVisibility(View.VISIBLE);
+            plansBLayout.setVisibility(View.VISIBLE);
+            amountBLayout.setVisibility(View.GONE);
+            amountALayout.setVisibility(View.GONE);
+            depositorAView.setText(getResources().getString(R.string.depositor_name));
+            depositorBView.setText(getResources().getString(R.string.narration_description));
+            assureAView.setText(getResources().getString(R.string.when_you_make_payment));
+            assureBView.setText(getResources().getString(R.string.when_you_make_payment));
+        }*/
+
         switch (payMethod) {
             case "agent":
                 agentLayout.setVisibility(View.VISIBLE);
@@ -134,7 +184,7 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
 
             startActivity(callIntent);
         }else{
-            Toast.makeText(this,"Permission not granted",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Permission to make calls not granted",Toast.LENGTH_SHORT).show();
         }
 
     }

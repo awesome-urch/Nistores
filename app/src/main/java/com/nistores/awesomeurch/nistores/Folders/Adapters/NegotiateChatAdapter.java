@@ -74,7 +74,7 @@ public class NegotiateChatAdapter extends RecyclerView.Adapter<NegotiateChatAdap
             holder.container.setBackgroundResource(R.drawable.receive_chat_style);
             holder.container.setGravity(Gravity.START);
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.FILL_PARENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             params.weight = 1.0f;
             params.gravity = Gravity.START;
 

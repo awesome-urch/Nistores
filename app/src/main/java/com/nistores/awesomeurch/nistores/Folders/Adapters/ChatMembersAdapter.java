@@ -1,6 +1,8 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ChatMembers;
+import com.nistores.awesomeurch.nistores.Folders.Pages.ChatContactActivity;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
 
@@ -21,7 +24,7 @@ public class ChatMembersAdapter extends RecyclerView.Adapter<ChatMembersAdapter.
     private List<ChatMembers> chatMembers;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, messageView, friendIdView;
+        public TextView name, messageView, friendIdView, imageUrlView;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
@@ -30,6 +33,34 @@ public class ChatMembersAdapter extends RecyclerView.Adapter<ChatMembersAdapter.
             messageView = view.findViewById(R.id.message);
             friendIdView = view.findViewById(R.id.friend_id);
             thumbnail = view.findViewById(R.id.friendLogo);
+            imageUrlView = view.findViewById(R.id.pic_url);
+            View.OnClickListener see = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    seeAll(view);
+                }
+            };
+            name.setOnClickListener(see);
+            messageView.setOnClickListener(see);
+        }
+
+        private void seeAll(View view){
+            String id = friendIdView.getText().toString();
+            String pic = imageUrlView.getText().toString();
+            String friendName = name.getText().toString();
+            Context viewContext = view.getContext();
+            switch (view.getId()){
+                case R.id.friendName:
+                case R.id.message:
+                    Bundle bundle = new Bundle();
+                    bundle.putString("member_id",id);
+                    bundle.putString("member_name",friendName);
+                    bundle.putString("member_pic",pic);
+                    Intent intent = new Intent(viewContext,ChatContactActivity.class);
+                    intent.putExtras(bundle);
+                    viewContext.startActivity(intent);
+                    break;
+            }
         }
     }
 
@@ -55,10 +86,13 @@ public class ChatMembersAdapter extends RecyclerView.Adapter<ChatMembersAdapter.
         holder.friendIdView.setText(members.getFto());
 
         final String STRING_BASE_URL = "https://www.nistores.com.ng/";
-        String pic = members.getPicture();
+        String pic = STRING_BASE_URL + members.getPicture();
+
+        holder.imageUrlView.setText(pic);
+
         //String img = "https://www.nistores.com.ng/"+product.getImage();
 
-        Picasso.with(context).load(STRING_BASE_URL + pic).placeholder(R.drawable.ic_person_default).into(holder.thumbnail);
+        Picasso.with(context).load(pic).placeholder(R.drawable.ic_person_default).into(holder.thumbnail);
 
     }
 

@@ -1,6 +1,8 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.selectCategory;
+import com.nistores.awesomeurch.nistores.Folders.Pages.CategoryProductsActivity;
 import com.nistores.awesomeurch.nistores.R;
 
 import java.util.Arrays;
@@ -23,10 +26,11 @@ public class selectCategoryAdapter extends RecyclerView.Adapter<selectCategoryAd
     private static int SELECT_DESIGN = 1;
     private static int STRAIGHT_DESIGN = 2;
     private int design = 1;
+    private String openActivity = "";
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView id, link, nameNormal ;
+        TextView id, nameNormal;
         public CheckBox name;
 
         public MyViewHolder(View view) {
@@ -34,8 +38,34 @@ public class selectCategoryAdapter extends RecyclerView.Adapter<selectCategoryAd
             name = view.findViewById(R.id.name);
             nameNormal = view.findViewById(R.id.name_normal);
             id = view.findViewById(R.id.id);
+            View.OnClickListener see = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    seeAll(view);
+                }
+            };
+            nameNormal.setOnClickListener(see);
+        }
 
+        private void seeAll(View view){
+            String cId = id.getText().toString();
+            String cName = nameNormal.getText().toString();
+            Context viewContext = view.getContext();
+            Intent intent;
+            switch (view.getId()){
+                case R.id.name_normal:
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id",cId);
+                    bundle.putString("name",cName);
 
+                    if(openActivity.equals("cat_products")){
+                        intent = new Intent(viewContext,CategoryProductsActivity.class);
+                        intent.putExtras(bundle);
+                        viewContext.startActivity(intent);
+                    }
+
+                    break;
+            }
         }
     }
 
@@ -99,5 +129,9 @@ public class selectCategoryAdapter extends RecyclerView.Adapter<selectCategoryAd
 
     public void setDesign(int design) {
         this.design = design;
+    }
+
+    public void setOpenActivity(String openActivity) {
+        this.openActivity = openActivity;
     }
 }

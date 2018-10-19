@@ -10,14 +10,19 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.nistores.awesomeurch.nistores.Folders.Pages.AllOrdersActivity;
+import com.nistores.awesomeurch.nistores.Folders.Pages.HomeActivity;
+import com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity;
 import com.nistores.awesomeurch.nistores.Folders.Pages.NotificationsActivity;
 import com.nistores.awesomeurch.nistores.R;
 
@@ -122,9 +127,21 @@ public class Utility {
         }
     }
 
+    public void adminLogout(View view){
+        Context vContext = view.getContext();
+        preferences = PreferenceManager.getDefaultSharedPreferences(vContext);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("isAdmin");
+        editor.apply();
+        Intent intent = new Intent(vContext,HomeActivity.class);
+        vContext.startActivity(intent);
+        new AllOrdersActivity().finish();
+    }
+
     public String returnStateShortCode(String s){
         String code = "all";
         switch (s){
+            case "FCT Abuja":
             case "Abuja":
                 code = "Abj";
                 break;

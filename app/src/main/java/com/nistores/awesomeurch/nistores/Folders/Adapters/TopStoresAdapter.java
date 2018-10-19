@@ -86,7 +86,7 @@ public class TopStoresAdapter extends RecyclerView.Adapter<TopStoresAdapter.MyVi
         final TopStores stores = topStoresList.get(position);
         String owner = stores.getSurname() + " " + stores.getFirstname();
         holder.ownerNameView.setText(owner);
-        holder.storeNameView.setText(stores.getSname());
+        holder.storeNameView.setText(Html.fromHtml(stores.getSname()));
         holder.viewsView.setText(stores.getViews());
         holder.storeIdView.setText(stores.getStore_id());
         holder.storeUidView.setText(stores.getStore_uid());

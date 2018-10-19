@@ -6,23 +6,18 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nistores.awesomeurch.nistores.Folders.Adapters.MyStoreAdapter;
-import com.nistores.awesomeurch.nistores.Folders.Adapters.PollAdapter;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.MyStore;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.VolleyRequest;
@@ -39,12 +34,9 @@ public class MyStoresActivity extends AppCompatActivity {
     Intent intent;
     private ProgressBar progressBar;
     private LinearLayout networkErrorLayout;
-    private RecyclerView recyclerView;
-    private ApiUrls apiUrls;
     private List<MyStore> myStoreList;
     private MyStoreAdapter mAdapter;
     private String URL, userId, storeString;
-    private AppCompatButton retryBtn;
     ImageView thumbnail;
     SharedPreferences preferences;
 
@@ -55,7 +47,7 @@ public class MyStoresActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.loader);
         networkErrorLayout = findViewById(R.id.network_error);
-        retryBtn = findViewById(R.id.btn_retry);
+        AppCompatButton retryBtn = findViewById(R.id.btn_retry);
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +63,7 @@ public class MyStoresActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         myStoreList = new ArrayList<>();
         mAdapter = new MyStoreAdapter(getApplicationContext(), myStoreList);
 
@@ -83,7 +75,7 @@ public class MyStoresActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        apiUrls = new ApiUrls();
+        ApiUrls apiUrls = new ApiUrls();
         URL = apiUrls.getApiUrl();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

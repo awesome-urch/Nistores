@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="3dp"
+
         card_view:cardUseCompatPadding="true"
         android:foreground="?attr/selectableItemBackground"
         card_view:cardCornerRadius="@dimen/zero_level_margin">

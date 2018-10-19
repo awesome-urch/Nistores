@@ -2,10 +2,13 @@ package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -70,6 +74,10 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
                     mcontext.startActivity(intent);
                     break;
                 case R.id.renew:
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("current_store_id",id).apply();
+                    editor.putString("current_store_uid",uid).apply();
                     bundle.putString("uid",uid);
                     intent = new Intent(mcontext, SelectPaymentActivity.class);
                     intent.putExtras(bundle);
@@ -84,8 +92,9 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
         this.myStores = myStores;
     }
 
+    @NonNull
     @Override
-    public MyStoreAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyStoreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.user_store_item_row, parent, false);
 
@@ -93,18 +102,27 @@ public class MyStoreAdapter extends RecyclerView.Adapter<MyStoreAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(MyStoreAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull MyStoreAdapter.MyViewHolder holder, final int position) {
         final MyStore myStore = myStores.get(position);
         holder.idView.setText(myStore.getStore_id());
         holder.uidView.setText(myStore.getStore_uid());
         holder.nameView.setText(myStore.getSname());
         holder.addressView.setText(myStore.getSaddress());
 
-        String orderDate = myStore.getSdate();
+        String orderDate = myStore.getExpires();
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(orderDate);
             String dateString = new SimpleDateFormat("EEE, MMM d, ''yy", Locale.ENGLISH).format(date);
-            holder.expiryView.setText(dateString);
+
+            Date currDate = Calendar.getInstance().getTime();
+            String exp = "Expires";
+            if(currDate.getTime() > date.getTime()){
+                holder.expiryView.setTextColor(Color.RED);
+                holder.renewView.setTextColor(Color.RED);
+                exp = "Expired";
+            }
+
+            holder.expiryView.setText(String.format("%s on %s",exp,dateString));
         } catch (ParseException e) {
             e.printStackTrace();
         }

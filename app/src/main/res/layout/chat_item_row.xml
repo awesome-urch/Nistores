@@ -8,5 +8,6 @@
         <TextView n1:textSize="@dimen/font_18" n1:textColor="@color/textColor" n1:id="@+id/friendName" n1:padding="@dimen/zero_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:text="@string/profile" n1:maxLines="1" />
         <TextView n1:textSize="@dimen/font_one" n1:textColor="@color/textColor" n1:id="@+id/message" n1:padding="@dimen/zero_level_margin" n1:layout_width="fill_parent" n1:layout_height="wrap_content" n1:text="@string/yes_account" n1:maxLines="1" />
         <TextView n1:id="@+id/friend_id" n1:visibility="gone" n1:layout_width="0.0dip" n1:layout_height="0.0dip" />
+        <TextView n1:id="@+id/pic_url" n1:visibility="gone" n1:layout_width="0.0dip" n1:layout_height="0.0dip" />
     </LinearLayout>
 </LinearLayout>

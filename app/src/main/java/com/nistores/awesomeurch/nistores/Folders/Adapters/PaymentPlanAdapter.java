@@ -1,6 +1,8 @@
 package com.nistores.awesomeurch.nistores.Folders.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nistores.awesomeurch.nistores.Folders.Helpers.PaymentPlan;
+import com.nistores.awesomeurch.nistores.Folders.Pages.PayActivity;
 import com.nistores.awesomeurch.nistores.R;
 
 import java.util.List;
@@ -27,7 +30,39 @@ public class PaymentPlanAdapter extends RecyclerView.Adapter<PaymentPlanAdapter.
             durationView = view.findViewById(R.id.duration);
             timeView = view.findViewById(R.id.time);
             discountView = view.findViewById(R.id.discount);
+            View.OnClickListener pay = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toPayment(view);
+                }
+            };
+
+            priceView.setOnClickListener(pay);
+            durationView.setOnClickListener(pay);
+
         }
+
+        private void toPayment(View view){
+            Context mcontext = view.getContext();
+            String sAmount = priceView.getText().toString().trim();
+            String days = timeView.getText().toString();
+            int amount = 0;
+            try {
+                amount = Integer.parseInt(sAmount);
+            } catch (Exception ignored) {
+            }
+            String id = idView.getText().toString();
+            Bundle bundle = new Bundle();
+            bundle.putString("id",id);
+            bundle.putInt("amount",amount);
+            bundle.putString("days",days);
+
+            Intent intent = new Intent(mcontext,PayActivity.class);
+            intent.putExtras(bundle);
+            mcontext.startActivity(intent);
+        }
+
+
     }
 
     public PaymentPlanAdapter(Context context, List<PaymentPlan> paymentPlans) {
@@ -47,7 +82,7 @@ public class PaymentPlanAdapter extends RecyclerView.Adapter<PaymentPlanAdapter.
     public void onBindViewHolder(PaymentPlanAdapter.MyViewHolder holder, final int position) {
         final PaymentPlan plan = paymentPlans.get(position);
         holder.idView.setText(plan.getPlan_id());
-        holder.priceView.setText(Html.fromHtml(plan.getPlan_amount()));
+        holder.priceView.setText(plan.getPlan_amount());
         holder.durationView.setText(plan.getPlan_name());
         holder.timeView.setText(plan.getPlan_time());
         holder.discountView.setText(plan.getPlan_discount());

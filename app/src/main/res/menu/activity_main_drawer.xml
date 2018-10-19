@@ -48,6 +48,11 @@
             android:id="@+id/nav_help_desk"
             android:icon="@drawable/ic_live_help_black_24dp"
             android:title="@string/help_desk" />
+        <item
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/ic_vpn_key_black"
+            android:title="@string/admin" />
+
     </group>
 
     <item android:title="@string/settings" >

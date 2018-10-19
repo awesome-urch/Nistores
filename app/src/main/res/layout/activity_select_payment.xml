@@ -24,6 +24,12 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
+                <TextView
+                    android:id="@+id/first_phrase"
                     android:textSize="24sp"
                     android:textAlignment="center"
                     android:textColor="@color/textColor"

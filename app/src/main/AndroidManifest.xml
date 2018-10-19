@@ -24,6 +24,10 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="co.paystack.android.PublicKey"
+            android:value="pk_test_0d7331b46439f9b6d6e5db8c4d893fe3a461f0f0" />
+
         <receiver android:name=".Folders.Helpers.BootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -100,6 +104,13 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.CategoryProductsActivity"
+            android:parentActivityName=".Folders.Pages.CategoriesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.CategoriesActivity" />
         </activity>
         <activity
             android:name=".Folders.Pages.ExploreStoresActivity"
@@ -185,12 +196,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.NegotiateActivity" />
         </activity>
-        <!--
-        <activity android:label="@string/help_desk" android:name="com.nistores.awesomeurch.nistores.Folders.Pages.HelpDeskActivity" android:parentActivityName="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.nistores.awesomeurch.nistores.Folders.Pages.HelpDeskActivity"/>
+        <activity
+            android:name=".Folders.Pages.HelpDeskActivity"
+            android:label="@string/help_desk"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.HelpDeskActivity" />
         </activity>
-        -->
-
         <activity
             android:name=".Folders.Pages.SuccessActivity"
             android:label="@string/success_product"
@@ -285,6 +298,53 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nistores.awesomeurch.nistores.Folders.Pages.SelectPaymentActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.PayActivity"
+            android:label="@string/pay"
+            android:parentActivityName=".Folders.Pages.MyStoresActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.SuccessPaymentActivity"
+            android:label="@string/your_payment_was_successful"
+            android:parentActivityName=".Folders.Pages.MyStoresActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MyStoresActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.ChatContactActivity"
+            android:label="@string/title_chats"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Folders.Pages.StateStoresActivity"
+            android:label="@string/state_stores"
+            android:parentActivityName=".Folders.Pages.ExploreStoresActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.ExploreStoresActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.AdminLoginActivity"
+            android:label="@string/admin"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Folders.Pages.AllOrdersActivity"
+            android:label="@string/all_delivery_orders"
+            android:parentActivityName=".Folders.Pages.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity" />
         </activity>
     </application>
 

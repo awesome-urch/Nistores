@@ -208,6 +208,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             intent = new Intent(this,AboutUsActivity.class);
             startActivity(intent);
 
+        } else if (id == R.id.nav_help_desk) {
+            intent = new Intent(this,HelpDeskActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.terms_policy) {
             intent = new Intent(this,TermsPolicyActivity.class);
             startActivity(intent);
@@ -218,6 +222,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_my_stores) {
             intent = new Intent(this,MyStoresActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_admin) {
+            intent = new Intent(this,AdminLoginActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_explore_stores) {
