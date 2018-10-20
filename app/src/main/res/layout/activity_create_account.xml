@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/background2"
-    tools:context="com.nistores.awesomeurch.nistores.Folders.Pages.CreateAccountActivity"
+    tools:context="com.nistores.awesomeurch.nistores.folders.pages.CreateAccountActivity"
     android:theme="@style/WebAppTheme"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">

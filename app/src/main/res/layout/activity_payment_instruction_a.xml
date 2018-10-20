@@ -5,7 +5,7 @@
     android:background="@color/littleGrey"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Folders.Pages.PaymentInstructionAActivity">
+    tools:context=".folders.pages.PaymentInstructionAActivity">
 
     <ScrollView
         android:layout_width="match_parent"

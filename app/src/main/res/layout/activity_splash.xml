@@ -6,7 +6,7 @@
     android:theme="@style/SplashTheme"
     android:background="@color/lightBlue"
     android:layout_height="match_parent"
-    tools:context="com.nistores.awesomeurch.nistores.Folders.Pages.SplashScreen">
+    tools:context="com.nistores.awesomeurch.nistores.folders.pages.SplashScreen">
 
     <ImageView
         android:contentDescription="@string/app_name"

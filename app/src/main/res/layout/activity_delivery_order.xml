@@ -6,7 +6,7 @@
     android:background="@color/littleGrey"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Folders.Pages.DeliveryOrderActivity">
+    tools:context=".folders.pages.DeliveryOrderActivity">
 
     <ScrollView
         android:layout_width="match_parent"

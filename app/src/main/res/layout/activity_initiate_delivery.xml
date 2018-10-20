@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:theme="@style/WebAppTheme"
     android:background="@color/littleGrey"
-    tools:context=".Folders.Pages.InitiateDeliveryActivity">
+    tools:context=".folders.pages.InitiateDeliveryActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

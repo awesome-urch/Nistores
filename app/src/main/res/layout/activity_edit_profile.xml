@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:theme="@style/WebAppTheme"
     android:background="@color/littleGrey"
-    tools:context=".Folders.Pages.EditProfileActivity">
+    tools:context=".folders.pages.EditProfileActivity">
 
     <ScrollView
         android:layout_width="match_parent"

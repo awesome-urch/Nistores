@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:paddingBottom="@dimen/bottom_nav_height"
-    tools:context="com.nistores.awesomeurch.nistores.Folders.Pages.AllProductsFragment">
+    tools:context="com.nistores.awesomeurch.nistores.folders.pages.AllProductsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

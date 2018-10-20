@@ -11,6 +11,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    repositories {
+        google() // important!
+        jcenter()
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -37,5 +41,4 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'co.paystack.android:paystack:3.0.10'
     implementation 'de.hdodenhof:circleimageview:1.2.1'
-
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background2"
     android:theme="@style/WebAppTheme"
-    tools:context="com.nistores.awesomeurch.nistores.Folders.Pages.MainActivity">
+    tools:context="com.nistores.awesomeurch.nistores.folders.pages.MainActivity">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Folders.Pages.StoreActivity"
+    tools:context=".folders.pages.StoreActivity"
     tools:showIn="@layout/activity_store">
 
     <!-- android.support.v4.widget.NestedScrollView -->

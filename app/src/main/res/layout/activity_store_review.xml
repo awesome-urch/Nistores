@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:theme="@style/WebAppTheme"
     android:background="@android:color/white"
-    tools:context=".Folders.Pages.StoreReviewActivity">
+    tools:context=".folders.pages.StoreReviewActivity">
 
 
     <ScrollView
