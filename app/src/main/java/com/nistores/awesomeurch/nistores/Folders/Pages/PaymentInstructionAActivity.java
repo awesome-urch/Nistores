@@ -41,7 +41,7 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
     List<PaymentPlan> paymentPlanList;
     PaymentPlanAdapter planAdapter;
     AppCompatButton callBtn, retryBtn;
-    TextView agentPhoneView, titleCardView, amountViewA, amountViewB, depositorAView, depositorBView, assureAView, assureBView;
+    TextView agentPhoneView, titleCardView, depositorAView, depositorBView, assureAView, assureBView;
     String payMethod, URL, planString, amount, payment_for;
     static String ATM = "atm";
     static String IN_BANK = "in_bank";
@@ -70,8 +70,12 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
                         amountViewB.setText(amount);
                     }*/
                 }
+            }else{
+                payment_for = "store_renew";
             }
 
+        }else{
+            payment_for = "store_renew";
         }
 
         View.OnClickListener onPlaceCall = new View.OnClickListener() {
@@ -152,6 +156,12 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
             assureAView.setText(getResources().getString(R.string.when_you_make_payment));
             assureBView.setText(getResources().getString(R.string.when_you_make_payment));
         }*/
+        if(payment_for.equals("delivery_order")){
+            TextView amountViewA = findViewById(R.id.pay_amount_a);
+            TextView amountViewB = findViewById(R.id.pay_amount_b);
+            amountViewA.setText(amount);
+            amountViewB.setText(amount);
+        }
 
         switch (payMethod) {
             case "agent":
@@ -164,14 +174,35 @@ public class PaymentInstructionAActivity extends AppCompatActivity {
                 mobileTransferLayout.setVisibility(View.VISIBLE);
                 break;
             case "with_bank":
-                cardLayout.setVisibility(View.VISIBLE);
-                titleCardView.setText(getResources().getString(R.string.pay_with_bank));
-                fetchPlans();
+                if(payment_for.equals("delivery_order")){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("amount",Integer.valueOf(amount));
+                    bundle.putString("pay_for","delivery_order");
+                    Intent intent = new Intent(getApplicationContext(),PayActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    cardLayout.setVisibility(View.VISIBLE);
+                    titleCardView.setText(getResources().getString(R.string.pay_with_bank));
+                    fetchPlans();
+                }
+
+
                 break;
             case "atm":
-                cardLayout.setVisibility(View.VISIBLE);
-                titleCardView.setText(getResources().getString(R.string.pay_with_atm));
-                fetchPlans();
+                if(payment_for.equals("delivery_order")){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("amount",Integer.valueOf(amount));
+                    bundle.putString("pay_for","delivery_order");
+                    Intent intent = new Intent(getApplicationContext(),PayActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    cardLayout.setVisibility(View.VISIBLE);
+                    titleCardView.setText(getResources().getString(R.string.pay_with_atm));
+                    fetchPlans();
+                }
+
                 break;
         }
     }

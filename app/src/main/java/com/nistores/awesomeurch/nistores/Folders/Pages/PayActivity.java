@@ -41,7 +41,7 @@ public class PayActivity extends AppCompatActivity {
     Card card;
     AppCompatButton payBtn;
     int amount = 0;
-    String email, userId, storeId, storeUid, URL, postURL, ref_no, days;
+    String email, userId, storeId, storeUid, URL, postURL, ref_no, days, pay_for;
     EditText mEditCardNum;
     EditText mEditCVV;
     EditText mEditExpiryMonth;
@@ -96,6 +96,11 @@ public class PayActivity extends AppCompatActivity {
             days = bundle.getString("days");
             String title = "Pay NGN "+amount;
             setTitle(title);
+            pay_for = bundle.getString("pay_for");
+            if(pay_for == null){
+                PayActivity.this.pay_for = "store_renew";
+            }
+
             getInfo();
         }
 
@@ -199,7 +204,7 @@ public class PayActivity extends AppCompatActivity {
     public void performCharge(){
         //create a Charge object
         Charge charge = new Charge();
-        charge.setAmount(amount);
+        charge.setAmount(amount*100);
         charge.setEmail(email);
         charge.setReference("Android_" + Calendar.getInstance().getTimeInMillis());
         try {
@@ -226,7 +231,14 @@ public class PayActivity extends AppCompatActivity {
                 Toast.makeText(PayActivity.this,"Your payment was successful",Toast.LENGTH_LONG).show();
                 String check = ref_no + " " + userId + " " + storeId + " " + amount + " " + days + " " + storeUid;
                 Log.d("CHECKAM",check);
-                notifyNistores();
+                Log.d("CHECKAM",pay_for);
+                if(pay_for.equals("store_renew")){
+                    notifyNistores();
+                }else{
+
+                    notifyNistoresDO();
+                }
+
 
             }
 
@@ -257,7 +269,7 @@ public class PayActivity extends AppCompatActivity {
 
     private void notifyNistores(){
         preventInteraction();
-        Toast.makeText(PayActivity.this,"Taking note ot your payment. Please wait...",Toast.LENGTH_LONG).show();
+        Toast.makeText(PayActivity.this,"Taking note ot your payment. Please wait...",Toast.LENGTH_SHORT).show();
         loaderLayout.setVisibility(View.VISIBLE);
         StringRequest request = new StringRequest(Request.Method.POST, postURL, new Response.Listener<String>(){
             @Override
@@ -267,17 +279,8 @@ public class PayActivity extends AppCompatActivity {
                 enableUserInteraction();
                 Log.d("DFILE",s);
 
-                if(s.equals("success")){
 
-                    Toast.makeText(getApplicationContext(),"Payment fully noted.",Toast.LENGTH_SHORT).show();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("message",String.format("Your store [%s] payment has been updated with N%s - %s days",storeUid,amount,days)); // "Your store [".$store_uid."] payment has been updated with N".$pay_amount." - ".$days." Days";
-                    Intent intent = new Intent(getApplicationContext(),SuccessPaymentActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
-
-                }
+                toSuccessPage1();
 
             }
         },new Response.ErrorListener(){
@@ -286,7 +289,8 @@ public class PayActivity extends AppCompatActivity {
                 enableUserInteraction();
                 loaderLayout.setVisibility(View.GONE);
 
-                Log.d("ERR",volleyError.toString());
+                Log.d("ERRARR",volleyError.toString());
+                toSuccessPage1();
 
 
             }
@@ -325,6 +329,86 @@ public class PayActivity extends AppCompatActivity {
         //RequestQueue rQueue = Volley.newRequestQueue(getContext());
         request.setShouldCache(false);
         InitiateVolley.getInstance().addToRequestQueue(request);
+    }
+
+    private void notifyNistoresDO(){
+        preventInteraction();
+        Toast.makeText(PayActivity.this,"Taking note ot your payment. Please wait...",Toast.LENGTH_SHORT).show();
+        loaderLayout.setVisibility(View.VISIBLE);
+        StringRequest request = new StringRequest(Request.Method.POST, postURL, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                loaderLayout.setVisibility(View.GONE);
+                //uploading.dismiss();
+                enableUserInteraction();
+                Log.d("DFILE",s);
+
+                toSuccessPage2();
+
+
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                enableUserInteraction();
+                loaderLayout.setVisibility(View.GONE);
+
+                Log.d("ERRARR",volleyError.toString());
+                toSuccessPage2();
+
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> parameters = new HashMap<>();
+                //parameters.put("Content-Type", "application/form-data");
+                //parameters.put("Content-Length", ""+97957);
+                parameters.put("Connection", "Keep-Alive");
+                return parameters;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+                //return "application/x-www-form-urlencoded";
+            }
+
+            //adding parameters to send
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> parameters = new HashMap<>();
+                parameters.put("request", "make_delivery_payment");
+                parameters.put("ref_no", ref_no);
+                parameters.put("pay_user", userId);
+                parameters.put("pay_data", storeId);
+                parameters.put("pay_amount", ""+amount);
+
+                return parameters;
+            }
+        };
+
+        //RequestQueue rQueue = Volley.newRequestQueue(getContext());
+        request.setShouldCache(false);
+        InitiateVolley.getInstance().addToRequestQueue(request);
+    }
+
+    private void toSuccessPage1(){
+        Bundle bundle = new Bundle();
+        bundle.putString("message",String.format("Your store [%s] payment has been updated with N%s - %s days",storeUid,amount,days)); //
+        Intent intent = new Intent(getApplicationContext(),SuccessPaymentActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    private void toSuccessPage2(){
+        Bundle bundle = new Bundle();
+        bundle.putString("message",String.format("Your payment for the delivery order %s has been noted",storeId)); //
+        Intent intent = new Intent(getApplicationContext(),SuccessPaymentActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
     public void preventInteraction(){

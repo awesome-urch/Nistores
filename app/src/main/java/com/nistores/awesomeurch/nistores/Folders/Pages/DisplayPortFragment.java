@@ -1,7 +1,5 @@
 package com.nistores.awesomeurch.nistores.Folders.Pages;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -21,7 +20,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -82,7 +79,7 @@ public class DisplayPortFragment extends Fragment {
     TextInputLayout priceLayout;
     Spinner storeSpinner;
     ApiUrls apiUrls;
-    String URL, imgURL, postURL;
+    String URL, imgURL, postURL, storeCategoryString, userStoreString;
     SharedPreferences prefs;
     String userId;
     ArrayList<String> myStores;
@@ -125,7 +122,7 @@ public class DisplayPortFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
     }
 
     @Override
@@ -138,10 +135,6 @@ public class DisplayPortFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (savedInstanceState == null) {
-            Bundle args = getArguments();
-        }
 
         homeActivity = new HomeActivity();
         apiUrls = new ApiUrls();
@@ -238,16 +231,41 @@ public class DisplayPortFragment extends Fragment {
         categoryRecycler.addItemDecoration(dividerItemDecoration);
         categoryRecycler.setAdapter(categoryAdapter);
 
+        if (savedInstanceState == null) {
+            Log.d("CHECKA","no save");
+            Bundle args = getArguments();
+            fetchItems();
 
-        fetchItems();
+        }else{
+            Log.d("CHECKA","saved");
+            storeCategoryString = savedInstanceState.getString("storeCategoryString");
+            if(storeCategoryString != null){
+                fillInCategories(storeCategoryString);
+            }
+            userStoreString = savedInstanceState.getString("userStoreString");
+            if(userStoreString != null){
+                try {
+                    JSONArray myStores = new JSONArray(userStoreString);
+                    fillInItems(myStores);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                fetchItems();
+            }
+
+        }
 
     }
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString("storeCategoryString",storeCategoryString);
+        outState.putString("userStoreString",userStoreString);
     }
+
 
     @Override
     public void onStop(){
@@ -540,6 +558,7 @@ public class DisplayPortFragment extends Fragment {
     }
 
     private void fetchItems(){
+        preventInteraction();
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         userId = prefs.getString("user",null);
         String originURL = URL + "request=my_stores&id=" + userId;
@@ -548,26 +567,36 @@ public class DisplayPortFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        enableUserInteraction();
                         Log.d("RTN",response.toString());
                         try {
 
                             Integer err = response.getInt("error");
-                            userStores = response.getJSONArray("data");
-                            if(err==0){
 
+                            if(err==0){
+                                userStores = response.getJSONArray("data");
+                                userStoreString = userStores.toString();
                                 fillInItems(userStores);
 
+                            }else if(err == 1){
+                                Toast.makeText(getContext(),"Create a store first",Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getContext(),CreateStoreActivity.class);
+                                startActivity(intent);
+                                //new HomeActivity().finish();
+
                             }else{
-                                Toast.makeText(getContext(),"Sorry an error occurred",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),"Sorry an error occurred",Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             Log.e("ERR",e.toString());
                             e.printStackTrace();
+
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                enableUserInteraction();
                 Toast.makeText(getContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
 
                 Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.network_error,
@@ -622,22 +651,24 @@ public class DisplayPortFragment extends Fragment {
     }
 
     private void fetchCategories(final String cats){
-
+        preventInteraction();
         String originURL = URL + "request=store_cats&catsStr="+cats;
         Log.d("CHECK",originURL);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, originURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        enableUserInteraction();
                         Log.d("RTN",response.toString());
                         try {
 
                             Integer err = response.getInt("error");
                             JSONArray storeCategories = response.getJSONArray("data");
                             if(err==0){
-                                List<selectCategory> items = new Gson().fromJson(storeCategories.toString(), new TypeToken<List<selectCategory>>() {
-                                }.getType());
-                                fillInCategories(items);
+
+                                storeCategoryString = storeCategories.toString();
+
+                                fillInCategories(storeCategoryString);
                                 //fillInItems(storeCategories);
 
                             }else{
@@ -651,6 +682,7 @@ public class DisplayPortFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                enableUserInteraction();
                 Toast.makeText(getContext(),"Sorry an error occurred. Try again",Toast.LENGTH_SHORT).show();
 
                 Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.network_error,
@@ -671,8 +703,9 @@ public class DisplayPortFragment extends Fragment {
         InitiateVolley.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
-    private void fillInCategories(List<selectCategory> items){
-
+    private void fillInCategories(String storeCategories){
+        List<selectCategory> items = new Gson().fromJson(storeCategories, new TypeToken<List<selectCategory>>() {
+        }.getType());
         selectCategoryList.clear();
         selectCategoryList.addAll(items);
         // refreshing recycler view

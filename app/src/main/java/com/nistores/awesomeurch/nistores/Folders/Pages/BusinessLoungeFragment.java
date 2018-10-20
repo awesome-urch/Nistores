@@ -80,6 +80,7 @@ public class BusinessLoungeFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,7 +113,7 @@ public class BusinessLoungeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         businessLoungeList = new ArrayList<>();
         mAdapter = new BusinessLoungeAdapter(getContext(), businessLoungeList);
-
+        mAdapter.setOpenActivity("state_topics");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -171,7 +172,7 @@ public class BusinessLoungeFragment extends Fragment {
 
             }
         });
-        //jsonObjectRequest.setShouldCache(true);
+        jsonObjectRequest.setShouldCache(true);
         InitiateVolley.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 

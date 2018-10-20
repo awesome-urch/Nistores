@@ -22,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:elevation="4dp"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
@@ -71,6 +70,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:textColor="@android:color/white"
+                        android:inputType="text"
                         android:background="@drawable/input_style1"
                         android:textColorHint="@color/whiteGrey"
                         android:padding="@dimen/one_level_margin"
@@ -225,7 +225,8 @@
             app:layout_constraintTop_toTopOf="@id/loader_layout"
             app:layout_constraintBottom_toBottomOf="@id/loader_layout"
             app:layout_constraintLeft_toLeftOf="@id/loader_layout"
-            android:progressTint="@color/colorAccent"/>
+            android:progressTint="@color/colorAccent"
+            tools:targetApi="lollipop" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -54,4 +54,9 @@
 
     <style name="WebAppTheme" parent="AppTheme" />
 
+    <style name="SplashTheme" parent="AppTheme" >
+        <item name="colorPrimary">@color/lightBlue</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
 </resources>

@@ -235,7 +235,6 @@ public class EditProfileActivity extends AppCompatActivity {
         if(newFirstName.equals(firstname) && newLastName.equals(lastname) && newEmail.equals(email) && newPicture.equals(picture) ){
             Toast.makeText(getApplicationContext(),"No change detected",Toast.LENGTH_SHORT).show();
         }else{
-            //TODO: handle change detected
             updateChanges();
             //Toast.makeText(getApplicationContext(),newPicture,Toast.LENGTH_SHORT).show();
         }

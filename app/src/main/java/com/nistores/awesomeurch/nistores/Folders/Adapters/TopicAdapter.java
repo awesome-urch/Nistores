@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nistores.awesomeurch.nistores.Folders.Helpers.ApiUrls;
 import com.nistores.awesomeurch.nistores.Folders.Helpers.Topic;
 import com.nistores.awesomeurch.nistores.R;
 import com.squareup.picasso.Picasso;
@@ -52,7 +53,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
         holder.idView.setText(topic.getMt_id());
         holder.titleView.setText(Html.fromHtml(topic.getMt_title()));
 
-        String pic = topic.getPicture();
+        String pic = new ApiUrls().getBaseURL() + topic.getPicture();
 
         Picasso.with(context).load(pic).placeholder(R.drawable.ic_crop_image).into(holder.thumbnail);
 

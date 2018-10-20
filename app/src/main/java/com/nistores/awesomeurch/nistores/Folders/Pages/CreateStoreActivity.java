@@ -310,6 +310,10 @@ public class CreateStoreActivity extends AppCompatActivity {
 
     private void createStore(){
         final String cats = utility.getSelectedCats(categoryRecycler);
+        if(cats.isEmpty()){
+            Toast.makeText(getApplicationContext(),"Please choose your store category",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         preventInteraction();
         loaderLayout.setVisibility(View.VISIBLE);
@@ -323,20 +327,34 @@ public class CreateStoreActivity extends AppCompatActivity {
                 enableUserInteraction();
                 Log.d("DFILE",s);
 
-                if(s.equals("success")){
+                try {
+                    JSONObject result = new JSONObject(s);
 
-                    Toast.makeText(getApplicationContext(),"Your store has been created!",Toast.LENGTH_SHORT).show();
-                    /*Bundle bundle = new Bundle();
-                    bundle.putString("number",orderId);
-                    //bundle.putString("id",id);
-                    intent = new Intent(getApplicationContext(),deliveredOrderActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);*/
+                    Integer error = result.getInt("error");
+                    if(error == 0){
+                        String id = result.getString("data");
+                        Log.d("KONFAMM",id);
 
+                        Bundle bundle = new Bundle();
+                        bundle.putString("sName",sname);
+                        bundle.putString("id",id);
+                        intent = new Intent(getApplicationContext(), StoreActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        finish();
+
+                    }else if(error == 1){
+                        Toast.makeText(getApplicationContext(),"Please select another store number. The store number you selected already exists",Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Sorry an error occurred. Retry",Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),"Sorry an error occurred",Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    Toast.makeText(getApplicationContext(),"Sorry an error occurred. Retry",Toast.LENGTH_SHORT).show();
-                }
+
             }
         },new Response.ErrorListener(){
             @Override

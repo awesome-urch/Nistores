@@ -19,6 +19,7 @@ import com.nistores.awesomeurch.nistores.Folders.Pages.DeliveryOrderActivity;
 import com.nistores.awesomeurch.nistores.Folders.Pages.InitiateDeliveryActivity;
 import com.nistores.awesomeurch.nistores.Folders.Pages.StateOrdersActivity;
 import com.nistores.awesomeurch.nistores.Folders.Pages.StateStoresActivity;
+import com.nistores.awesomeurch.nistores.Folders.Pages.StateTopicsActivity;
 import com.nistores.awesomeurch.nistores.R;
 
 import java.util.List;
@@ -64,6 +65,11 @@ public class BusinessLoungeAdapter extends RecyclerView.Adapter<BusinessLoungeAd
                             viewContext.startActivity(intent);
                         }else if(openActivity.equals("state_stores")){
                             intent = new Intent(viewContext,StateStoresActivity.class);
+                            intent.putExtras(bundle);
+                            viewContext.startActivity(intent);
+                        }else if(openActivity.equals("state_topics")){
+                            bundle.putString("id",state_id);
+                            intent = new Intent(viewContext,StateTopicsActivity.class);
                             intent.putExtras(bundle);
                             viewContext.startActivity(intent);
                         }

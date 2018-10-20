@@ -52,6 +52,7 @@
     <string name="copy_number_out_select_payment">Copy this number out and select a payment method</string>
     <string name="could_not_fetch_stores">"Couldn't get your stores"</string>
     <string name="could_not_fetch_categories">"Couldn't get all categories"</string>
+    <string name="could_not_fetch_interests">"Couldn't get all interests"</string>
     <string name="cvv">CVV</string>
     <string name="cvv_hint">123</string>
     <string name="dashboard">Dashboard</string>

@@ -182,8 +182,8 @@ public class StoreReviewActivity extends AppCompatActivity {
                         fillInItems(data);
 
                     }else{
-
-                        networkErrorLayout.setVisibility(View.VISIBLE);
+                        Toast.makeText(getApplicationContext(),"No reviews yet",Toast.LENGTH_SHORT).show();
+                        //networkErrorLayout.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     Log.e("V_ERROR",e.toString());
@@ -194,7 +194,8 @@ public class StoreReviewActivity extends AppCompatActivity {
             @Override
             public void onNetworkError() {
                 loaderLayout.setVisibility(View.GONE);
-                networkErrorLayout.setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(),"Network Error Occurred",Toast.LENGTH_SHORT).show();
+
             }
         };
         volleyRequest.setCache(false);

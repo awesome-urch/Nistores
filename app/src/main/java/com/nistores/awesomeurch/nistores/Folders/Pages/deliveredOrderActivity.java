@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -46,6 +47,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,10 +69,11 @@ public class deliveredOrderActivity extends AppCompatActivity {
     MorePhotoAdapter mAdapter;
     VideoView videoView;
     ImageView playImage, stopImage;
-    AppCompatButton payBtn, retryBtn, approveBtn, updateOrderBtn;
+    AppCompatButton payBtn, retryBtn, approveBtn, updateOrderBtn, confirmOrderBtn, confirmReceivingBtn;
     ConstraintLayout networkErrorLayout, loaderLayout;
     LinearLayout infoLayout, controlLayout, adminLayout, confirmOrderLayout, confirmReceivingLayout;
     RadioGroup orderRadioGroup;
+    EditText confirmReceivingEditText, confirmOrderEditText;
     String userId, URL, postURL, id, number, storeNumber, desc, photosString, video, totalPrice, loc_from, loc_to, storeName,
             receiverFullName, receiverUsername, initiatedDate, orderStatus, savedVideo, confirmReceiving, confirmComment, sellerId, receiverId;
     String payment_received = "0";
@@ -82,6 +86,13 @@ public class deliveredOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivered_order);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        userId = prefs.getString("user",null);
+
+        apiUrls = new ApiUrls();
+        URL = apiUrls.getApiUrl();
+        postURL = apiUrls.getProcessPost();
 
         orderIdView = findViewById(R.id.order_id);
         orderDescView = findViewById(R.id.order_desc);
@@ -119,6 +130,8 @@ public class deliveredOrderActivity extends AppCompatActivity {
         adminLayout = findViewById(R.id.admin_section);
         confirmOrderLayout = findViewById(R.id.confirm_order_layout);
         confirmReceivingLayout = findViewById(R.id.confirm_receiving_layout);
+        confirmOrderEditText = findViewById(R.id.msg_confirm_order);
+        confirmReceivingEditText = findViewById(R.id.msg_confirm_receiving);
         orderRadioGroup = findViewById(R.id.orderGroup);
 
         View.OnClickListener onRadioButtonClicked = new View.OnClickListener() {
@@ -169,6 +182,40 @@ public class deliveredOrderActivity extends AppCompatActivity {
             }
         };
 
+        View.OnClickListener onConfirm1 = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String comment = confirmOrderEditText.getText().toString();
+                if(!comment.isEmpty()){
+                    String encodedMsg = "";
+                    try {
+                        encodedMsg = URLEncoder.encode(comment,"utf-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    String pURL = URL + "request=comment_confirm_order&comment=" + encodedMsg + "&order_no=" + number;
+                    pushComment(pURL,"confirm_order");
+                }
+            }
+        };
+
+        View.OnClickListener onConfirm2 = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String comment = confirmReceivingEditText.getText().toString();
+                if(!comment.isEmpty()){
+                    String encodedMsg = "";
+                    try {
+                        encodedMsg = URLEncoder.encode(comment,"utf-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    String pURL = URL + "request=comment_confirm_receiving&comment=" + encodedMsg + "&order_id=" + number;
+                    pushComment(pURL,"confirm_receive");
+                }
+            }
+        };
+
         payBtn = findViewById(R.id.btn_pay);
         retryBtn = findViewById(R.id.btn_retry);
         approveBtn = findViewById(R.id.btn_approve);
@@ -177,12 +224,10 @@ public class deliveredOrderActivity extends AppCompatActivity {
         approveBtn.setOnClickListener(onApprove);
         payBtn.setOnClickListener(onSelectPay);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        userId = prefs.getString("user",null);
-
-        apiUrls = new ApiUrls();
-        URL = apiUrls.getApiUrl();
-        postURL = apiUrls.getProcessPost();
+        confirmOrderBtn = findViewById(R.id.btn_confirm_order);
+        confirmReceivingBtn = findViewById(R.id.btn_confirm_receiving);
+        confirmOrderBtn.setOnClickListener(onConfirm1);
+        confirmReceivingBtn.setOnClickListener(onConfirm2);
 
         Bundle bundle = this.getIntent().getExtras();
         if(bundle!=null){
@@ -246,6 +291,10 @@ public class deliveredOrderActivity extends AppCompatActivity {
     }
 
     private void toSelectPayMethod(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("current_store_id",number).apply();
+        editor.putString("current_store_uid",number).apply();
         Bundle bundle = new Bundle();
         bundle.putString("pay_for","delivery_order");
         bundle.putString("uid",number);
@@ -578,6 +627,67 @@ public class deliveredOrderActivity extends AppCompatActivity {
 
     public void enableUserInteraction(){
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+
+
+    private void pushComment(final String URL, final String type){
+
+        VolleyRequest volleyRequest = new VolleyRequest(getApplicationContext(), URL) {
+            @Override
+            public void onProcess() {
+                preventInteraction();
+                if(type.equals("confirm_order")){
+                    confirmOrderBtn.setText(getResources().getString(R.string.sending));
+                }else{
+                    confirmReceivingBtn.setText(getResources().getString(R.string.sending));
+                }
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+                enableUserInteraction();
+                if(type.equals("confirm_order")){
+                    confirmOrderBtn.setText(getResources().getString(R.string.confirm));
+                }else{
+                    confirmReceivingBtn.setText(getResources().getString(R.string.confirm));
+                }
+                try {
+
+                    Integer err = response.getInt("error");
+                    if(err==0){
+
+                        String data = response.getString("data");
+                        if(type.equals("confirm_order")){
+                            confirmOrderLayout.setVisibility(View.GONE);
+                            confirmOrderView.setText(data);
+                        }else{
+                            confirmReceivingLayout.setVisibility(View.GONE);
+                            confirmReceiveView.setText(data);
+                        }
+
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Server error occurred. Please resend",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Log.e("V_ERROR",e.toString());
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetworkError() {
+                enableUserInteraction();
+                if(type.equals("confirm_order")){
+                    confirmOrderBtn.setText(getResources().getString(R.string.confirm));
+                }else{
+                    confirmReceivingBtn.setText(getResources().getString(R.string.confirm));
+                }
+                Toast.makeText(getApplicationContext(),"Network error occurred. Please resend",Toast.LENGTH_SHORT).show();
+            }
+        };
+        volleyRequest.setCache(false);
+        volleyRequest.fetchResources();
     }
 
 }
