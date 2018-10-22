@@ -23,7 +23,7 @@
         <item
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_list_black"
-            android:title="@string/explore_stores" />
+            android:title="@string/categories" />
         <item
             android:id="@+id/nav_delivery_orders"
             android:icon="@drawable/ic_local_grocery_store_black"
@@ -48,40 +48,53 @@
             android:id="@+id/nav_help_desk"
             android:icon="@drawable/ic_live_help_black_24dp"
             android:title="@string/help_desk" />
+        <item
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/ic_vpn_key_black"
+            android:title="@string/admin" />
+
     </group>
 
-    <item android:title="@string/settings">
-        <menu>
+    <item android:title="@string/settings" >
+        <menu >
             <item
                 android:id="@+id/nav_dashboard"
+                android:checkable="true"
                 android:icon="@drawable/ic_dashboard_black_24dp"
                 android:title="@string/dashboard" />
             <item
                 android:id="@+id/nav_manage_product"
+                android:checkable="true"
                 android:icon="@drawable/ic_build_black_24dp"
                 android:title="@string/manage_products" />
             <item
                 android:id="@+id/subscription_history"
+                android:checkable="true"
                 android:icon="@drawable/ic_history_black_24dp"
                 android:title="@string/sub_history" />
             <item
                 android:id="@+id/notifications"
+                android:checkable="true"
                 android:icon="@drawable/ic_notifications_black_24dp"
-                android:title="@string/manage_products" />
+                android:title="@string/turn_off_notif" />
             <item
                 android:id="@+id/about_us"
+                android:checkable="true"
                 android:icon="@drawable/ic_location_city_black_24dp"
                 android:title="@string/about_us" />
             <item
                 android:id="@+id/terms_policy"
+                android:checkable="true"
                 android:icon="@drawable/ic_library_books_black_24dp"
                 android:title="@string/terms_policy" />
             <item
                 android:id="@+id/disclaimer"
+                android:checkable="true"
                 android:icon="@drawable/ic_warning"
                 android:title="@string/disclaimer" />
             <item
                 android:id="@+id/logout"
+                android:checkable="true"
                 android:icon="@drawable/ic_power_settings_new"
                 android:title="@string/logout" />
         </menu>

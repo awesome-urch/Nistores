@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Nistores.iml" filepath="$PROJECT_DIR$/Nistores.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Nistores.iml" filepath="$PROJECT_DIR$/.idea/Nistores.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
